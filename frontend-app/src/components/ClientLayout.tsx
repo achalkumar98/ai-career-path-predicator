@@ -1,19 +1,29 @@
 'use client';
 import { useState } from 'react';
+import { usePathname } from 'next/navigation';
 import Sidebar from './Sidebar';
+import AppHeader from './AppHeader';
+import Footer from './Footer';
+
+const PUBLIC_PATHS = ['/', '/login', '/register', '/contact', '/upgrade'];
 
 export default function ClientLayout({ children }: { children: React.ReactNode }) {
   const [isOpen, setIsOpen] = useState(true);
+  const pathname = usePathname();
+  const isPublic = PUBLIC_PATHS.includes(pathname);
+
+  if (isPublic) return <>{children}</>;
 
   return (
-    <div className="flex min-h-screen" style={{ background: 'var(--bg-primary)' }}>
+    <div style={{ display: 'flex', minHeight: '100vh', background: '#f9fafb' }}>
       <Sidebar isOpen={isOpen} toggleSidebar={() => setIsOpen(!isOpen)} />
-      <main
-        className="flex-1 transition-all duration-300 min-h-screen"
-        style={{ marginLeft: isOpen ? '256px' : '72px', background: 'var(--bg-primary)' }}
-      >
-        {children}
-      </main>
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: '100vh', marginLeft: isOpen ? '240px' : '64px', transition: 'margin-left 300ms ease' }}>
+        <AppHeader toggleSidebar={() => setIsOpen(!isOpen)} />
+        <main style={{ flex: 1 }}>
+          {children}
+        </main>
+        <Footer />
+      </div>
     </div>
   );
 }

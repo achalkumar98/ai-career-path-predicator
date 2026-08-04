@@ -1,13 +1,11 @@
 const express = require('express');
 const router = express.Router();
-
 const authMiddleware = require('../middleware/authMiddleware');
 const Insight = require('../models/Insights');
-const Assessment = require('../models/Assessment'); // ensure this is imported
-const { GoogleGenerativeAI } = require('@google/generative-ai');
+const Assessment = require('../models/Assessment');
+const { callGeminiWithRetry, fallbackPersonalityInsight } = require('../utils/geminiHelper');
 
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-
+// POST /api/insights
 router.post('/', authMiddleware, async (req, res) => {
   try {
     const { input } = req.body;
@@ -18,8 +16,7 @@ router.post('/', authMiddleware, async (req, res) => {
       ? assessments.map((a, i) => `Assessment ${i + 1}:
 - Skills: ${a.skills.join(', ') || 'None'}
 - Interests: ${a.interests.join(', ') || 'None'}
-- Recommended Careers: ${a.recommendedCareers.join(', ') || 'None'}
-- Previous Insight: ${a.insight || 'N/A'}`).join('\n')
+- Recommended Careers: ${a.recommendedCareers.join(', ') || 'None'}`).join('\n')
       : 'No prior assessment history available.';
 
     const prompt = `
@@ -28,18 +25,29 @@ The user shared this input:
 "${input}"
 Here is their recent assessment history:
 ${historyText}
-Generate a personalized, warm, encouraging career insight.`;
+Generate a personalized, warm, encouraging career insight in 2-3 paragraphs.
+    `.trim();
 
-    const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
-    const result = await model.generateContent(prompt);
-    const aiInsight = (await result.response).text().trim();
+    let aiInsight;
+    try {
+      aiInsight = await callGeminiWithRetry(prompt);
+      console.log('[Insights] Gemini response received');
+    } catch (aiErr) {
+      const is429 = aiErr?.status === 429 || aiErr?.message?.includes('429');
+      if (is429) {
+        console.warn('[Insights] Gemini quota exhausted — using fallback');
+        aiInsight = fallbackPersonalityInsight(input);
+      } else {
+        throw aiErr;
+      }
+    }
 
     const newInsight = new Insight({ userId: req.user, userInput: input, aiInsight });
     await newInsight.save();
 
     res.status(200).json({ insight: aiInsight });
   } catch (err) {
-    console.error('Insight generation failed:', err);
+    console.error('Insight generation failed:', err.message);
     res.status(500).json({ message: 'Internal server error while generating insight.' });
   }
 });

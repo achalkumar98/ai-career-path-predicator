@@ -2,12 +2,14 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { Eye, EyeOff, ArrowLeft, Shield } from 'lucide-react';
 import { registerApi } from '@/api/authApi';
 
 export default function Register() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
@@ -17,6 +19,7 @@ export default function Register() {
     try {
       const res = await registerApi(name, email, password);
       localStorage.setItem('token', res.data.token);
+      localStorage.setItem('user', JSON.stringify(res.data.user));
       router.push('/homepage');
     } catch (err: any) {
       alert('Registration failed: ' + (err.response?.data?.message || err.message));
@@ -26,43 +29,101 @@ export default function Register() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4" style={{ background: 'radial-gradient(ellipse at top, #0d1f3c 0%, #0a0f1e 60%)' }}>
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-96 h-96 rounded-full pointer-events-none" style={{ background: 'radial-gradient(circle, rgba(0,212,255,0.1) 0%, transparent 70%)' }} />
-
-      <div className="w-full max-w-md relative">
-        <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl mb-4" style={{ background: 'linear-gradient(135deg, #0066ff, #00d4ff)' }}>
-            <span className="text-white font-bold text-xl">AI</span>
+    <div style={{ minHeight: '100vh', background: '#f3f4f6', display: 'flex', flexDirection: 'column' }}>
+      {/* Top bar */}
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px 24px' }}>
+        <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: '6px', textDecoration: 'none', color: '#374151', fontSize: '13px' }}>
+          <ArrowLeft size={14} /> Back to home
+        </Link>
+        <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: '8px', textDecoration: 'none' }}>
+          <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: '#2255ec', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <span style={{ color: '#fff', fontWeight: 800, fontSize: '14px' }}>N</span>
           </div>
-          <h1 className="text-3xl font-bold text-white mb-2">Create account</h1>
-          <p style={{ color: 'var(--text-muted)' }}>Start your AI-powered career journey</p>
-        </div>
+          <span style={{ fontSize: '14px', fontWeight: 700, color: '#0f1729' }}>CareerNav</span>
+        </Link>
+      </div>
 
-        <div className="glass p-8">
-          <form onSubmit={handleSubmit} className="space-y-5">
-            <div>
-              <label className="block text-sm font-medium mb-2" style={{ color: 'var(--text-muted)' }}>Full name</label>
-              <input type="text" className="input-dark" placeholder="John Doe" value={name} onChange={(e) => setName(e.target.value)} required />
+      {/* Card */}
+      <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px' }}>
+        <div style={{ width: '100%', maxWidth: '420px', background: '#fff', borderRadius: '16px', padding: '40px 36px', boxShadow: '0 4px 24px rgba(0,0,0,0.08)' }}>
+          {/* Logo */}
+          <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '24px' }}>
+            <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: '#2255ec', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <span style={{ color: '#fff', fontWeight: 800, fontSize: '20px' }}>N</span>
             </div>
+          </div>
+
+          <h1 style={{ fontSize: '22px', fontWeight: 700, color: '#0f1729', textAlign: 'center', marginBottom: '6px' }}>Create your account</h1>
+          <p style={{ fontSize: '13px', color: '#6b7280', textAlign: 'center', marginBottom: '28px' }}>Start your AI-powered career journey today</p>
+
+          <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
             <div>
-              <label className="block text-sm font-medium mb-2" style={{ color: 'var(--text-muted)' }}>Email address</label>
-              <input type="email" className="input-dark" placeholder="you@example.com" value={email} onChange={(e) => setEmail(e.target.value)} required />
+              <label htmlFor="name" style={{ display: 'block', fontSize: '12px', fontWeight: 500, color: '#374151', marginBottom: '6px' }}>Full name</label>
+              <input
+                id="name" type="text" placeholder="John Doe" value={name}
+                onChange={e => setName(e.target.value)} required
+                style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', border: '1px solid #e5e7eb', fontSize: '13px', color: '#0f1729', outline: 'none', boxSizing: 'border-box', transition: 'border-color 150ms' }}
+                onFocus={e => (e.currentTarget.style.borderColor = '#2255ec')}
+                onBlur={e => (e.currentTarget.style.borderColor = '#e5e7eb')}
+              />
             </div>
+
             <div>
-              <label className="block text-sm font-medium mb-2" style={{ color: 'var(--text-muted)' }}>Password</label>
-              <input type="password" className="input-dark" placeholder="••••••••" value={password} onChange={(e) => setPassword(e.target.value)} required />
+              <label htmlFor="email" style={{ display: 'block', fontSize: '12px', fontWeight: 500, color: '#374151', marginBottom: '6px' }}>Email address</label>
+              <input
+                id="email" type="email" placeholder="you@example.com" value={email}
+                onChange={e => setEmail(e.target.value)} required
+                style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', border: '1px solid #e5e7eb', fontSize: '13px', color: '#0f1729', outline: 'none', boxSizing: 'border-box', transition: 'border-color 150ms' }}
+                onFocus={e => (e.currentTarget.style.borderColor = '#2255ec')}
+                onBlur={e => (e.currentTarget.style.borderColor = '#e5e7eb')}
+              />
             </div>
-            <button type="submit" disabled={loading} className="btn-accent w-full py-3 mt-2">
+
+            <div>
+              <label htmlFor="password" style={{ display: 'block', fontSize: '12px', fontWeight: 500, color: '#374151', marginBottom: '6px' }}>Password</label>
+              <div style={{ position: 'relative' }}>
+                <input
+                  id="password" type={showPassword ? 'text' : 'password'} placeholder="••••••••" value={password}
+                  onChange={e => setPassword(e.target.value)} required
+                  style={{ width: '100%', padding: '10px 40px 10px 12px', borderRadius: '8px', border: '1px solid #e5e7eb', fontSize: '13px', color: '#0f1729', outline: 'none', boxSizing: 'border-box', transition: 'border-color 150ms' }}
+                  onFocus={e => (e.currentTarget.style.borderColor = '#2255ec')}
+                  onBlur={e => (e.currentTarget.style.borderColor = '#e5e7eb')}
+                />
+                <button type="button" onClick={() => setShowPassword(!showPassword)}
+                  style={{ position: 'absolute', right: '10px', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', color: '#9ca3af', padding: '2px', display: 'flex', alignItems: 'center' }}
+                  aria-label={showPassword ? 'Hide password' : 'Show password'}>
+                  {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                </button>
+              </div>
+            </div>
+
+            <button type="submit" disabled={loading}
+              style={{ width: '100%', padding: '11px', borderRadius: '10px', background: loading ? '#93a5f5' : '#2255ec', color: '#fff', fontSize: '13px', fontWeight: 600, border: 'none', cursor: loading ? 'not-allowed' : 'pointer', transition: 'background 150ms', marginTop: '4px' }}>
               {loading ? 'Creating account...' : 'Create Account'}
             </button>
           </form>
 
-          <p className="text-center mt-6 text-sm" style={{ color: 'var(--text-muted)' }}>
+          {/* Secure note */}
+          <div style={{ marginTop: '20px', padding: '12px', borderRadius: '10px', background: '#f3f4f6', display: 'flex', alignItems: 'flex-start', gap: '10px' }}>
+            <Shield size={15} style={{ color: '#2255ec', flexShrink: 0, marginTop: '1px' }} />
+            <div>
+              <p style={{ fontSize: '12px', fontWeight: 600, color: '#0f1729', marginBottom: '2px' }}>Secure &amp; private</p>
+              <p style={{ fontSize: '11px', color: '#6b7280' }}>Your data is encrypted and only accessible to you.</p>
+            </div>
+          </div>
+
+          <p style={{ textAlign: 'center', marginTop: '20px', fontSize: '12px', color: '#6b7280' }}>
             Already have an account?{' '}
-            <Link href="/login" className="font-medium" style={{ color: 'var(--accent)' }}>Sign in</Link>
+            <Link href="/login" style={{ fontWeight: 600, color: '#2255ec', textDecoration: 'none' }}>Sign in</Link>
           </p>
         </div>
       </div>
+
+      <p style={{ textAlign: 'center', padding: '16px', fontSize: '11px', color: '#9ca3af' }}>
+        By creating an account, you agree to our{' '}
+        <a href="#" style={{ color: '#2255ec', textDecoration: 'none' }}>Terms</a> and{' '}
+        <a href="#" style={{ color: '#2255ec', textDecoration: 'none' }}>Privacy Policy</a>
+      </p>
     </div>
   );
 }

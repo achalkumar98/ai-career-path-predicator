@@ -37,42 +37,55 @@ export default function Chatbot() {
   };
 
   return (
-    <div className="space-y-4">
-      <div className="glass p-6">
-        <form onSubmit={handleChatSubmit} className="space-y-4">
-          <div className="flex gap-3">
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-5)' }}>
+      <div className="glass" style={{ padding: 'var(--space-7)' }}>
+        <form onSubmit={handleChatSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-5)' }}>
+          <div style={{ display: 'flex', gap: 'var(--space-4)' }}>
             <input
               type="text"
               value={chatMessage}
               onChange={(e) => setChatMessage(e.target.value)}
               placeholder="Ask anything about your career..."
-              className="input-dark flex-1"
+              className="input-dark"
+              style={{ flex: 1 }}
             />
             <button
               type="button"
               onClick={handleVoiceInput}
-              className="px-4 py-2 rounded-lg transition-all duration-200 flex-shrink-0"
+              aria-label="Voice input"
               style={{
-                background: isListening ? 'rgba(239,68,68,0.15)' : 'rgba(0,212,255,0.1)',
-                border: `1px solid ${isListening ? 'rgba(239,68,68,0.3)' : 'rgba(0,212,255,0.2)'}`,
-                color: isListening ? '#f87171' : 'var(--accent)',
+                flexShrink: 0,
+                padding: 'var(--space-4)',
+                borderRadius: 'var(--radius-xs)',
+                border: `1px solid ${isListening ? 'rgba(220,38,38,0.3)' : 'var(--color-border-default)'}`,
+                background: isListening ? 'rgba(220,38,38,0.06)' : 'var(--color-surface-muted)',
+                color: isListening ? '#dc2626' : 'var(--color-text-tertiary)',
+                cursor: 'pointer',
+                transition: `background var(--motion-instant), color var(--motion-instant)`,
+                boxShadow: 'var(--shadow-1)',
               }}
-              title="Voice input"
             >
-              <FaMicrophone size={16} />
+              <FaMicrophone size={14} />
             </button>
           </div>
-          <button type="submit" disabled={loading} className="btn-accent w-full py-3 flex items-center justify-center gap-2">
-            <FaPaperPlane size={14} />
+          <button
+            type="submit"
+            disabled={loading}
+            className="btn-accent w-full"
+            style={{ padding: 'var(--space-4) var(--space-6)', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 'var(--space-3)' }}
+          >
+            <FaPaperPlane size={12} aria-hidden="true" />
             {loading ? 'Thinking...' : 'Send Message'}
           </button>
         </form>
       </div>
 
       {chatResponse && (
-        <div className="glass p-6">
-          <p className="text-xs font-medium mb-3" style={{ color: 'var(--accent)' }}>🤖 CAREERBOT RESPONSE</p>
-          <p className="text-sm leading-relaxed" style={{ color: 'var(--text-primary)' }}>{chatResponse}</p>
+        <div className="glass" style={{ padding: 'var(--space-7)' }}>
+          <p style={{ fontSize: 'var(--font-size-xs)', fontWeight: 600, color: 'var(--color-surface-raised)', marginBottom: 'var(--space-4)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+            🤖 CareerBot Response
+          </p>
+          <p style={{ fontSize: 'var(--font-size-md)', lineHeight: '1.7', color: 'var(--color-text-secondary)' }}>{chatResponse}</p>
         </div>
       )}
     </div>

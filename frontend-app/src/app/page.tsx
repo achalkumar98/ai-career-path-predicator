@@ -1,260 +1,268 @@
 'use client';
-import { useEffect, useRef, useState } from 'react';
-import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import * as echarts from 'echarts';
-
-const features = [
-  { icon: '🧠', title: 'Skill Assessment', desc: 'Identify your strengths, weaknesses, and hidden talents with our AI-powered assessment.' },
-  { icon: '🗺️', title: 'Career Mapping', desc: 'Match your profile with thousands of career paths to find your optimal professional journey.' },
-  { icon: '🎓', title: 'Learning Roadmap', desc: 'Get personalized course and certification recommendations to achieve your goals.' },
-];
-
-const testimonials = [
-  { name: 'Sarah L.', role: 'Former Teacher → UX Designer', quote: 'The assessment identified my hidden design talents. I transitioned from teaching to UX design in just 8 months.', stars: 5 },
-  { name: 'Marcus J.', role: 'Sales Rep → Data Analyst', quote: 'The AI showed me how my analytical skills transfer to data analysis. Now I\'m earning 40% more.', stars: 5 },
-  { name: 'Jennifer M.', role: 'Marketing → Product Management', quote: 'After 10 years in marketing, the career path visualization showed me exactly how to transition.', stars: 5 },
-];
+import { useRouter } from 'next/navigation';
+import { FileText, Search, Mic, BookOpen, Layers, Users, FileCheck, Headphones, ArrowRight, CheckCircle } from 'lucide-react';
 
 const stats = [
-  { value: '94+', label: 'Career Paths' },
-  { value: '1,250+', label: 'Skills Analyzed' },
-  { value: '85%', label: 'Success Rate' },
-  { value: '6 mo', label: 'Avg. Transition' },
+  { icon: BookOpen, value: '500+', label: 'Interview Questions' },
+  { icon: Layers, value: '50+', label: 'Tech Stacks' },
+  { icon: Users, value: '2.5k+', label: 'Users' },
+  { icon: FileCheck, value: '300+', label: 'Resumes Created' },
+  { icon: Headphones, value: '100+', label: 'Mock Interviews' },
+];
+
+const steps = [
+  { num: '01', title: 'Build Your Resume', desc: 'Create ATS-optimized resumes with AI assistance. Choose from 50+ professional templates tailored for your industry.', color: '#2255ec' },
+  { num: '02', title: 'Find Matching Jobs', desc: 'Smart job search across LinkedIn, Naukri, Indeed, Glassdoor and more — your role and location pre-filled automatically.', color: '#059669' },
+  { num: '03', title: 'Ace Your Interview', desc: 'Practice with AI-powered mock interviews, get real-time feedback, and master 500+ curated interview questions.', color: '#7c3aed' },
+];
+
+const portals = [
+  { name: 'LinkedIn', desc: "World's largest professional network", bg: '#0077b5', letter: 'in' },
+  { name: 'Naukri', desc: "India's top job portal", bg: '#2255ec', letter: 'N' },
+  { name: 'Indeed', desc: '#1 job site — 250M+ visits/mo', bg: '#003a9b', letter: 'i' },
+  { name: 'Glassdoor', desc: 'Salaries, reviews, insider insights', bg: '#0caa41', letter: 'G' },
+  { name: 'Google Jobs', desc: 'Aggregated from every major board', bg: '#ea4335', letter: 'G' },
+];
+
+const footerCols = [
+  { title: 'Product', links: ['Templates', 'Resume Score', 'ATS Guidelines', 'Features'] },
+  { title: 'Career Tools', links: ['Job Search', 'Interview Prep', 'Blog'] },
+  { title: 'Company', links: ['Pricing', 'Contact Us', 'Feedback'] },
+  { title: 'Legal', links: ['Privacy', 'Terms', 'Cookies', 'Refund Policy'] },
 ];
 
 export default function LandingPage() {
-  const [email, setEmail] = useState('');
-  const [isAssessmentVisible, setIsAssessmentVisible] = useState(false);
-  const [currentQuestion, setCurrentQuestion] = useState(0);
-  const [answers, setAnswers] = useState<Record<number, string>>({});
-  const careerChartRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
   const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
-
-  const questions = [
-    { question: 'Which work environment do you prefer?', options: ['Collaborative team setting', 'Independent work', 'Mix of both', 'Leadership position'] },
-    { question: 'What skills would you like to develop?', options: ['Technical/coding', 'Communication/presentation', 'Creative/design', 'Analytical/problem-solving'] },
-    { question: 'How do you prefer to learn?', options: ['Hands-on experience', 'Structured courses', 'Self-directed learning', 'Mentorship'] },
-  ];
-
-  useEffect(() => {
-    if (!careerChartRef.current) return;
-    const chart = echarts.init(careerChartRef.current, 'dark');
-    chart.setOption({
-      backgroundColor: 'transparent',
-      animation: true,
-      tooltip: { trigger: 'item', formatter: '{b}' },
-      series: [{
-        type: 'graph', layout: 'force', roam: true,
-        label: { show: true, position: 'right', color: '#8899aa', fontSize: 11 },
-        force: { repulsion: 120, edgeLength: 90 },
-        data: [
-          { name: 'Skills Assessment', symbolSize: 55, itemStyle: { color: '#0066ff' } },
-          { name: 'Data Science', symbolSize: 42, itemStyle: { color: '#00d4ff' } },
-          { name: 'UX Design', symbolSize: 42, itemStyle: { color: '#7c3aed' } },
-          { name: 'Software Eng.', symbolSize: 42, itemStyle: { color: '#10b981' } },
-          { name: 'Product Mgmt', symbolSize: 42, itemStyle: { color: '#f59e0b' } },
-          { name: 'ML Engineer', symbolSize: 30, itemStyle: { color: '#00d4ff' } },
-          { name: 'Data Analyst', symbolSize: 30, itemStyle: { color: '#00d4ff' } },
-          { name: 'UI Designer', symbolSize: 30, itemStyle: { color: '#7c3aed' } },
-          { name: 'UX Researcher', symbolSize: 30, itemStyle: { color: '#7c3aed' } },
-          { name: 'Frontend Dev', symbolSize: 30, itemStyle: { color: '#10b981' } },
-          { name: 'Backend Dev', symbolSize: 30, itemStyle: { color: '#10b981' } },
-          { name: 'Technical PM', symbolSize: 30, itemStyle: { color: '#f59e0b' } },
-        ],
-        links: [
-          { source: 'Skills Assessment', target: 'Data Science' },
-          { source: 'Skills Assessment', target: 'UX Design' },
-          { source: 'Skills Assessment', target: 'Software Eng.' },
-          { source: 'Skills Assessment', target: 'Product Mgmt' },
-          { source: 'Data Science', target: 'ML Engineer' },
-          { source: 'Data Science', target: 'Data Analyst' },
-          { source: 'UX Design', target: 'UI Designer' },
-          { source: 'UX Design', target: 'UX Researcher' },
-          { source: 'Software Eng.', target: 'Frontend Dev' },
-          { source: 'Software Eng.', target: 'Backend Dev' },
-          { source: 'Product Mgmt', target: 'Technical PM' },
-        ],
-        lineStyle: { color: 'rgba(0,212,255,0.2)', width: 1.5, curveness: 0.2 },
-      }],
-    });
-    const onResize = () => chart.resize();
-    window.addEventListener('resize', onResize);
-    return () => { chart.dispose(); window.removeEventListener('resize', onResize); };
-  }, []);
-
-  const handleStart = () => router.push(token ? '/homepage' : '/login');
-
-  const handleAnswerSelect = (answer: string) => {
-    setAnswers((prev) => ({ ...prev, [currentQuestion]: answer }));
-    if (currentQuestion < questions.length - 1) setCurrentQuestion((p) => p + 1);
-    else setIsAssessmentVisible(false);
-  };
+  const go = (path: string) => router.push(token ? path : '/register');
 
   return (
-    <div className="min-h-screen" style={{ background: 'var(--bg-primary)', color: 'var(--text-primary)' }}>
+    <div style={{ minHeight: '100vh', background: '#fff', color: '#0f1729', fontFamily: 'Inter, sans-serif' }}>
 
-      {/* Nav */}
-      <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 lg:px-12 py-4" style={{ background: 'rgba(10,15,30,0.85)', backdropFilter: 'blur(12px)', borderBottom: '1px solid rgba(0,212,255,0.08)' }}>
-        <div className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-lg flex items-center justify-center text-sm font-bold" style={{ background: 'linear-gradient(135deg, #0066ff, #00d4ff)' }}>AI</div>
-          <span className="font-bold text-lg gradient-text">CareerNav</span>
-        </div>
-        <div className="flex items-center gap-3">
-          <Link href="/login" className="text-sm px-4 py-2 rounded-lg transition-colors" style={{ color: 'var(--text-muted)' }} onMouseEnter={e => (e.currentTarget.style.color = 'white')} onMouseLeave={e => (e.currentTarget.style.color = 'var(--text-muted)')}>Sign In</Link>
-          <Link href="/register" className="btn-accent text-sm px-4 py-2">Get Started</Link>
+      {/* ── Navbar ── */}
+      <nav style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 50, height: '60px', background: 'rgba(255,255,255,0.96)', backdropFilter: 'blur(8px)', borderBottom: '1px solid #e5e7eb', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 48px' }}>
+        <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: '8px', textDecoration: 'none' }}>
+          <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: '#2255ec', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <span style={{ color: '#fff', fontWeight: 800, fontSize: '14px' }}>N</span>
+          </div>
+          <span style={{ fontSize: '15px', fontWeight: 700, color: '#0f1729' }}>CareerNav</span>
+        </Link>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+          <Link href="/contact" style={{ padding: '7px 14px', fontSize: '13px', color: '#374151', textDecoration: 'none', borderRadius: '8px', transition: 'background 150ms' }}
+            onMouseEnter={e => (e.currentTarget.style.background = '#f3f4f6')}
+            onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}>Contact Us</Link>
+          <Link href="/upgrade" style={{ padding: '7px 14px', fontSize: '13px', color: '#374151', textDecoration: 'none', borderRadius: '8px', transition: 'background 150ms' }}
+            onMouseEnter={e => (e.currentTarget.style.background = '#f3f4f6')}
+            onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}>Pricing</Link>
+          <Link href="/login" style={{ padding: '7px 16px', fontSize: '13px', color: '#374151', textDecoration: 'none', borderRadius: '8px', border: '1px solid #e5e7eb', transition: 'border-color 150ms' }}
+            onMouseEnter={e => (e.currentTarget.style.borderColor = '#2255ec')}
+            onMouseLeave={e => (e.currentTarget.style.borderColor = '#e5e7eb')}>Sign In</Link>
+          <button onClick={() => go('/homepage')} style={{ padding: '7px 18px', fontSize: '13px', fontWeight: 600, background: '#2255ec', color: '#fff', border: 'none', borderRadius: '8px', cursor: 'pointer', transition: 'background 150ms' }}
+            onMouseEnter={e => (e.currentTarget.style.background = '#1a44c8')}
+            onMouseLeave={e => (e.currentTarget.style.background = '#2255ec')}>Get Started</button>
         </div>
       </nav>
 
-      {/* Hero */}
-      <section className="relative min-h-screen flex items-center justify-center px-6 pt-20" style={{ background: 'radial-gradient(ellipse at 50% 0%, rgba(0,102,255,0.15) 0%, transparent 60%)' }}>
-        <div className="absolute inset-0 pointer-events-none overflow-hidden">
-          <div className="absolute top-1/3 left-1/4 w-64 h-64 rounded-full" style={{ background: 'radial-gradient(circle, rgba(0,212,255,0.06) 0%, transparent 70%)' }} />
-          <div className="absolute top-1/2 right-1/4 w-96 h-96 rounded-full" style={{ background: 'radial-gradient(circle, rgba(0,102,255,0.08) 0%, transparent 70%)' }} />
-        </div>
-
-        <div className="max-w-4xl mx-auto text-center relative z-10">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium mb-6" style={{ background: 'rgba(0,212,255,0.1)', border: '1px solid rgba(0,212,255,0.2)', color: 'var(--accent)' }}>
-            <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
-            AI-Powered Career Guidance
-          </div>
-          <h1 className="text-5xl lg:text-7xl font-bold text-white mb-6 leading-tight">
-            Navigate Your<br /><span className="gradient-text">Career Future</span>
-          </h1>
-          <p className="text-lg lg:text-xl mb-10 max-w-2xl mx-auto" style={{ color: 'var(--text-muted)' }}>
-            Personalized skill-based guidance powered by AI. Discover your ideal career path, track progress, and land your dream job.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button onClick={handleStart} className="btn-accent px-8 py-4 text-base">
-              Start Your Journey →
-            </button>
-            <button onClick={() => setIsAssessmentVisible(true)} className="px-8 py-4 text-base rounded-lg font-semibold transition-all" style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', color: 'white' }} onMouseEnter={e => (e.currentTarget.style.background = 'rgba(255,255,255,0.1)')} onMouseLeave={e => (e.currentTarget.style.background = 'rgba(255,255,255,0.05)')}>
-              Free Assessment
-            </button>
-          </div>
-
-          {/* Stats */}
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mt-16">
-            {stats.map((s) => (
-              <div key={s.label} className="glass p-4 text-center">
-                <p className="text-2xl font-bold gradient-text">{s.value}</p>
-                <p className="text-xs mt-1" style={{ color: 'var(--text-muted)' }}>{s.label}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Assessment Modal */}
-      {isAssessmentVisible && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center px-4" style={{ background: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(4px)' }}>
-          <div className="glass p-8 w-full max-w-lg">
-            <div className="flex justify-between items-center mb-6">
-              <h3 className="text-lg font-semibold text-white">Quick Assessment</h3>
-              <button onClick={() => setIsAssessmentVisible(false)} style={{ color: 'var(--text-muted)' }} className="text-xl hover:text-white">✕</button>
+      {/* ── Hero ── */}
+      <section style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', padding: '80px 48px 60px', background: 'linear-gradient(160deg, #f8faff 0%, #ffffff 60%)' }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto', width: '100%', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '64px', alignItems: 'center' }}>
+          {/* Left */}
+          <div>
+            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '6px 14px', borderRadius: '9999px', background: 'rgba(34,85,236,0.07)', border: '1px solid rgba(34,85,236,0.18)', fontSize: '12px', fontWeight: 600, color: '#2255ec', marginBottom: '28px' }}>
+              ✦ Free AI Resume Builder — Jobs &amp; Interviews
             </div>
-            <div className="mb-6">
-              <div className="flex justify-between text-xs mb-2" style={{ color: 'var(--text-muted)' }}>
-                <span>Question {currentQuestion + 1} of {questions.length}</span>
-                <span>{Math.round(((currentQuestion + 1) / questions.length) * 100)}%</span>
-              </div>
-              <div className="w-full h-1.5 rounded-full" style={{ background: 'rgba(255,255,255,0.1)' }}>
-                <div className="h-1.5 rounded-full transition-all duration-300" style={{ width: `${((currentQuestion + 1) / questions.length) * 100}%`, background: 'linear-gradient(90deg, #0066ff, #00d4ff)' }} />
-              </div>
+            <h1 style={{ fontSize: '54px', fontWeight: 800, lineHeight: 1.1, color: '#0f1729', marginBottom: '20px' }}>
+              Your AI<br />
+              <span style={{ color: '#2255ec' }}>Career Navigator</span>
+            </h1>
+            <p style={{ fontSize: '16px', color: '#6b7280', lineHeight: 1.75, marginBottom: '36px', maxWidth: '460px' }}>
+              Build ATS-ready resumes with our free AI resume builder, find matching jobs, and ace interviews — all in one place, available 24/7.
+            </p>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap', marginBottom: '28px' }}>
+              <button onClick={() => go('/resume-analyzer')} style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '12px 22px', borderRadius: '10px', background: '#2255ec', color: '#fff', fontSize: '14px', fontWeight: 600, border: 'none', cursor: 'pointer', boxShadow: '0 4px 14px rgba(34,85,236,0.28)', transition: 'background 150ms' }}
+                onMouseEnter={e => (e.currentTarget.style.background = '#1a44c8')}
+                onMouseLeave={e => (e.currentTarget.style.background = '#2255ec')}>
+                <FileText size={14} /> Build Resume <ArrowRight size={13} />
+              </button>
+              <span style={{ color: '#d1d5db', fontSize: '16px' }}>→</span>
+              <button onClick={() => go('/homepage')} style={{ display: 'inline-flex', alignItems: 'center', gap: '7px', padding: '12px 18px', borderRadius: '10px', background: '#fff', color: '#0f1729', fontSize: '14px', fontWeight: 500, border: '1.5px solid #e5e7eb', cursor: 'pointer', transition: 'border-color 150ms' }}
+                onMouseEnter={e => (e.currentTarget.style.borderColor = '#2255ec')}
+                onMouseLeave={e => (e.currentTarget.style.borderColor = '#e5e7eb')}>
+                <Search size={13} /> Find Jobs
+              </button>
+              <span style={{ color: '#d1d5db', fontSize: '16px' }}>→</span>
+              <button onClick={() => go('/chatbot')} style={{ display: 'inline-flex', alignItems: 'center', gap: '7px', padding: '12px 18px', borderRadius: '10px', background: '#fff', color: '#0f1729', fontSize: '14px', fontWeight: 500, border: '1.5px solid #e5e7eb', cursor: 'pointer', transition: 'border-color 150ms' }}
+                onMouseEnter={e => (e.currentTarget.style.borderColor = '#2255ec')}
+                onMouseLeave={e => (e.currentTarget.style.borderColor = '#e5e7eb')}>
+                <Mic size={13} /> Ace Interview
+              </button>
             </div>
-            <p className="text-white font-medium mb-4">{questions[currentQuestion].question}</p>
-            <div className="space-y-2">
-              {questions[currentQuestion].options.map((option, i) => (
-                <button key={i} onClick={() => handleAnswerSelect(option)} className="w-full text-left px-4 py-3 rounded-lg text-sm transition-all duration-200" style={{ background: answers[currentQuestion] === option ? 'rgba(0,212,255,0.15)' : 'rgba(255,255,255,0.04)', border: `1px solid ${answers[currentQuestion] === option ? 'rgba(0,212,255,0.4)' : 'rgba(255,255,255,0.08)'}`, color: 'var(--text-primary)' }} onMouseEnter={e => { if (answers[currentQuestion] !== option) (e.currentTarget.style.background = 'rgba(255,255,255,0.08)'); }} onMouseLeave={e => { if (answers[currentQuestion] !== option) (e.currentTarget.style.background = 'rgba(255,255,255,0.04)'); }}>
-                  {option}
-                </button>
+            <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap' }}>
+              {['No credit card', '50+ ATS templates', 'AI interviews'].map(t => (
+                <span key={t} style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', fontSize: '12px', color: '#6b7280' }}>
+                  <CheckCircle size={13} style={{ color: '#059669' }} /> {t}
+                </span>
               ))}
             </div>
           </div>
-        </div>
-      )}
 
-      {/* Features */}
-      <section className="py-24 px-6">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-16">
-            <p className="text-sm font-medium mb-3" style={{ color: 'var(--accent)' }}>How It Works</p>
-            <h2 className="text-3xl lg:text-4xl font-bold text-white mb-4">Everything you need to succeed</h2>
-            <p className="max-w-2xl mx-auto" style={{ color: 'var(--text-muted)' }}>Our AI analyzes your skills and preferences to create a personalized career roadmap.</p>
+          {/* Right — floating info cards */}
+          <div style={{ position: 'relative', height: '440px' }}>
+            {/* dot grid */}
+            <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)', display: 'grid', gridTemplateColumns: 'repeat(6,1fr)', gap: '10px', opacity: 0.15 }}>
+              {Array.from({ length: 36 }).map((_, i) => <div key={i} style={{ width: '4px', height: '4px', borderRadius: '50%', background: '#2255ec' }} />)}
+            </div>
+            {/* cards */}
+            <div style={{ position: 'absolute', top: '10px', right: '0', background: '#2255ec', color: '#fff', borderRadius: '14px', padding: '16px 20px', boxShadow: '0 8px 28px rgba(34,85,236,0.32)', minWidth: '180px' }}>
+              <p style={{ fontSize: '14px', fontWeight: 700 }}>500+ Questions</p>
+              <p style={{ fontSize: '11px', opacity: 0.8, marginTop: '2px' }}>Across 50+ stacks</p>
+            </div>
+            <div style={{ position: 'absolute', top: '70px', left: '0', background: '#fff', border: '1px solid #e5e7eb', borderRadius: '14px', padding: '14px 18px', boxShadow: '0 4px 18px rgba(0,0,0,0.07)', minWidth: '170px' }}>
+              <p style={{ fontSize: '13px', fontWeight: 700, color: '#0f1729' }}>🔗 Smart Job Links</p>
+              <p style={{ fontSize: '11px', color: '#6b7280', marginTop: '2px' }}>LinkedIn · Naukri · +4</p>
+            </div>
+            <div style={{ position: 'absolute', bottom: '110px', right: '0', background: '#fff', border: '1px solid #e5e7eb', borderRadius: '14px', padding: '14px 18px', boxShadow: '0 4px 18px rgba(0,0,0,0.07)', minWidth: '160px' }}>
+              <p style={{ fontSize: '13px', fontWeight: 700, color: '#0f1729' }}>📄 50+ Templates</p>
+              <p style={{ fontSize: '11px', color: '#6b7280', marginTop: '2px' }}>ATS-ready resumes</p>
+            </div>
+            <div style={{ position: 'absolute', bottom: '20px', left: '10px', background: '#fff', border: '1px solid #e5e7eb', borderRadius: '14px', padding: '14px 18px', boxShadow: '0 4px 18px rgba(0,0,0,0.07)', minWidth: '180px' }}>
+              <p style={{ fontSize: '13px', fontWeight: 700, color: '#0f1729' }}>🎙️ 100+ Mock Interviews</p>
+              <p style={{ fontSize: '11px', color: '#6b7280', marginTop: '2px' }}>Real-voice AI agent</p>
+            </div>
+            {/* center emoji illustration */}
+            <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)', width: '160px', height: '160px', borderRadius: '50%', background: 'linear-gradient(135deg,rgba(34,85,236,0.06),rgba(5,150,105,0.06))', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '72px' }}>
+              🧑‍💼
+            </div>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {features.map((f) => (
-              <div key={f.title} className="glass p-6 transition-all duration-300" onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(0,212,255,0.3)'; (e.currentTarget as HTMLElement).style.transform = 'translateY(-4px)'; }} onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(0,212,255,0.15)'; (e.currentTarget as HTMLElement).style.transform = 'translateY(0)'; }}>
-                <div className="text-3xl mb-4">{f.icon}</div>
-                <h3 className="text-lg font-semibold text-white mb-2">{f.title}</h3>
-                <p className="text-sm leading-relaxed" style={{ color: 'var(--text-muted)' }}>{f.desc}</p>
+        </div>
+      </section>
+
+      {/* ── Stats ── */}
+      <section style={{ padding: '64px 48px', background: '#f9fafb', borderTop: '1px solid #e5e7eb', borderBottom: '1px solid #e5e7eb' }}>
+        <div style={{ maxWidth: '1100px', margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(5,1fr)', gap: '24px' }}>
+          {stats.map(({ icon: Icon, value, label }) => (
+            <div key={label} style={{ textAlign: 'center' }}>
+              <div style={{ width: '54px', height: '54px', borderRadius: '14px', background: 'rgba(34,85,236,0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 14px' }}>
+                <Icon size={22} style={{ color: '#2255ec' }} />
               </div>
-            ))}
-          </div>
+              <p style={{ fontSize: '28px', fontWeight: 800, color: '#0f1729', marginBottom: '4px' }}>{value}</p>
+              <p style={{ fontSize: '12px', color: '#6b7280' }}>{label}</p>
+            </div>
+          ))}
         </div>
       </section>
 
-      {/* Career Graph */}
-      <section className="py-24 px-6" style={{ background: 'rgba(13,21,38,0.5)' }}>
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-12">
-            <p className="text-sm font-medium mb-3" style={{ color: 'var(--accent)' }}>Visualization</p>
-            <h2 className="text-3xl lg:text-4xl font-bold text-white mb-4">Explore Career Paths</h2>
-            <p style={{ color: 'var(--text-muted)' }}>See how different roles connect and branch from your skills.</p>
+      {/* ── Three Steps ── */}
+      <section style={{ padding: '80px 48px', background: '#fff' }}>
+        <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
+          <div style={{ textAlign: 'center', marginBottom: '56px' }}>
+            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '6px 16px', borderRadius: '9999px', background: 'rgba(34,85,236,0.06)', border: '1px solid rgba(34,85,236,0.15)', fontSize: '12px', fontWeight: 600, color: '#2255ec', marginBottom: '16px' }}>
+              ✦ Your Career Journey
+            </div>
+            <h2 style={{ fontSize: '38px', fontWeight: 800, color: '#0f1729', marginBottom: '12px' }}>
+              Three Steps to <span style={{ color: '#2255ec' }}>Career Success</span>
+            </h2>
+            <p style={{ fontSize: '15px', color: '#6b7280' }}>Create, apply, and prepare — everything AI-powered, all in one place.</p>
           </div>
-          <div className="glass p-4" style={{ height: '480px' }}>
-            <div ref={careerChartRef} className="w-full h-full" />
-          </div>
-        </div>
-      </section>
-
-      {/* Testimonials */}
-      <section className="py-24 px-6">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-16">
-            <p className="text-sm font-medium mb-3" style={{ color: 'var(--accent)' }}>Success Stories</p>
-            <h2 className="text-3xl lg:text-4xl font-bold text-white mb-4">Real people, real results</h2>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {testimonials.map((t) => (
-              <div key={t.name} className="glass p-6">
-                <div className="flex mb-3">{'⭐'.repeat(t.stars)}</div>
-                <p className="text-sm leading-relaxed mb-4" style={{ color: 'var(--text-muted)' }}>&quot;{t.quote}&quot;</p>
-                <div>
-                  <p className="text-sm font-semibold text-white">{t.name}</p>
-                  <p className="text-xs" style={{ color: 'var(--accent)' }}>{t.role}</p>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '24px' }}>
+            {steps.map(s => (
+              <div key={s.num} style={{ background: '#f9fafb', border: '1px solid #e5e7eb', borderRadius: '16px', padding: '32px', transition: 'box-shadow 200ms, transform 200ms' }}
+                onMouseEnter={e => { (e.currentTarget as HTMLElement).style.boxShadow = '0 8px 32px rgba(0,0,0,0.08)'; (e.currentTarget as HTMLElement).style.transform = 'translateY(-4px)'; }}
+                onMouseLeave={e => { (e.currentTarget as HTMLElement).style.boxShadow = 'none'; (e.currentTarget as HTMLElement).style.transform = 'translateY(0)'; }}>
+                <div style={{ width: '42px', height: '42px', borderRadius: '10px', background: s.color, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '20px' }}>
+                  <span style={{ color: '#fff', fontWeight: 800, fontSize: '13px' }}>{s.num}</span>
                 </div>
+                <h3 style={{ fontSize: '17px', fontWeight: 700, color: '#0f1729', marginBottom: '10px' }}>{s.title}</h3>
+                <p style={{ fontSize: '13px', color: '#6b7280', lineHeight: 1.75 }}>{s.desc}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* CTA */}
-      <section className="py-24 px-6" style={{ background: 'radial-gradient(ellipse at center, rgba(0,102,255,0.12) 0%, transparent 70%)' }}>
-        <div className="max-w-2xl mx-auto text-center">
-          <h2 className="text-3xl lg:text-4xl font-bold text-white mb-4">Ready to find your path?</h2>
-          <p className="mb-8" style={{ color: 'var(--text-muted)' }}>Join thousands of professionals who found their ideal career with AI Career Navigator.</p>
-          <form onSubmit={(e) => { e.preventDefault(); setEmail(''); }} className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
-            <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Enter your email" className="input-dark flex-1" required />
-            <button type="submit" className="btn-accent px-6 py-3 whitespace-nowrap">Get Started</button>
-          </form>
+      {/* ── Job Portal Coverage ── */}
+      <section style={{ padding: '80px 48px', background: 'linear-gradient(180deg,#f0fdf4 0%,#f9fafb 100%)' }}>
+        <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
+          <div style={{ textAlign: 'center', marginBottom: '48px' }}>
+            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '6px 16px', borderRadius: '9999px', background: 'rgba(5,150,105,0.08)', border: '1px solid rgba(5,150,105,0.2)', fontSize: '12px', fontWeight: 600, color: '#059669', marginBottom: '16px' }}>
+              ✦ Job Portal Coverage
+            </div>
+            <h2 style={{ fontSize: '38px', fontWeight: 800, color: '#0f1729', marginBottom: '12px' }}>
+              One Click, <span style={{ color: '#059669' }}>Every Major Portal</span>
+            </h2>
+            <p style={{ fontSize: '15px', color: '#6b7280', maxWidth: '560px', margin: '0 auto' }}>
+              We generate smart search links for the job sites you actually use — your role and location pre-filled, one click opens each in a new tab.
+            </p>
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5,1fr)', gap: '16px', marginBottom: '40px' }}>
+            {portals.map(p => (
+              <div key={p.name} style={{ background: '#fff', border: '1px solid #e5e7eb', borderRadius: '14px', padding: '28px 16px', textAlign: 'center', cursor: 'pointer', transition: 'box-shadow 200ms, transform 200ms' }}
+                onMouseEnter={e => { (e.currentTarget as HTMLElement).style.boxShadow = '0 8px 24px rgba(0,0,0,0.08)'; (e.currentTarget as HTMLElement).style.transform = 'translateY(-3px)'; }}
+                onMouseLeave={e => { (e.currentTarget as HTMLElement).style.boxShadow = 'none'; (e.currentTarget as HTMLElement).style.transform = 'translateY(0)'; }}>
+                <div style={{ width: '52px', height: '52px', borderRadius: '12px', background: p.bg, display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 14px', color: '#fff', fontWeight: 800, fontSize: '17px' }}>
+                  {p.letter}
+                </div>
+                <p style={{ fontSize: '13px', fontWeight: 700, color: '#0f1729', marginBottom: '5px' }}>{p.name}</p>
+                <p style={{ fontSize: '11px', color: '#6b7280', lineHeight: 1.5 }}>{p.desc}</p>
+              </div>
+            ))}
+          </div>
+          <p style={{ textAlign: 'center', fontSize: '13px', color: '#6b7280', marginBottom: '28px', lineHeight: 1.75 }}>
+            Each card opens the platform in a new tab with your search ready.<br />
+            You apply on the original site — we don&apos;t store applications or charge fees.
+          </p>
+          <div style={{ textAlign: 'center' }}>
+            <button onClick={() => go('/homepage')} style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '13px 28px', borderRadius: '10px', background: '#059669', color: '#fff', fontSize: '14px', fontWeight: 600, border: 'none', cursor: 'pointer', boxShadow: '0 4px 14px rgba(5,150,105,0.25)', transition: 'background 150ms' }}
+              onMouseEnter={e => (e.currentTarget.style.background = '#047857')}
+              onMouseLeave={e => (e.currentTarget.style.background = '#059669')}>
+              Try Smart Job Search <ArrowRight size={14} />
+            </button>
+          </div>
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="py-10 px-6" style={{ borderTop: '1px solid rgba(0,212,255,0.08)', background: 'var(--bg-secondary)' }}>
-        <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-2">
-            <div className="w-7 h-7 rounded-lg flex items-center justify-center text-xs font-bold" style={{ background: 'linear-gradient(135deg, #0066ff, #00d4ff)' }}>AI</div>
-            <span className="font-semibold gradient-text">CareerNav</span>
-          </div>
-          <p className="text-sm" style={{ color: 'var(--text-muted)' }}>© 2025 AI Career Navigator. All rights reserved.</p>
-          <div className="flex gap-6 text-sm" style={{ color: 'var(--text-muted)' }}>
-            {['Terms', 'Privacy', 'Contact'].map((l) => (
-              <a key={l} href="#" className="hover:text-white transition-colors">{l}</a>
+      {/* ── CTA ── */}
+      <section style={{ padding: '80px 48px', background: '#fff', borderTop: '1px solid #e5e7eb' }}>
+        <div style={{ maxWidth: '600px', margin: '0 auto', textAlign: 'center' }}>
+          <h2 style={{ fontSize: '38px', fontWeight: 800, color: '#0f1729', marginBottom: '14px' }}>
+            Ready to <span style={{ color: '#2255ec' }}>Navigate Your Career</span>?
+          </h2>
+          <p style={{ fontSize: '15px', color: '#6b7280', marginBottom: '32px' }}>
+            Build resumes, find jobs, and practice interviews — start your journey today.
+          </p>
+          <button onClick={() => go('/homepage')} style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '14px 32px', borderRadius: '10px', background: '#2255ec', color: '#fff', fontSize: '15px', fontWeight: 600, border: 'none', cursor: 'pointer', boxShadow: '0 4px 14px rgba(34,85,236,0.28)', transition: 'background 150ms' }}
+            onMouseEnter={e => (e.currentTarget.style.background = '#1a44c8')}
+            onMouseLeave={e => (e.currentTarget.style.background = '#2255ec')}>
+            Get Started Free <ArrowRight size={15} />
+          </button>
+        </div>
+      </section>
+
+      {/* ── Footer ── */}
+      <footer style={{ background: '#f9fafb', borderTop: '1px solid #e5e7eb', padding: '56px 48px 32px' }}>
+        <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: '40px', marginBottom: '48px' }}>
+            {footerCols.map(col => (
+              <div key={col.title}>
+                <p style={{ fontSize: '13px', fontWeight: 700, color: '#0f1729', marginBottom: '16px' }}>{col.title}</p>
+                {col.links.map(l => (
+                  <a key={l} href="#" style={{ display: 'block', fontSize: '13px', color: '#6b7280', textDecoration: 'none', marginBottom: '10px', transition: 'color 150ms' }}
+                    onMouseEnter={e => (e.currentTarget.style.color = '#2255ec')}
+                    onMouseLeave={e => (e.currentTarget.style.color = '#6b7280')}>{l}</a>
+                ))}
+              </div>
             ))}
+          </div>
+          <div style={{ borderTop: '1px solid #e5e7eb', paddingTop: '24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px' }}>
+            <p style={{ fontSize: '12px', color: '#9ca3af' }}>© 2025 CareerNav. Crafted to help you land your next role.</p>
+            <div style={{ display: 'flex', gap: '20px' }}>
+              {['Privacy', 'Terms', 'Cookies', 'Refund'].map(l => (
+                <a key={l} href="#" style={{ fontSize: '12px', color: '#9ca3af', textDecoration: 'none', transition: 'color 150ms' }}
+                  onMouseEnter={e => (e.currentTarget.style.color = '#374151')}
+                  onMouseLeave={e => (e.currentTarget.style.color = '#9ca3af')}>{l}</a>
+              ))}
+            </div>
           </div>
         </div>
       </footer>

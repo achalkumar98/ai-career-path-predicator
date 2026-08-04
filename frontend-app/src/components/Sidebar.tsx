@@ -1,127 +1,243 @@
 'use client';
+import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { FaBars, FaHome, FaCompass, FaChartLine, FaFileAlt, FaLightbulb, FaRobot, FaSignInAlt, FaUserPlus, FaSignOutAlt } from 'react-icons/fa';
+import {
+  LayoutDashboard, Compass, TrendingUp, FileText, Sparkles, MessageSquare,
+  Zap, ChevronUp, User, Settings, MessageCircle, LogOut,
+} from 'lucide-react';
 
 interface SidebarProps {
   isOpen: boolean;
   toggleSidebar: () => void;
 }
 
-const navItems = [
-  { path: '/homepage', label: 'Home', icon: FaHome },
-  { path: '/career-navigator', label: 'Career Navigator', icon: FaCompass },
-  { path: '/progress-tracker', label: 'Progress Tracker', icon: FaChartLine },
-  { path: '/resume-analyzer', label: 'Resume Analyzer', icon: FaFileAlt },
-  { path: '/insights', label: 'Personality & Trends', icon: FaLightbulb },
-  { path: '/chatbot', label: 'Chat Assistant', icon: FaRobot },
+const navGroups = [
+  {
+    items: [
+      { path: '/homepage', label: 'Dashboard', icon: LayoutDashboard },
+    ],
+  },
+  {
+    label: 'TOOLS',
+    items: [
+      { path: '/career-navigator', label: 'Career Navigator', icon: Compass },
+      { path: '/progress-tracker', label: 'Progress Tracker', icon: TrendingUp },
+      { path: '/resume-analyzer', label: 'Resume Analyzer', icon: FileText },
+      { path: '/insights', label: 'Personality & Trends', icon: Sparkles },
+      { path: '/chatbot', label: 'Chat Assistant', icon: MessageSquare },
+    ],
+  },
 ];
 
 export default function Sidebar({ isOpen, toggleSidebar }: SidebarProps) {
   const pathname = usePathname();
   const router = useRouter();
-  const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
+  const [showUserMenu, setShowUserMenu] = useState(false);
+
+  const user = typeof window !== 'undefined'
+    ? JSON.parse(localStorage.getItem('user') || 'null')
+    : null;
 
   const handleLogout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
+    setShowUserMenu(false);
     router.push('/');
   };
 
+  const handleMenuNav = (path: string) => {
+    setShowUserMenu(false);
+    router.push(path);
+  };
+
   return (
-    <div
-      className="fixed top-0 left-0 h-screen flex flex-col transition-all duration-300 z-50"
-      style={{
-        width: isOpen ? '256px' : '72px',
-        background: 'linear-gradient(180deg, #0d1526 0%, #0a0f1e 100%)',
-        borderRight: '1px solid rgba(0,212,255,0.1)',
-      }}
-    >
+    <div style={{
+      position: 'fixed', top: 0, left: 0, height: '100vh',
+      width: isOpen ? '240px' : '64px',
+      background: '#ffffff',
+      borderRight: '1px solid #e5e7eb',
+      display: 'flex', flexDirection: 'column',
+      zIndex: 50,
+      transition: 'width 300ms ease',
+      overflow: 'hidden',
+    }}>
       {/* Logo */}
-      <div className="flex items-center justify-between px-4 py-5" style={{ borderBottom: '1px solid rgba(0,212,255,0.1)' }}>
-        {isOpen && (
-          <Link href="/" className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg flex items-center justify-center text-sm font-bold" style={{ background: 'linear-gradient(135deg, #0066ff, #00d4ff)' }}>
-              AI
+      <div style={{ padding: '14px 12px', borderBottom: '1px solid #f3f4f6', flexShrink: 0 }}>
+        <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: '10px', textDecoration: 'none' }}>
+          <div style={{
+            width: '36px', height: '36px', borderRadius: '10px',
+            background: '#2255ec', display: 'flex', alignItems: 'center', justifyContent: 'center',
+            flexShrink: 0,
+          }}>
+            <span style={{ color: '#fff', fontWeight: 800, fontSize: '16px' }}>N</span>
+          </div>
+          {isOpen && (
+            <div>
+              <div style={{ display: 'flex', alignItems: 'baseline', gap: '4px' }}>
+                <span style={{ fontSize: '14px', fontWeight: 700, color: '#0f1729' }}>CareerNav</span>
+              </div>
+              <p style={{ fontSize: '11px', color: '#9ca3af', marginTop: '1px' }}>AI Career Platform</p>
             </div>
-            <span className="font-bold text-lg gradient-text">CareerNav</span>
-          </Link>
-        )}
-        <button
-          onClick={toggleSidebar}
-          className="p-2 rounded-lg transition-colors"
-          style={{ color: 'var(--text-muted)' }}
-          onMouseEnter={e => (e.currentTarget.style.color = 'var(--accent)')}
-          onMouseLeave={e => (e.currentTarget.style.color = 'var(--text-muted)')}
-        >
-          <FaBars size={18} />
-        </button>
+          )}
+        </Link>
       </div>
 
       {/* Nav */}
-      <nav className="flex-1 py-6 overflow-y-auto">
-        <ul className="space-y-1 px-3">
-          {navItems.map((item) => {
-            const Icon = item.icon;
-            const active = pathname === item.path;
-            return (
-              <li key={item.path}>
+      <nav style={{ flex: 1, overflowY: 'auto', padding: '8px' }}>
+        {navGroups.map((group, gi) => (
+          <div key={gi} style={{ marginBottom: '4px' }}>
+            {group.label && isOpen && (
+              <p style={{ fontSize: '10px', fontWeight: 600, color: '#9ca3af', letterSpacing: '0.08em', padding: '8px 8px 4px' }}>
+                {group.label}
+              </p>
+            )}
+            {group.items.map((item) => {
+              const Icon = item.icon;
+              const isActive = pathname === item.path;
+              return (
                 <Link
+                  key={item.path}
                   href={item.path}
-                  className="flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-200 group"
+                  title={!isOpen ? item.label : undefined}
                   style={{
-                    background: active ? 'rgba(0,212,255,0.12)' : 'transparent',
-                    color: active ? 'var(--accent)' : 'var(--text-muted)',
-                    borderLeft: active ? '2px solid var(--accent)' : '2px solid transparent',
+                    display: 'flex', alignItems: 'center', gap: '10px',
+                    padding: '8px 10px',
+                    borderRadius: '8px',
+                    marginBottom: '2px',
+                    background: isActive ? '#eef2ff' : 'transparent',
+                    color: isActive ? '#2255ec' : '#374151',
+                    fontSize: '13px',
+                    fontWeight: isActive ? 600 : 400,
+                    textDecoration: 'none',
+                    transition: 'background 150ms, color 150ms',
+                    whiteSpace: 'nowrap',
                   }}
-                  onMouseEnter={e => { if (!active) { (e.currentTarget as HTMLElement).style.background = 'rgba(0,212,255,0.06)'; (e.currentTarget as HTMLElement).style.color = 'var(--text-primary)'; } }}
-                  onMouseLeave={e => { if (!active) { (e.currentTarget as HTMLElement).style.background = 'transparent'; (e.currentTarget as HTMLElement).style.color = 'var(--text-muted)'; } }}
+                  onMouseEnter={e => { if (!isActive) { (e.currentTarget as HTMLElement).style.background = '#f9fafb'; } }}
+                  onMouseLeave={e => { if (!isActive) { (e.currentTarget as HTMLElement).style.background = 'transparent'; } }}
+                  aria-current={isActive ? 'page' : undefined}
                 >
-                  <Icon size={18} className="flex-shrink-0" />
-                  {isOpen && <span className="text-sm font-medium">{item.label}</span>}
+                  <div style={{
+                    width: '28px', height: '28px', borderRadius: '7px',
+                    background: isActive ? '#dde4fb' : '#f3f4f6',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    flexShrink: 0,
+                  }}>
+                    <Icon size={14} style={{ color: isActive ? '#2255ec' : '#6b7280' }} />
+                  </div>
+                  {isOpen && <span>{item.label}</span>}
                 </Link>
-              </li>
-            );
-          })}
-        </ul>
+              );
+            })}
+          </div>
+        ))}
       </nav>
 
-      {/* Bottom auth */}
-      <div className="px-3 pb-6 space-y-1" style={{ borderTop: '1px solid rgba(0,212,255,0.1)', paddingTop: '16px' }}>
-        {token ? (
-          <button
-            onClick={handleLogout}
-            className="flex items-center gap-3 px-3 py-2.5 rounded-lg w-full transition-all duration-200"
-            style={{ color: '#f87171' }}
-            onMouseEnter={e => (e.currentTarget.style.background = 'rgba(248,113,113,0.1)')}
-            onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
-          >
-            <FaSignOutAlt size={18} className="flex-shrink-0" />
-            {isOpen && <span className="text-sm font-medium">Logout</span>}
-          </button>
-        ) : (
-          <>
-            <Link
-              href="/login"
-              className="flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-200"
-              style={{ color: pathname === '/login' ? 'var(--accent)' : 'var(--text-muted)' }}
-              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = 'rgba(0,212,255,0.06)'; (e.currentTarget as HTMLElement).style.color = 'var(--text-primary)'; }}
-              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = 'transparent'; (e.currentTarget as HTMLElement).style.color = pathname === '/login' ? 'var(--accent)' : 'var(--text-muted)'; }}
-            >
-              <FaSignInAlt size={18} className="flex-shrink-0" />
-              {isOpen && <span className="text-sm font-medium">Login</span>}
-            </Link>
-            <Link
-              href="/register"
-              className="flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-200"
-              style={{ color: pathname === '/register' ? 'var(--accent)' : 'var(--text-muted)' }}
-              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = 'rgba(0,212,255,0.06)'; (e.currentTarget as HTMLElement).style.color = 'var(--text-primary)'; }}
-              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = 'transparent'; (e.currentTarget as HTMLElement).style.color = pathname === '/register' ? 'var(--accent)' : 'var(--text-muted)'; }}
-            >
-              <FaUserPlus size={18} className="flex-shrink-0" />
-              {isOpen && <span className="text-sm font-medium">Register</span>}
-            </Link>
-          </>
+      {/* Upgrade */}
+      <div style={{ padding: '8px', flexShrink: 0 }}>
+        <button
+          onClick={() => router.push('/upgrade')}
+          style={{
+            width: '100%', padding: isOpen ? '10px 14px' : '10px',
+            borderRadius: '10px', background: '#2255ec', color: '#fff',
+            fontSize: '13px', fontWeight: 600, border: 'none', cursor: 'pointer',
+            display: 'flex', alignItems: 'center', justifyContent: isOpen ? 'flex-start' : 'center',
+            gap: '8px', transition: 'background 150ms',
+          }}
+          onMouseEnter={e => (e.currentTarget.style.background = '#1a44c8')}
+          onMouseLeave={e => (e.currentTarget.style.background = '#2255ec')}
+        >
+          <Zap size={13} />
+          {isOpen && 'Upgrade to Pro'}
+        </button>
+      </div>
+
+      {/* User profile */}
+      <div style={{ padding: '8px', borderTop: '1px solid #e5e7eb', flexShrink: 0, position: 'relative' }}>
+        <button
+          onClick={() => setShowUserMenu(!showUserMenu)}
+          style={{
+            width: '100%', padding: '8px 10px', borderRadius: '8px',
+            background: 'transparent', border: 'none', cursor: 'pointer',
+            display: 'flex', alignItems: 'center', gap: '10px',
+            transition: 'background 150ms',
+          }}
+          onMouseEnter={e => (e.currentTarget.style.background = '#f9fafb')}
+          onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
+        >
+          <div style={{
+            width: '32px', height: '32px', borderRadius: '50%',
+            background: '#dde4fb', display: 'flex', alignItems: 'center', justifyContent: 'center',
+            flexShrink: 0, fontSize: '13px', fontWeight: 700, color: '#2255ec',
+          }}>
+            {user?.name?.[0]?.toUpperCase() || 'U'}
+          </div>
+          {isOpen && (
+            <>
+              <div style={{ flex: 1, textAlign: 'left', overflow: 'hidden' }}>
+                <p style={{ fontSize: '12px', fontWeight: 600, color: '#0f1729', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                  {user?.name || 'User'}
+                </p>
+                <p style={{ fontSize: '11px', color: '#9ca3af', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                  {user?.email || ''}
+                </p>
+              </div>
+              <ChevronUp size={11} style={{ color: '#9ca3af', flexShrink: 0, transform: showUserMenu ? 'rotate(0deg)' : 'rotate(180deg)', transition: 'transform 200ms' }} />
+            </>
+          )}
+        </button>
+
+        {/* User dropdown */}
+        {showUserMenu && isOpen && (
+          <div style={{
+            position: 'absolute', bottom: '60px', left: '8px', right: '8px',
+            background: '#fff', border: '1px solid #e5e7eb', borderRadius: '12px',
+            boxShadow: '0 10px 25px rgba(0,0,0,0.12)', padding: '8px', zIndex: 100,
+          }}>
+            <div style={{ padding: '8px 10px 10px', borderBottom: '1px solid #f3f4f6', marginBottom: '4px' }}>
+              <p style={{ fontSize: '12px', fontWeight: 600, color: '#0f1729' }}>{user?.name || 'User'}</p>
+              <p style={{ fontSize: '11px', color: '#9ca3af' }}>{user?.email || ''}</p>
+            </div>
+            {[
+              { label: 'Profile', icon: User, path: '/profile' },
+              { label: 'Account Settings', icon: Settings, path: '/account-settings' },
+              { label: 'My Feedback', icon: MessageCircle, path: '/feedback' },
+            ].map(({ label, icon: Icon, path }) => (
+              <button
+                key={label}
+                onClick={() => handleMenuNav(path)}
+                style={{
+                  width: '100%', display: 'flex', alignItems: 'center', gap: '10px',
+                  padding: '8px 10px', borderRadius: '8px',
+                  background: 'transparent', border: 'none', cursor: 'pointer',
+                  fontSize: '13px', color: '#374151', textAlign: 'left',
+                  transition: 'background 150ms',
+                }}
+                onMouseEnter={e => (e.currentTarget.style.background = '#f9fafb')}
+                onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
+              >
+                <Icon size={13} style={{ color: '#6b7280' }} />
+                {label}
+              </button>
+            ))}
+            <div style={{ borderTop: '1px solid #f3f4f6', marginTop: '4px', paddingTop: '4px' }}>
+              <button
+                onClick={handleLogout}
+                style={{
+                  width: '100%', display: 'flex', alignItems: 'center', gap: '10px',
+                  padding: '8px 10px', borderRadius: '8px',
+                  background: 'transparent', border: 'none', cursor: 'pointer',
+                  fontSize: '13px', color: '#dc2626', textAlign: 'left',
+                  transition: 'background 150ms',
+                }}
+                onMouseEnter={e => (e.currentTarget.style.background = '#fef2f2')}
+                onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
+              >
+                <LogOut size={13} />
+                Log out
+              </button>
+            </div>
+          </div>
         )}
       </div>
     </div>

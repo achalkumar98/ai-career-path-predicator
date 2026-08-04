@@ -25,22 +25,27 @@ export default function InsightsForm({ userInput, setUserInput, setResult, setLo
   };
 
   return (
-    <div className="glass p-6 mb-6">
-      <form onSubmit={handleSubmit} className="space-y-5">
+    <div className="glass" style={{ padding: 'var(--space-7)', marginBottom: 'var(--space-6)' }}>
+      <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-6)' }}>
         <div>
-          <label className="block text-sm font-medium mb-2" style={{ color: 'var(--text-muted)' }}>
+          <label
+            htmlFor="insight-input"
+            style={{ display: 'block', fontSize: 'var(--font-size-xs)', fontWeight: 500, color: 'var(--color-text-secondary)', marginBottom: 'var(--space-3)' }}
+          >
             Tell us about yourself — your goals, values, and personality:
           </label>
           <textarea
+            id="insight-input"
             rows={5}
             value={userInput}
             onChange={(e) => setUserInput(e.target.value)}
-            className="input-dark resize-none"
+            className="input-dark"
+            style={{ resize: 'none' }}
             placeholder="e.g., I enjoy helping others, love solving logical problems, and prefer remote work..."
             required
           />
         </div>
-        <button type="submit" disabled={loading} className="btn-accent w-full py-3">
+        <button type="submit" disabled={loading} className="btn-accent w-full" style={{ padding: 'var(--space-4) var(--space-6)' }}>
           {loading ? 'Analyzing...' : 'Get My AI Insight →'}
         </button>
       </form>

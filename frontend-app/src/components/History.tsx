@@ -7,29 +7,44 @@ export default function History({ historyData }: HistoryProps) {
 
   if (isEmpty) {
     return (
-      <div className="glass p-10 text-center w-full">
-        <p className="text-4xl mb-3">📭</p>
-        <p className="font-medium text-white mb-1">No history yet</p>
-        <p className="text-sm" style={{ color: 'var(--text-muted)' }}>Complete an assessment or insight to see your history here.</p>
+      <div className="glass" style={{ padding: 'var(--space-8)', textAlign: 'center' }}>
+        <p style={{ fontSize: '2rem', marginBottom: 'var(--space-4)' }}>📭</p>
+        <p style={{ fontSize: 'var(--font-size-lg)', fontWeight: 600, color: 'var(--color-text-primary)', marginBottom: 'var(--space-3)' }}>No history yet</p>
+        <p style={{ fontSize: 'var(--font-size-md)', color: 'var(--color-text-tertiary)' }}>Complete an assessment or insight to see your history here.</p>
       </div>
     );
   }
 
   return (
-    <div className="space-y-6 w-full">
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-7)' }}>
+
       {/* Insight History */}
       {historyData?.insight?.length > 0 && (
-        <div className="glass p-6">
-          <h2 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full" style={{ background: 'var(--accent)' }} />
+        <div className="glass" style={{ padding: 'var(--space-7)' }}>
+          <h2 style={{ fontSize: 'var(--font-size-xl)', fontWeight: 600, color: 'var(--color-text-primary)', marginBottom: 'var(--space-6)', display: 'flex', alignItems: 'center', gap: 'var(--space-3)' }}>
+            <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: 'var(--color-surface-raised)', display: 'inline-block', flexShrink: 0 }} />
             Insight History
           </h2>
-          <div className="space-y-3">
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-4)' }}>
             {historyData.insight.map((item: any, index: number) => (
-              <div key={item._id || index} className="p-4 rounded-lg" style={{ background: 'rgba(0,212,255,0.05)', border: '1px solid rgba(0,212,255,0.1)' }}>
-                <p className="text-xs mb-2" style={{ color: 'var(--text-muted)' }}>🕒 {new Date(item.createdAt || item.date).toLocaleString()}</p>
-                <p className="text-sm text-white mb-1"><span style={{ color: 'var(--text-muted)' }}>Input:</span> {item.userInput}</p>
-                <p className="text-sm text-white"><span style={{ color: 'var(--text-muted)' }}>Result:</span> {item.aiInsight}</p>
+              <div
+                key={item._id || index}
+                style={{
+                  padding: 'var(--space-6)',
+                  borderRadius: 'var(--radius-xs)',
+                  background: 'rgba(34,85,236,0.04)',
+                  border: '1px solid rgba(34,85,236,0.12)',
+                }}
+              >
+                <p style={{ fontSize: 'var(--font-size-xs)', color: 'var(--color-text-tertiary)', marginBottom: 'var(--space-3)' }}>
+                  🕒 {new Date(item.createdAt || item.date).toLocaleString()}
+                </p>
+                <p style={{ fontSize: 'var(--font-size-md)', color: 'var(--color-text-secondary)', marginBottom: 'var(--space-2)' }}>
+                  <span style={{ color: 'var(--color-text-tertiary)' }}>Input:</span> {item.userInput}
+                </p>
+                <p style={{ fontSize: 'var(--font-size-md)', color: 'var(--color-text-secondary)' }}>
+                  <span style={{ color: 'var(--color-text-tertiary)' }}>Result:</span> {item.aiInsight}
+                </p>
               </div>
             ))}
           </div>
@@ -38,23 +53,49 @@ export default function History({ historyData }: HistoryProps) {
 
       {/* Assessment History */}
       {historyData?.assessments?.length > 0 && (
-        <div className="glass p-6">
-          <h2 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full" style={{ background: '#7c3aed' }} />
+        <div className="glass" style={{ padding: 'var(--space-7)' }}>
+          <h2 style={{ fontSize: 'var(--font-size-xl)', fontWeight: 600, color: 'var(--color-text-primary)', marginBottom: 'var(--space-6)', display: 'flex', alignItems: 'center', gap: 'var(--space-3)' }}>
+            <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#7c3aed', display: 'inline-block', flexShrink: 0 }} />
             Assessment History
           </h2>
-          <div className="space-y-3">
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-4)' }}>
             {historyData.assessments.map((item: any, index: number) => (
-              <div key={item._id || index} className="p-4 rounded-lg" style={{ background: 'rgba(124,58,237,0.05)', border: '1px solid rgba(124,58,237,0.15)' }}>
-                <p className="text-xs mb-2" style={{ color: 'var(--text-muted)' }}>🕒 {new Date(item.createdAt || item.date).toLocaleString()}</p>
-                <p className="text-sm text-white mb-1"><span style={{ color: 'var(--text-muted)' }}>Skills:</span> {item.skills?.join(', ')}</p>
-                <p className="text-sm text-white mb-2"><span style={{ color: 'var(--text-muted)' }}>Interests:</span> {item.interests?.join(', ')}</p>
+              <div
+                key={item._id || index}
+                style={{
+                  padding: 'var(--space-6)',
+                  borderRadius: 'var(--radius-xs)',
+                  background: 'rgba(124,58,237,0.04)',
+                  border: '1px solid rgba(124,58,237,0.12)',
+                }}
+              >
+                <p style={{ fontSize: 'var(--font-size-xs)', color: 'var(--color-text-tertiary)', marginBottom: 'var(--space-3)' }}>
+                  🕒 {new Date(item.createdAt || item.date).toLocaleString()}
+                </p>
+                <p style={{ fontSize: 'var(--font-size-md)', color: 'var(--color-text-secondary)', marginBottom: 'var(--space-2)' }}>
+                  <span style={{ color: 'var(--color-text-tertiary)' }}>Skills:</span> {item.skills?.join(', ')}
+                </p>
+                <p style={{ fontSize: 'var(--font-size-md)', color: 'var(--color-text-secondary)', marginBottom: 'var(--space-4)' }}>
+                  <span style={{ color: 'var(--color-text-tertiary)' }}>Interests:</span> {item.interests?.join(', ')}
+                </p>
                 {item.recommendedCareers?.length > 0 && (
                   <div>
-                    <p className="text-xs font-medium mb-1" style={{ color: 'var(--text-muted)' }}>Recommended Careers:</p>
-                    <div className="flex flex-wrap gap-2">
+                    <p style={{ fontSize: 'var(--font-size-xs)', fontWeight: 500, color: 'var(--color-text-tertiary)', marginBottom: 'var(--space-3)' }}>
+                      Recommended Careers:
+                    </p>
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--space-3)' }}>
                       {item.recommendedCareers.map((career: string, i: number) => (
-                        <span key={i} className="text-xs px-2 py-1 rounded-full" style={{ background: 'rgba(0,212,255,0.1)', color: 'var(--accent)', border: '1px solid rgba(0,212,255,0.2)' }}>
+                        <span
+                          key={i}
+                          style={{
+                            fontSize: 'var(--font-size-xs)',
+                            padding: `var(--space-2) var(--space-4)`,
+                            borderRadius: 'var(--radius-lg)',
+                            background: 'rgba(34,85,236,0.08)',
+                            color: 'var(--color-surface-raised)',
+                            border: '1px solid rgba(34,85,236,0.2)',
+                          }}
+                        >
                           {career}
                         </span>
                       ))}

@@ -11,27 +11,27 @@ export default function InsightsResult({ result, loading }: InsightsResultProps)
       if (section.includes('*') || section.includes('-')) {
         const items = section.split('\n').filter((line) => line.startsWith('*') || line.startsWith('-'));
         return (
-          <ul key={index} className="space-y-2 pl-4">
+          <ul key={index} style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-3)', paddingLeft: 'var(--space-5)' }}>
             {items.map((item, i) => (
-              <li key={i} className="flex items-start gap-2 text-sm" style={{ color: 'var(--text-primary)' }}>
-                <span style={{ color: 'var(--accent)', marginTop: '2px' }}>›</span>
+              <li key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: 'var(--space-3)', fontSize: 'var(--font-size-md)', color: 'var(--color-text-secondary)' }}>
+                <span style={{ color: 'var(--color-surface-raised)', marginTop: '2px', flexShrink: 0 }}>›</span>
                 {item.replace(/^[-*]\s*/, '')}
               </li>
             ))}
           </ul>
         );
       }
-      return <p key={index} className="text-sm leading-relaxed" style={{ color: 'var(--text-primary)' }}>{section}</p>;
+      return <p key={index} style={{ fontSize: 'var(--font-size-md)', lineHeight: '1.7', color: 'var(--color-text-secondary)' }}>{section}</p>;
     });
   };
 
   return (
-    <div className="glass p-6">
-      <h2 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
-        <span className="w-2 h-2 rounded-full" style={{ background: 'var(--accent)' }} />
+    <div className="glass" style={{ padding: 'var(--space-7)' }}>
+      <h2 style={{ fontSize: 'var(--font-size-xl)', fontWeight: 600, color: 'var(--color-text-primary)', marginBottom: 'var(--space-6)', display: 'flex', alignItems: 'center', gap: 'var(--space-3)' }}>
+        <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: 'var(--color-surface-raised)', display: 'inline-block', flexShrink: 0 }} />
         Your AI Career Insight 🚀
       </h2>
-      <div className="space-y-4">{splitContent(result)}</div>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-5)' }}>{splitContent(result)}</div>
     </div>
   );
 }
