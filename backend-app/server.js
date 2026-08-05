@@ -7,7 +7,10 @@ require('dotenv').config();
 const connectDB = require('./src/config/db');
 
 const app = express();
-app.use(cors());
+app.use(cors({
+  'origin': 'http://localhost:3000',
+  'credentials': true,
+}));
 app.use(express.json());
 
 const apiRoutePrefix = process.env.NODE_ENV === 'production' ? '/api' : '/v1';

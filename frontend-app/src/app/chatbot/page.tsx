@@ -18,7 +18,16 @@ export default function ChatAssistant() {
 
   useEffect(() => {
     if (open && messages.length === 0) {
-      setMessages([{ role: 'bot', text: "Hi! I'm your AI Career Assistant. Ask me anything about resumes, job search, interview tips, or career growth. 🚀" }]);
+      const user = JSON.parse(
+      localStorage.getItem('user') || '{}'
+    );
+
+      setMessages([
+      {
+        role: 'bot',
+        text: `Hi ${user?.name || 'Friend'}! 👋 I'm your AI Career Assistant. Ask me anything about resumes, job search, interview tips, or career growth. 🚀`
+      }
+    ]);
     }
   }, [open]);
 

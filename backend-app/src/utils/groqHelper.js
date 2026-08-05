@@ -1,24 +1,30 @@
-const { GoogleGenerativeAI } = require('@google/generative-ai');
+const OpenAI = require('openai');
 
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+const groq = new OpenAI({
+  apiKey: process.env.GROQ_API_KEY,
+  baseURL: 'https://api.groq.com/openai/v1',
+});
 
 // Retry Gemini with exponential backoff on 429
-async function callGeminiWithRetry(prompt, retries = 3, delayMs = 15000) {
-  const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
+async function callGroqWithRetry(prompt, retries = 3, delayMs = 15000) {
   for (let attempt = 1; attempt <= retries; attempt++) {
     try {
-      const result = await model.generateContent(prompt);
-      return (await result.response).text().trim();
+      const result = await groq.chat.completions.create({
+        model: 'llama-3.3-70b-versatile', // check console.groq.com/docs/models for current options
+        messages: [{ role: 'user', content: prompt }],
+      });
+      return result.choices[0].message.content.trim();
     } catch (err) {
       const is429 = err?.status === 429 || err?.message?.includes('429');
       if (is429 && attempt < retries) {
         const wait = delayMs * attempt;
-        console.warn(`[Gemini] 429 quota hit — retrying in ${wait / 1000}s (attempt ${attempt}/${retries})`);
+        console.warn(`[Groq] 429 quota hit — retrying in ${wait / 1000}s (attempt ${attempt}/${retries})`);
         await new Promise(r => setTimeout(r, wait));
       } else {
         throw err;
       }
     }
+ 
   }
 }
 
@@ -86,4 +92,4 @@ function fallbackChatReply(message = '') {
   return `That's a great career question! As your AI career advisor, I'd suggest focusing on three things: (1) Identify your core strengths and how they create value for employers, (2) Research the specific roles and companies that align with your goals, and (3) Build a consistent personal brand across LinkedIn and your portfolio. Career growth is about strategic positioning, not just hard work. What specific aspect would you like to explore further?`;
 }
 
-module.exports = { callGeminiWithRetry, fallbackCareerInsight, fallbackPersonalityInsight, fallbackChatReply };
+module.exports = { callGroqWithRetry, fallbackCareerInsight, fallbackPersonalityInsight, fallbackChatReply };
