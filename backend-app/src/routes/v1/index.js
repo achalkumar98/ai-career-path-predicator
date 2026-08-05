@@ -1,14 +1,14 @@
 const express = require('express');
 
-const authRoute = require('../auth.route');
-const assessmentRoute = require('../assessment.route');
-const jobMatchingRoute = require('../jobMatching.route');
+const authRoute = require('./auth.route');
+const assessmentRoute = require('./assessment.route');
+const jobMatchingRoute = require('./jobMatching.route');
 const resourcesRoute = require('./resources.route');
-const chatRoute = require('../chat.route');
-const resumeRoute = require('../resume.route');
-const insightsRoute = require('../insights.route');
-const contactRoute = require('../contact.route');
-const docsRoute = require('../docs.route');
+const chatRoute = require('./chat.route');
+const resumeRoute = require('./resume.route');
+const insightsRoute = require('./insights.route');
+const contactRoute = require('./contact.route');
+const docsRoute = require('./docs.route');
 
 const router = express.Router();
 
