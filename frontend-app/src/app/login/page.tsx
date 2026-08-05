@@ -24,8 +24,9 @@ export default function Login() {
       localStorage.setItem('token', res.data.token);
       localStorage.setItem('user', JSON.stringify(res.data.user));
       router.push('/homepage');
-    } catch (err: any) {
-      alert('Login failed: ' + (err.response?.data?.msg || err.response?.data?.message || err.message));
+    } catch (err) {
+      const e = err as { response?: { data?: { msg?: string; message?: string } }; message?: string };
+      alert('Login failed: ' + (e.response?.data?.msg || e.response?.data?.message || e.message));
     } finally {
       setLoading(false);
     }
@@ -37,8 +38,9 @@ export default function Login() {
     try {
       await forgotPasswordApi(forgotEmail);
       setForgotSent(true);
-    } catch (err: any) {
-      alert(err.response?.data?.msg || 'Something went wrong');
+    } catch (err) {
+      const e = err as { response?: { data?: { msg?: string } } };
+      alert(e.response?.data?.msg || 'Something went wrong');
     } finally {
       setForgotLoading(false);
     }

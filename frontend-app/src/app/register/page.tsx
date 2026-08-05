@@ -21,8 +21,9 @@ export default function Register() {
       localStorage.setItem('token', res.data.token);
       localStorage.setItem('user', JSON.stringify(res.data.user));
       router.push('/homepage');
-    } catch (err: any) {
-      alert('Registration failed: ' + (err.response?.data?.message || err.message));
+    } catch (err) {
+      const e = err as { response?: { data?: { message?: string } }; message?: string };
+      alert('Registration failed: ' + (e.response?.data?.message || e.message));
     } finally {
       setLoading(false);
     }

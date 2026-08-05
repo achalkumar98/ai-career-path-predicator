@@ -8,8 +8,8 @@
     "build": "next build",
     "start:prod": "next start -p 3001",
     "start": "next start",
-    "lint": "next lint",
-    "lint:fix": "next lint --fix",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
     "compile-ts": "tsc --noEmit",
     "prettier": "prettier --check .",
     "prettier:fix": "prettier --write ."
@@ -26,15 +26,16 @@
     "zod": "^3.24.2"
   },
   "devDependencies": {
+    "@eslint/eslintrc": "^3.3.6",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
-    "eslint-config-next": "^15",
-    "tailwindcss": "^4",
-    "typescript": "^5",
+    "eslint-config-next": "^15.5.22",
     "prettier": "^2.8.8",
-    "rimraf": "^5.0.0"
+    "rimraf": "^5.0.0",
+    "tailwindcss": "^4",
+    "typescript": "^5"
   }
 }

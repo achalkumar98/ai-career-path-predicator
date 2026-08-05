@@ -23,7 +23,7 @@ export default function CareerNavigator() {
     try {
       const res = await submitAssessmentApi(cleanedSkills, cleanedInterests);
       setResult(res.data.insight);
-    } catch (err: any) {
+    } catch {
       alert("Error: Make sure you're logged in and your server is running.");
     } finally {
       setLoading(false);

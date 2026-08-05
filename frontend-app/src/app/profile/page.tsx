@@ -30,8 +30,9 @@ export default function Profile() {
       localStorage.setItem('user', JSON.stringify(res.data.user));
       setSaved(true);
       setTimeout(() => setSaved(false), 3000);
-    } catch (err: any) {
-      alert(err.response?.data?.msg || 'Failed to update profile');
+    } catch (err) {
+      const e = err as { response?: { data?: { msg?: string } } };
+      alert(e.response?.data?.msg || 'Failed to update profile');
     } finally {
       setSaving(false);
     }
@@ -85,7 +86,7 @@ export default function Profile() {
                   </label>
                   <input
                     type={type}
-                    value={(form as any)[key]}
+                    value={(form as Record<string, string>)[key]}
                     onChange={e => setForm(f => ({ ...f, [key]: e.target.value }))}
                     placeholder={placeholder}
                     style={{ width: '100%', padding: '9px 12px', borderRadius: '8px', border: '1px solid #e5e7eb', fontSize: '13px', color: '#0f1729', outline: 'none', boxSizing: 'border-box', transition: 'border-color 150ms' }}

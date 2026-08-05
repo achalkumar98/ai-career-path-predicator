@@ -10,14 +10,15 @@ export default function Chatbot() {
   const [loading, setLoading] = useState(false);
 
   const handleVoiceInput = () => {
-    const SpeechRecognition = (window as any).webkitSpeechRecognition || (window as any).SpeechRecognition;
+    const SpeechRecognition = (window as Window & { webkitSpeechRecognition?: new () => SpeechRecognition; SpeechRecognition?: new () => SpeechRecognition }).webkitSpeechRecognition
+      || (window as Window & { SpeechRecognition?: new () => SpeechRecognition }).SpeechRecognition;
     if (!SpeechRecognition) { alert('Speech recognition not supported in this browser.'); return; }
     const recognition = new SpeechRecognition();
     recognition.lang = 'en-US';
     recognition.interimResults = false;
     recognition.onstart = () => setIsListening(true);
     recognition.onend = () => setIsListening(false);
-    recognition.onresult = (event: any) => setChatMessage(event.results[0][0].transcript);
+    recognition.onresult = (event: SpeechRecognitionEvent) => setChatMessage(event.results[0][0].transcript);
     recognition.start();
   };
 

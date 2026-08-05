@@ -3,9 +3,15 @@ import { useState } from 'react';
 import { uploadResumeApi } from '@/api/resumeApi';
 import { FaUpload, FaFilePdf } from 'react-icons/fa';
 
+interface ResumeResult {
+  extractedSkills?: string[];
+  experienceYears?: string[];
+  rawText?: string;
+}
+
 export default function ResumeNLP() {
   const [file, setFile] = useState<File | null>(null);
-  const [result, setResult] = useState<any>(null);
+  const [result, setResult] = useState<ResumeResult | null>(null);
   const [loading, setLoading] = useState(false);
 
   const handleUpload = async (e: React.FormEvent) => {

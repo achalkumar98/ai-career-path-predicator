@@ -24,8 +24,9 @@ export default function AccountSettings() {
       setSaved(true);
       setCurrentPw(''); setNewPw(''); setConfirmPw('');
       setTimeout(() => setSaved(false), 3000);
-    } catch (err: any) {
-      alert(err.response?.data?.msg || 'Failed to update password. Make sure your current password is correct.');
+    } catch (err) {
+      const e = err as { response?: { data?: { msg?: string } } };
+      alert(e.response?.data?.msg || 'Failed to update password. Make sure your current password is correct.');
     } finally {
       setSaving(false);
     }

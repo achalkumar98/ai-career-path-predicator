@@ -20,8 +20,9 @@ export default function ContactPage() {
       await api.post('/contact', form);
       setSent(true);
       setForm({ name: '', email: '', subject: '', message: '' });
-    } catch (err: any) {
-      setError(err.response?.data?.errors?.[0]?.msg || 'Something went wrong. Please try again.');
+    } catch (err) {
+      const e = err as { response?: { data?: { errors?: { msg: string }[]; msg?: string } } };
+      setError(e.response?.data?.errors?.[0]?.msg || 'Something went wrong. Please try again.');
     } finally {
       setLoading(false);
     }
