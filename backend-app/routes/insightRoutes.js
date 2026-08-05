@@ -3,7 +3,7 @@ const router = express.Router();
 const authMiddleware = require('../middleware/authMiddleware');
 const Insight = require('../models/Insights');
 const Assessment = require('../models/Assessment');
-const { callGroqWithRetry, fallbackPersonalityInsight } = require('../utils/groqHelper');
+const { callGeminiWithRetry, fallbackPersonalityInsight } = require('../utils/geminiHelper');
 
 // POST /api/insights
 router.post('/', authMiddleware, async (req, res) => {
@@ -30,12 +30,12 @@ Generate a personalized, warm, encouraging career insight in 2-3 paragraphs.
 
     let aiInsight;
     try {
-      aiInsight = await callGroqWithRetry(prompt);
-      console.log('[Insights] Groq response received');
+      aiInsight = await callGeminiWithRetry(prompt);
+      console.log('[Insights] Gemini response received');
     } catch (aiErr) {
       const is429 = aiErr?.status === 429 || aiErr?.message?.includes('429');
       if (is429) {
-        console.warn('[Insights] Groqquota exhausted — using fallback');
+        console.warn('[Insights] Gemini quota exhausted — using fallback');
         aiInsight = fallbackPersonalityInsight(input);
       } else {
         throw aiErr;

@@ -64,7 +64,7 @@ NEXT_PUBLIC_API_URL=http://localhost:5000
 
 ## Backend App (`backend-app/`)
 
-Built with **Node.js**, **Express**, **MongoDB (Mongoose)**, and **Google GroqAI**.
+Built with **Node.js**, **Express**, **MongoDB (Mongoose)**, and **Google Gemini AI**.
 
 ### API Routes
 
@@ -77,7 +77,7 @@ Built with **Node.js**, **Express**, **MongoDB (Mongoose)**, and **Google GroqAI
 | GET | `/api/auth/profile` | Get user profile (auth required) |
 | PUT | `/api/auth/profile` | Update user profile (auth required) |
 | POST | `/api/contact` | Send contact form email via Nodemailer |
-| POST | `/api/chat` | AI chat via Groq|
+| POST | `/api/chat` | AI chat via Gemini |
 | POST | `/api/resume` | Upload & analyze resume PDF |
 | POST | `/api/assessment` | Submit skill assessment |
 | GET | `/api/insights` | Get AI career insights |
@@ -136,7 +136,7 @@ SMTP_PASS=your-gmail-app-password
 |---|---|
 | Frontend | Next.js 15, TypeScript, Tailwind CSS v4 |
 | Backend | Node.js, Express 5, MongoDB, Mongoose |
-| AI | Google GroqAPI |
+| AI | Google Gemini API |
 | Auth | JWT + bcryptjs |
 | Email | Nodemailer (Gmail SMTP) |
 | File Upload | Multer + pdf-parse |

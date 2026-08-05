@@ -442,7 +442,7 @@ export default function LandingPage() {
               </button>
             </div>
             <div style={{ display: "flex", gap: "20px", flexWrap: "wrap" }}>
-              {["No credit card", "Powered by GroqAI", "Available 24/7"].map(
+              {["No credit card", "Powered by Gemini AI", "Available 24/7"].map(
                 (t) => (
                   <span
                     key={t}
@@ -523,7 +523,7 @@ export default function LandingPage() {
               <p
                 style={{ fontSize: "13px", fontWeight: 700, color: "#0f1729" }}
               >
-                🧠 GroqAI Engine
+                🧠 Gemini AI Engine
               </p>
               <p
                 style={{ fontSize: "11px", color: "#6b7280", marginTop: "2px" }}
