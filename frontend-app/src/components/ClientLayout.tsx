@@ -4,13 +4,15 @@ import { usePathname } from 'next/navigation';
 import Sidebar from './Sidebar';
 import AppHeader from './AppHeader';
 import Footer from './Footer';
+import { stripBasePath } from '@/lib/pathHelper';
 
 const PUBLIC_PATHS = ['/', '/login', '/register', '/contact', '/upgrade'];
 
 export default function ClientLayout({ children }: { children: React.ReactNode }) {
   const [isOpen, setIsOpen] = useState(true);
   const pathname = usePathname();
-  const isPublic = PUBLIC_PATHS.includes(pathname);
+  const currentPath = stripBasePath(pathname || '/');
+  const isPublic = PUBLIC_PATHS.includes(currentPath);
 
   if (isPublic) {
     return (

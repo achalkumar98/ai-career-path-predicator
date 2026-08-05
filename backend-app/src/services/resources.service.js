@@ -1,9 +1,4 @@
-const express = require('express');
-const router = express.Router();
-
-router.post('/', (req, res) => {
-  const { skills, interests } = req.body;
-
+﻿const getResources = async (skills, interests) => {
   const mockResources = [
     {
       title: "Machine Learning Specialization",
@@ -22,7 +17,9 @@ router.post('/', (req, res) => {
     },
   ];
 
-  res.json({ resources: mockResources });
-});
+  return { resources: mockResources };
+};
 
-module.exports = router;
+module.exports = {
+  getResources,
+};

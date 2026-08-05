@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
+import { stripBasePath } from '@/lib/pathHelper';
 import {
   LayoutDashboard, Compass, TrendingUp, FileText, Sparkles, MessageSquare,
   Zap, ChevronUp, User, Settings, MessageCircle, LogOut,
@@ -32,6 +33,7 @@ const navGroups = [
 
 export default function Sidebar({ isOpen, toggleSidebar }: SidebarProps) {
   const pathname = usePathname();
+  const currentPath = stripBasePath(pathname || '/');
   const router = useRouter();
   const [showUserMenu, setShowUserMenu] = useState(false);
 
@@ -94,7 +96,7 @@ export default function Sidebar({ isOpen, toggleSidebar }: SidebarProps) {
             )}
             {group.items.map((item) => {
               const Icon = item.icon;
-              const isActive = pathname === item.path;
+              const isActive = currentPath === item.path;
               return (
                 <Link
                   key={item.path}

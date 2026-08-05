@@ -1,0 +1,9 @@
+﻿module.exports.geminiService = require('./gemini.service');
+module.exports.assessmentService = require('./assessment.service');
+module.exports.authService = require('./auth.service');
+module.exports.chatService = require('./chat.service');
+module.exports.contactService = require('./contact.service');
+module.exports.insightsService = require('./insights.service');
+module.exports.jobMatchingService = require('./jobMatching.service');
+module.exports.resourcesService = require('./resources.service');
+module.exports.resumeService = require('./resume.service');
