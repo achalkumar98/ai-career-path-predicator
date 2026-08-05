@@ -1,6 +1,6 @@
 const Insight = require('../models/Insights');
 const Assessment = require('../models/Assessment');
-const { callGeminiWithRetry, fallbackPersonalityInsight } = require('../utils/geminiHelper');
+const { callGroqWithRetry, fallbackPersonalityInsight } = require('../utils/groqHelper');
 
 const createInsight = async (userId, input) => {
   const assessments = await Assessment.find({ userId }).sort({ createdAt: -1 }).limit(5);
@@ -12,7 +12,7 @@ const createInsight = async (userId, input) => {
 
   let aiInsight;
   try {
-    aiInsight = await callGeminiWithRetry(prompt);
+    aiInsight = await callGroqWithRetry(prompt);
   } catch (err) {
     const is429 = err?.status === 429 || err?.message?.includes('429');
     if (is429) {

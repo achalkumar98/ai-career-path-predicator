@@ -14,6 +14,8 @@ const auth = (req, res, next) => {
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET || 'defaultsecret');
     req.user = decoded;
+    console.log('Decoded JWT payload:', decoded); // Log the decoded payload for debugging
+
     next();
   } catch (err) {
     res.status(401).json({ message: 'Invalid token' });
