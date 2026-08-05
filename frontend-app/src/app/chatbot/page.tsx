@@ -36,13 +36,14 @@ export default function ChatAssistant() {
   }, [messages, loading]);
 
   const handleVoice = () => {
-    const SR = (window as any).webkitSpeechRecognition || (window as any).SpeechRecognition;
+    const SR = (window as Window & { webkitSpeechRecognition?: new () => SpeechRecognition; SpeechRecognition?: new () => SpeechRecognition }).webkitSpeechRecognition
+      || (window as Window & { SpeechRecognition?: new () => SpeechRecognition }).SpeechRecognition;
     if (!SR) { alert('Speech recognition not supported.'); return; }
     const r = new SR();
     r.lang = 'en-US'; r.interimResults = false;
     r.onstart = () => setIsListening(true);
     r.onend = () => setIsListening(false);
-    r.onresult = (e: any) => setInput(e.results[0][0].transcript);
+    r.onresult = (e: SpeechRecognitionEvent) => setInput(e.results[0][0].transcript);
     r.start();
   };
 

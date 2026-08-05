@@ -6,14 +6,14 @@ import History from '@/components/History';
 
 export default function ProgressTracker() {
   const [open, setOpen] = useState(false);
-  const [historyData, setHistoryData] = useState<any>([]);
+  const [historyData, setHistoryData] = useState<{ insight?: unknown[]; assessments?: unknown[] } | null>(null);
   const [loading, setLoading] = useState(false);
 
   const fetchHistory = async () => {
     setLoading(true);
     try {
       const res = await getAssessmentHistoryApi();
-      setHistoryData(res.data);
+      setHistoryData(res.data as { insight?: unknown[]; assessments?: unknown[] });
     } catch (err) {
       console.error('History fetch error:', err);
     } finally {

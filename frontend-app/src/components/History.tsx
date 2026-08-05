@@ -1,5 +1,27 @@
+interface InsightItem {
+  _id?: string;
+  createdAt?: string;
+  date?: string;
+  userInput: string;
+  aiInsight: string;
+}
+
+interface AssessmentItem {
+  _id?: string;
+  createdAt?: string;
+  date?: string;
+  skills?: string[];
+  interests?: string[];
+  recommendedCareers?: string[];
+}
+
+interface HistoryData {
+  insight?: InsightItem[];
+  assessments?: AssessmentItem[];
+}
+
 interface HistoryProps {
-  historyData: any;
+  historyData: HistoryData | null;
 }
 
 export default function History({ historyData }: HistoryProps) {
@@ -26,7 +48,7 @@ export default function History({ historyData }: HistoryProps) {
             Insight History
           </h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-4)' }}>
-            {historyData.insight.map((item: any, index: number) => (
+            {historyData.insight.map((item: InsightItem, index: number) => (
               <div
                 key={item._id || index}
                 style={{
@@ -59,7 +81,7 @@ export default function History({ historyData }: HistoryProps) {
             Assessment History
           </h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-4)' }}>
-            {historyData.assessments.map((item: any, index: number) => (
+            {historyData.assessments.map((item: AssessmentItem, index: number) => (
               <div
                 key={item._id || index}
                 style={{
