@@ -1,11 +1,12 @@
 'use client';
 import { useState, useRef, useEffect } from 'react';
-import { MessageSquare, Mic, Send, X, Loader2, Bot, User } from 'lucide-react';
-import { sendChatMessageApi } from '@/api/chatApi';
+import { MessageSquare, Mic, Send, X, Loader2, Bot, User, Trash2 } from 'lucide-react';
+import { sendChatMessageApi, getChatHistoryApi, clearChatHistoryApi } from '@/api/chatApi';
 
 interface Message {
   role: 'user' | 'bot';
   text: string;
+  timestamp?: number;
 }
 
 export default function ChatAssistant() {
@@ -14,29 +15,101 @@ export default function ChatAssistant() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [loading, setLoading] = useState(false);
   const [isListening, setIsListening] = useState(false);
+  const [isInitializing, setIsInitializing] = useState(false);
+  const [messageCount, setMessageCount] = useState(0);
+  const hasInitialized = useRef(false);
   const bottomRef = useRef<HTMLDivElement>(null);
 
+  // Initialize chat when opened
   useEffect(() => {
-    if (open && messages.length === 0) {
-      setMessages([{ role: 'bot', text: "Hi! I'm your AI Career Assistant. Ask me anything about resumes, job search, interview tips, or career growth. 🚀" }]);
+    if (open && !hasInitialized.current) {
+      initializeChat();
     }
   }, [open]);
 
+  // Auto-scroll to bottom
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages, loading]);
 
+  // Initialize chat with personalized greeting
+  const initializeChat = async () => {
+    setIsInitializing(true);
+    try {
+      const response = await getChatHistoryApi();
+      const { greeting: personalizedGreeting, history, messageCount: count } = response.data;
+      
+      setMessageCount(count || 0);
+      
+      if (history && history.length > 0) {
+        const formattedHistory = history.map((msg: any) => ({
+          role: msg.role === 'user' ? 'user' : 'bot',
+          text: msg.content
+        }));
+        setMessages(formattedHistory);
+      } else {
+        setMessages([{ role: 'bot', text: personalizedGreeting }]);
+      }
+      
+      hasInitialized.current = true;
+    } catch (error) {
+      console.error('Failed to initialize chat:', error);
+      setMessages([{ 
+        role: 'bot', 
+        text: "Hi! I'm your AI Career Assistant. Ask me anything about resumes, job search, interview tips, or career growth. 🚀" 
+      }]);
+    } finally {
+      setIsInitializing(false);
+    }
+  };
+
+  // Handle voice input
   const handleVoice = () => {
     const SR = (window as any).webkitSpeechRecognition || (window as any).SpeechRecognition;
-    if (!SR) { alert('Speech recognition not supported.'); return; }
+    if (!SR) { 
+      alert('Speech recognition not supported in your browser. Please use Chrome or Edge.'); 
+      return; 
+    }
     const r = new SR();
-    r.lang = 'en-US'; r.interimResults = false;
+    r.lang = 'en-US'; 
+    r.interimResults = false;
     r.onstart = () => setIsListening(true);
     r.onend = () => setIsListening(false);
-    r.onresult = (e: any) => setInput(e.results[0][0].transcript);
+    r.onresult = (e: any) => {
+      const transcript = e.results[0][0].transcript;
+      setInput(transcript);
+      setTimeout(() => {
+        if (transcript.trim()) {
+          handleSendDirect(transcript);
+        }
+      }, 300);
+    };
     r.start();
   };
 
+  // Direct send for voice
+  const handleSendDirect = async (text: string) => {
+    if (!text.trim() || loading) return;
+    const userMsg = text.trim();
+    setInput('');
+    setMessages(prev => [...prev, { role: 'user', text: userMsg }]);
+    setLoading(true);
+    try {
+      const res = await sendChatMessageApi(userMsg);
+      setMessages(prev => [...prev, { role: 'bot', text: res.data.reply }]);
+      setMessageCount(res.data.messageCount || messageCount + 1);
+    } catch (error) {
+      console.error('Chat error:', error);
+      setMessages(prev => [...prev, { 
+        role: 'bot', 
+        text: 'Sorry, I ran into an error. Please make sure the server is running and try again.' 
+      }]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Handle send message
   const handleSend = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!input.trim() || loading) return;
@@ -47,22 +120,42 @@ export default function ChatAssistant() {
     try {
       const res = await sendChatMessageApi(userMsg);
       setMessages(prev => [...prev, { role: 'bot', text: res.data.reply }]);
-    } catch {
-      setMessages(prev => [...prev, { role: 'bot', text: 'Sorry, I ran into an error. Please make sure the server is running and try again.' }]);
+      setMessageCount(res.data.messageCount || messageCount + 1);
+    } catch (error) {
+      console.error('Chat error:', error);
+      setMessages(prev => [...prev, { 
+        role: 'bot', 
+        text: 'Sorry, I ran into an error. Please make sure the server is running and try again.' 
+      }]);
     } finally {
       setLoading(false);
+    }
+  };
+
+  // Clear chat history
+  const clearHistory = async () => {
+    if (window.confirm('Are you sure you want to clear your chat history?')) {
+      try {
+        await clearChatHistoryApi();
+        setMessages([{ role: 'bot', text: 'Chat history cleared. How can I help you today? 🚀' }]);
+        setMessageCount(0);
+        hasInitialized.current = false;
+      } catch (error) {
+        console.error('Failed to clear history:', error);
+        alert('Failed to clear chat history. Please try again.');
+      }
     }
   };
 
   const highlights = [
     { icon: Bot, label: 'AI-Powered', desc: 'Intelligent responses to career questions' },
     { icon: Mic, label: 'Voice Input', desc: 'Speak your questions hands-free' },
-    { icon: MessageSquare, label: 'Instant Answers', desc: 'Get guidance on any career topic' },
+    { icon: MessageSquare, label: 'Session Memory', desc: 'Remembers your conversation context' },
   ];
 
   return (
     <div style={{ minHeight: 'calc(100vh - 56px)', background: '#f9fafb' }}>
-      {/* Hero */}
+      {/* Hero Section */}
       <div style={{ background: 'linear-gradient(135deg,#f0fdf4 0%,#f9fafb 60%)', borderBottom: '1px solid #e5e7eb', padding: '64px 48px', textAlign: 'center' }}>
         <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '6px 14px', borderRadius: '9999px', background: 'rgba(16,185,129,0.08)', border: '1px solid rgba(16,185,129,0.2)', fontSize: '12px', fontWeight: 600, color: '#059669', marginBottom: '24px' }}>
           <MessageSquare size={13} /> AI Assistant
@@ -71,7 +164,7 @@ export default function ChatAssistant() {
           Career<br /><span style={{ color: '#059669' }}>Chat Assistant</span>
         </h1>
         <p style={{ fontSize: '16px', color: '#6b7280', maxWidth: '520px', margin: '0 auto 32px', lineHeight: 1.7 }}>
-          Ask anything about careers, skills, job market trends, or interview tips. Your AI career advisor is available 24/7.
+          Ask anything about careers, skills, job market trends, or interview tips. Your AI career advisor is available 24/7 with session memory.
         </p>
         <button onClick={() => setOpen(true)}
           style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '13px 28px', borderRadius: '10px', background: '#059669', color: '#fff', fontSize: '14px', fontWeight: 600, border: 'none', cursor: 'pointer', boxShadow: '0 4px 14px rgba(5,150,105,0.3)', transition: 'background 150ms' }}
@@ -81,7 +174,7 @@ export default function ChatAssistant() {
         </button>
       </div>
 
-      {/* Highlights */}
+      {/* Features Section */}
       <div style={{ padding: '48px', maxWidth: '900px', margin: '0 auto' }}>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '20px' }}>
           {highlights.map(({ icon: Icon, label, desc }) => (
@@ -101,7 +194,7 @@ export default function ChatAssistant() {
       {/* Chat Modal */}
       {open && (
         <div style={{ position: 'fixed', inset: 0, background: 'rgba(15,23,41,0.5)', backdropFilter: 'blur(4px)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 200, padding: '24px' }}>
-          <div style={{ background: '#fff', borderRadius: '16px', width: '100%', maxWidth: '560px', height: '600px', boxShadow: '0 20px 40px rgba(0,0,0,0.15)', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+          <div style={{ background: '#fff', borderRadius: '16px', width: '100%', maxWidth: '560px', height: '620px', boxShadow: '0 20px 40px rgba(0,0,0,0.15)', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
 
             {/* Header */}
             <div style={{ padding: '16px 20px', borderBottom: '1px solid #f3f4f6', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0 }}>
@@ -113,61 +206,92 @@ export default function ChatAssistant() {
                   <p style={{ fontSize: '14px', fontWeight: 700, color: '#0f1729' }}>CareerBot</p>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
                     <span style={{ width: '7px', height: '7px', borderRadius: '50%', background: '#059669', display: 'inline-block' }} />
-                    <p style={{ fontSize: '11px', color: '#6b7280' }}>Online — AI Career Assistant</p>
+                    <p style={{ fontSize: '11px', color: '#6b7280' }}>
+                      {isInitializing ? 'Loading...' : `Online — ${messageCount} messages exchanged`}
+                    </p>
                   </div>
                 </div>
               </div>
-              <button onClick={() => setOpen(false)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#9ca3af', padding: '4px', borderRadius: '6px', transition: 'background 150ms' }}
-                onMouseEnter={e => (e.currentTarget.style.background = '#f3f4f6')}
-                onMouseLeave={e => (e.currentTarget.style.background = 'none')}>
-                <X size={18} />
-              </button>
+              <div style={{ display: 'flex', gap: '6px' }}>
+                {messages.length > 0 && (
+                  <button onClick={clearHistory}
+                    style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#9ca3af', padding: '4px', borderRadius: '6px', transition: 'background 150ms' }}
+                    onMouseEnter={e => (e.currentTarget.style.background = '#fef2f2')}
+                    onMouseLeave={e => (e.currentTarget.style.background = 'none')}
+                    title="Clear chat history">
+                    <Trash2 size={16} />
+                  </button>
+                )}
+                <button onClick={() => {
+                  setOpen(false);
+                  hasInitialized.current = false;
+                }} 
+                  style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#9ca3af', padding: '4px', borderRadius: '6px', transition: 'background 150ms' }}
+                  onMouseEnter={e => (e.currentTarget.style.background = '#f3f4f6')}
+                  onMouseLeave={e => (e.currentTarget.style.background = 'none')}>
+                  <X size={18} />
+                </button>
+              </div>
             </div>
 
             {/* Messages */}
             <div style={{ flex: 1, overflowY: 'auto', padding: '20px', display: 'flex', flexDirection: 'column', gap: '14px' }}>
-              {messages.map((m, i) => (
-                <div key={i} style={{ display: 'flex', gap: '10px', alignItems: 'flex-start', flexDirection: m.role === 'user' ? 'row-reverse' : 'row' }}>
-                  <div style={{ width: '30px', height: '30px', borderRadius: '50%', background: m.role === 'user' ? '#2255ec' : '#f0fdf4', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                    {m.role === 'user' ? <User size={14} style={{ color: '#fff' }} /> : <Bot size={14} style={{ color: '#059669' }} />}
-                  </div>
-                  <div style={{ maxWidth: '75%', padding: '10px 14px', borderRadius: m.role === 'user' ? '14px 4px 14px 14px' : '4px 14px 14px 14px', background: m.role === 'user' ? '#2255ec' : '#f9fafb', border: m.role === 'bot' ? '1px solid #e5e7eb' : 'none', fontSize: '13px', color: m.role === 'user' ? '#fff' : '#374151', lineHeight: 1.65 }}>
-                    {m.text}
+              {isInitializing ? (
+                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
+                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '12px' }}>
+                    <Loader2 size={32} style={{ color: '#059669', animation: 'spin 1s linear infinite' }} />
+                    <p style={{ fontSize: '14px', color: '#6b7280' }}>Loading your conversation...</p>
                   </div>
                 </div>
-              ))}
-              {loading && (
-                <div style={{ display: 'flex', gap: '10px', alignItems: 'flex-start' }}>
-                  <div style={{ width: '30px', height: '30px', borderRadius: '50%', background: '#f0fdf4', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                    <Bot size={14} style={{ color: '#059669' }} />
-                  </div>
-                  <div style={{ padding: '12px 16px', borderRadius: '4px 14px 14px 14px', background: '#f9fafb', border: '1px solid #e5e7eb', display: 'flex', gap: '4px', alignItems: 'center' }}>
-                    {[0, 1, 2].map(i => (
-                      <span key={i} style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#9ca3af', display: 'inline-block', animation: `bounce 1.2s ${i * 0.2}s infinite` }} />
-                    ))}
-                  </div>
-                </div>
+              ) : (
+                <>
+                  {messages.map((m, i) => (
+                    <div key={i} style={{ display: 'flex', gap: '10px', alignItems: 'flex-start', flexDirection: m.role === 'user' ? 'row-reverse' : 'row' }}>
+                      <div style={{ width: '30px', height: '30px', borderRadius: '50%', background: m.role === 'user' ? '#2255ec' : '#f0fdf4', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                        {m.role === 'user' ? <User size={14} style={{ color: '#fff' }} /> : <Bot size={14} style={{ color: '#059669' }} />}
+                      </div>
+                      <div style={{ maxWidth: '75%', padding: '10px 14px', borderRadius: m.role === 'user' ? '14px 4px 14px 14px' : '4px 14px 14px 14px', background: m.role === 'user' ? '#2255ec' : '#f9fafb', border: m.role === 'bot' ? '1px solid #e5e7eb' : 'none', fontSize: '13px', color: m.role === 'user' ? '#fff' : '#374151', lineHeight: 1.65 }}>
+                        {m.text}
+                      </div>
+                    </div>
+                  ))}
+                  {loading && (
+                    <div style={{ display: 'flex', gap: '10px', alignItems: 'flex-start' }}>
+                      <div style={{ width: '30px', height: '30px', borderRadius: '50%', background: '#f0fdf4', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                        <Bot size={14} style={{ color: '#059669' }} />
+                      </div>
+                      <div style={{ padding: '12px 16px', borderRadius: '4px 14px 14px 14px', background: '#f9fafb', border: '1px solid #e5e7eb', display: 'flex', gap: '4px', alignItems: 'center' }}>
+                        {[0, 1, 2].map(i => (
+                          <span key={i} style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#9ca3af', display: 'inline-block', animation: `bounce 1.2s ${i * 0.2}s infinite` }} />
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                  <div ref={bottomRef} />
+                </>
               )}
-              <div ref={bottomRef} />
             </div>
 
             {/* Input */}
             <div style={{ padding: '16px 20px', borderTop: '1px solid #f3f4f6', flexShrink: 0 }}>
               <form onSubmit={handleSend} style={{ display: 'flex', gap: '8px' }}>
                 <input
-                  type="text" value={input} onChange={e => setInput(e.target.value)}
+                  type="text" 
+                  value={input} 
+                  onChange={e => setInput(e.target.value)}
                   placeholder="Ask anything about your career..."
+                  disabled={isInitializing}
                   style={{ flex: 1, padding: '10px 14px', borderRadius: '10px', border: '1px solid #e5e7eb', fontSize: '13px', outline: 'none', transition: 'border-color 150ms' }}
                   onFocus={e => (e.currentTarget.style.borderColor = '#059669')}
                   onBlur={e => (e.currentTarget.style.borderColor = '#e5e7eb')}
                 />
-                <button type="button" onClick={handleVoice}
-                  style={{ width: '40px', height: '40px', borderRadius: '10px', border: `1px solid ${isListening ? 'rgba(220,38,38,0.3)' : '#e5e7eb'}`, background: isListening ? '#fef2f2' : '#fff', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: isListening ? '#dc2626' : '#6b7280', flexShrink: 0 }}
+                <button type="button" onClick={handleVoice} disabled={isInitializing}
+                  style={{ width: '40px', height: '40px', borderRadius: '10px', border: `1px solid ${isListening ? 'rgba(220,38,38,0.3)' : '#e5e7eb'}`, background: isListening ? '#fef2f2' : '#fff', cursor: isInitializing ? 'not-allowed' : 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: isListening ? '#dc2626' : '#6b7280', flexShrink: 0 }}
                   aria-label="Voice input">
                   <Mic size={15} />
                 </button>
-                <button type="submit" disabled={loading || !input.trim()}
-                  style={{ width: '40px', height: '40px', borderRadius: '10px', background: loading || !input.trim() ? '#d1fae5' : '#059669', border: 'none', cursor: loading || !input.trim() ? 'not-allowed' : 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, transition: 'background 150ms' }}>
+                <button type="submit" disabled={loading || !input.trim() || isInitializing}
+                  style={{ width: '40px', height: '40px', borderRadius: '10px', background: loading || !input.trim() || isInitializing ? '#d1fae5' : '#059669', border: 'none', cursor: loading || !input.trim() || isInitializing ? 'not-allowed' : 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, transition: 'background 150ms' }}>
                   {loading ? <Loader2 size={15} style={{ color: '#059669', animation: 'spin 1s linear infinite' }} /> : <Send size={15} style={{ color: '#fff' }} />}
                 </button>
               </form>

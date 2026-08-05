@@ -3,7 +3,7 @@ const router = express.Router();
 const authMiddleware = require('../middleware/authMiddleware');
 const Assessment = require('../models/Assessment');
 const Insights = require('../models/Insights');
-const { callGeminiWithRetry, fallbackCareerInsight } = require('../utils/geminiHelper');
+const { callGroqWithRetry, fallbackCareerInsight } = require('../utils/groqHelper');
 
 // POST /api/assessment
 router.post('/', authMiddleware, async (req, res) => {
@@ -24,12 +24,12 @@ Keep the answer friendly and 1 paragraph long, and explain briefly why these pat
 
     let insightText;
     try {
-      insightText = await callGeminiWithRetry(prompt);
-      console.log('[Assessment] Gemini response received');
+      insightText = await callGroqWithRetry(prompt);
+      console.log('[Assessment] Groqresponse received');
     } catch (aiErr) {
       const is429 = aiErr?.status === 429 || aiErr?.message?.includes('429');
       if (is429) {
-        console.warn('[Assessment] Gemini quota exhausted — using fallback');
+        console.warn('[Assessment] Groqquota exhausted — using fallback');
         insightText = fallbackCareerInsight(skills, interests);
       } else {
         throw aiErr;
@@ -59,7 +59,7 @@ Keep the answer friendly and 1 paragraph long, and explain briefly why these pat
 // GET /api/assessment/history
 router.get('/history', authMiddleware, async (req, res) => {
   try {
-    const userId = req.user;
+    const userId = req.user.id;
     const assessments = await Assessment.find({ userId }).sort({ createdAt: -1 });
     const insight = await Insights.find({ userId }).sort({ createdAt: -1 });
     res.status(200).json({ assessments, insight });
