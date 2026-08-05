@@ -12,7 +12,14 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
   const pathname = usePathname();
   const isPublic = PUBLIC_PATHS.includes(pathname);
 
-  if (isPublic) return <>{children}</>;
+  if (isPublic) {
+    return (
+      <>
+        {children}
+        <Footer />
+      </>
+    );
+  }
 
   return (
     <div style={{ display: 'flex', minHeight: '100vh', background: '#f9fafb' }}>
