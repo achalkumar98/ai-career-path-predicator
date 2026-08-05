@@ -209,8 +209,8 @@ The backend uses `zod` for request validation on key routes (for example, `route
 
 Swagger UI is available once the backend server is running. Open in your browser:
 
-- Swagger UI: `http://localhost:5000/api-docs`
-- Raw OpenAPI JSON: `http://localhost:5000/api-docs.json`
+- Swagger UI: `http://localhost:5000/v1/docs`
+- Raw OpenAPI JSON: `http://localhost:5000/v1/docs.json`
 
 The OpenAPI spec is generated from JSDoc-style annotations found in `backend-app/routes/*.js`.
 

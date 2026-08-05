@@ -10,6 +10,10 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// Request logging (prints API hits to the backend terminal)
+const requestLogger = require('./src/middleware/requestLogger');
+app.use(requestLogger);
+
 const apiRoutePrefix = process.env.NODE_ENV === 'production' ? '/api' : '/v1';
 const swaggerServerUrl = process.env.SWAGGER_SERVER_URL
   || (process.env.NODE_ENV === 'production'
