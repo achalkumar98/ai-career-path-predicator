@@ -158,4 +158,69 @@ cd frontend-app && npm run dev
 
 ---
 
+## Tooling & Developer Scripts
+
+Both apps include linting, formatting, and validation tooling to keep the codebase consistent.
+
+Frontend (`frontend-app`):
+
+- Install dependencies and start dev server:
+
+```bash
+cd frontend-app
+npm install
+npm run dev
+```
+
+- Useful scripts:
+
+```bash
+npm run compile-ts    # TypeScript type-check (no emit)
+npm run lint          # Run ESLint
+npm run lint:fix      # Fix lintable issues
+npm run prettier      # Check formatting with Prettier
+npm run prettier:fix  # Auto-format files with Prettier
+```
+
+Backend (`backend-app`):
+
+- Install dependencies and start dev server:
+
+```bash
+cd backend-app
+npm install
+npm run dev
+```
+
+- Useful scripts:
+
+```bash
+npm run lint          # Run ESLint on the backend
+npm run lint:fix      # Fix lintable issues
+npm run prettier      # Check formatting with Prettier
+npm run prettier:fix  # Auto-format files with Prettier
+```
+
+## Validation (Zod)
+
+The backend uses `zod` for request validation on key routes (for example, `routes/auth.js`). Schemas are applied server-side and return structured error messages on validation failure.
+
+## API documentation (Swagger)
+
+Swagger UI is available once the backend server is running. Open in your browser:
+
+- Swagger UI: `http://localhost:5000/api-docs`
+- Raw OpenAPI JSON: `http://localhost:5000/api-docs.json`
+
+The OpenAPI spec is generated from JSDoc-style annotations found in `backend-app/routes/*.js`.
+
+If you add new routes, annotate them with `@swagger` blocks to include them in the spec.
+
+## Notes & Troubleshooting
+
+- If `npm install` fails with version errors, the README's recommended tools use conservative versions (Prettier 2.x) known to be available on public registries. Update `package.json` otherwise.
+- After changing `package.json`, run `npm install` in each app.
+- Restart dev servers after installing or changing environment variables.
+
+
 © 2025 CareerNav. Crafted to help you land your next role.

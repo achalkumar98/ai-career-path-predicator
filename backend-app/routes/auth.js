@@ -2,20 +2,89 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const { body, validationResult } = require('express-validator');
+const { z } = require('zod');
 const User = require('../models/User');
 const auth = require('../middleware/auth');
 
-// POST /api/auth/register
-router.post('/register', [
-  body('name').notEmpty(),
-  body('email').isEmail(),
-  body('password').isLength({ min: 6 })
-], async (req, res) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
+const registerSchema = z.object({
+  name: z.string().min(1, 'Name is required'),
+  email: z.string().email('Valid email is required'),
+  password: z.string().min(6, 'Password must be at least 6 characters'),
+});
 
-  const { name, email, password } = req.body;
+const loginSchema = z.object({
+  email: z.string().email('Valid email is required'),
+  password: z.string().min(1, 'Password is required'),
+});
+
+const forgotPasswordSchema = z.object({
+  email: z.string().email('Valid email is required'),
+});
+
+const resetPasswordSchema = z.object({
+  token: z.string().min(1, 'Token is required'),
+  password: z.string().min(6, 'Password must be at least 6 characters'),
+});
+
+const profileUpdateSchema = z.object({
+  name: z.string().min(1).optional(),
+  email: z.string().email().optional(),
+  bio: z.string().optional(),
+  phone: z.string().optional(),
+  location: z.string().optional(),
+});
+
+function validateSchema(schema, data, res) {
+  const parsed = schema.safeParse(data);
+  if (!parsed.success) {
+    const errors = parsed.error.errors.map((err) => ({ path: err.path.join('.'), message: err.message }));
+    res.status(400).json({ errors });
+    return null;
+  }
+  return parsed.data;
+}
+
+/**
+ * @swagger
+ * tags:
+ *   name: Auth
+ *   description: Authentication and user profile routes
+ */
+
+/**
+ * @swagger
+ * /api/auth/register:
+ *   post:
+ *     tags:
+ *       - Auth
+ *     summary: Register a new user
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - name
+ *               - email
+ *               - password
+ *             properties:
+ *               name:
+ *                 type: string
+ *               email:
+ *                 type: string
+ *                 format: email
+ *               password:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Registered successfully
+ */
+router.post('/register', async (req, res) => {
+  const parsed = validateSchema(registerSchema, req.body, res);
+  if (!parsed) return;
+
+  const { name, email, password } = parsed;
 
   try {
     const existing = await User.findOne({ email });
@@ -33,15 +102,37 @@ router.post('/register', [
   }
 });
 
-// POST /api/auth/login
-router.post('/login', [
-  body('email').isEmail(),
-  body('password').exists()
-], async (req, res) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
+/**
+ * @swagger
+ * /api/auth/login:
+ *   post:
+ *     tags:
+ *       - Auth
+ *     summary: Login user and return token
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - email
+ *               - password
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 format: email
+ *               password:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Login successful
+ */
+router.post('/login', async (req, res) => {
+  const parsed = validateSchema(loginSchema, req.body, res);
+  if (!parsed) return;
 
-  const { email, password } = req.body;
+  const { email, password } = parsed;
 
   try {
     const user = await User.findOne({ email });
@@ -58,14 +149,34 @@ router.post('/login', [
   }
 });
 
-// POST /api/auth/forgot-password
-router.post('/forgot-password', [
-  body('email').isEmail()
-], async (req, res) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
+/**
+ * @swagger
+ * /api/auth/forgot-password:
+ *   post:
+ *     tags:
+ *       - Auth
+ *     summary: Send password reset instructions
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - email
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 format: email
+ *     responses:
+ *       200:
+ *         description: Reset instructions sent
+ */
+router.post('/forgot-password', async (req, res) => {
+  const parsed = validateSchema(forgotPasswordSchema, req.body, res);
+  if (!parsed) return;
 
-  const { email } = req.body;
+  const { email } = parsed;
   try {
     const user = await User.findOne({ email });
     if (!user) return res.status(404).json({ msg: 'No account found with that email' });
@@ -79,15 +190,36 @@ router.post('/forgot-password', [
   }
 });
 
-// POST /api/auth/reset-password
-router.post('/reset-password', [
-  body('token').notEmpty(),
-  body('password').isLength({ min: 6 })
-], async (req, res) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
+/**
+ * @swagger
+ * /api/auth/reset-password:
+ *   post:
+ *     tags:
+ *       - Auth
+ *     summary: Reset a user password
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - token
+ *               - password
+ *             properties:
+ *               token:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Password reset successfully
+ */
+router.post('/reset-password', async (req, res) => {
+  const parsed = validateSchema(resetPasswordSchema, req.body, res);
+  if (!parsed) return;
 
-  const { token, password } = req.body;
+  const { token, password } = parsed;
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const hashed = await bcrypt.hash(password, 10);
@@ -99,7 +231,19 @@ router.post('/reset-password', [
   }
 });
 
-// GET /api/auth/profile
+/**
+ * @swagger
+ * /api/auth/profile:
+ *   get:
+ *     tags:
+ *       - Auth
+ *     summary: Get authenticated user profile
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: User profile returned
+ */
 router.get('/profile', auth, async (req, res) => {
   try {
     const user = await User.findById(req.user.userId).select('-password');
@@ -111,15 +255,41 @@ router.get('/profile', auth, async (req, res) => {
   }
 });
 
-// PUT /api/auth/profile
-router.put('/profile', auth, [
-  body('name').optional().notEmpty(),
-  body('email').optional().isEmail(),
-], async (req, res) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
+/**
+ * @swagger
+ * /api/auth/profile:
+ *   put:
+ *     tags:
+ *       - Auth
+ *     summary: Update authenticated user profile
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *               email:
+ *                 type: string
+ *                 format: email
+ *               bio:
+ *                 type: string
+ *               phone:
+ *                 type: string
+ *               location:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Profile updated
+ */
+router.put('/profile', auth, async (req, res) => {
+  const parsed = validateSchema(profileUpdateSchema, req.body, res);
+  if (!parsed) return;
 
-  const { name, email, bio, phone, location } = req.body;
+  const { name, email, bio, phone, location } = parsed;
   try {
     const update = {};
     if (name) update.name = name;
