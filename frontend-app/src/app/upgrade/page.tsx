@@ -1,5 +1,7 @@
 'use client';
-import { CheckCircle, Zap, Star, Crown } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import Link from 'next/link';
+import { CheckCircle, Zap, Star, Crown, ArrowLeft } from 'lucide-react';
 
 const plans = [
   {
@@ -67,8 +69,31 @@ const plans = [
 ];
 
 export default function UpgradePage() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    setIsLoggedIn(!!localStorage.getItem('token'));
+  }, []);
+
   return (
     <div style={{ minHeight: 'calc(100vh - 56px)', background: '#f9fafb', fontFamily: 'Inter, sans-serif' }}>
+      {/* Top bar */}
+      <div style={{ background: '#fff', borderBottom: '1px solid #e5e7eb', padding: '14px 48px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <Link
+          href={isLoggedIn ? '/homepage' : '/'}
+          style={{ display: 'flex', alignItems: 'center', gap: '6px', textDecoration: 'none', color: '#374151', fontSize: '13px' }}
+        >
+          <ArrowLeft size={14} />
+          {isLoggedIn ? 'Back to Dashboard' : 'Back to Home'}
+        </Link>
+        <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: '8px', textDecoration: 'none' }}>
+          <div style={{ width: '30px', height: '30px', borderRadius: '8px', background: '#2255ec', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <span style={{ color: '#fff', fontWeight: 800, fontSize: '13px' }}>N</span>
+          </div>
+          <span style={{ fontSize: '14px', fontWeight: 700, color: '#0f1729' }}>CareerNav</span>
+        </Link>
+      </div>
+
       {/* Hero */}
       <div style={{ background: 'linear-gradient(160deg,#f0f4ff 0%,#f9fafb 60%)', borderBottom: '1px solid #e5e7eb', padding: '64px 48px 56px', textAlign: 'center' }}>
         <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '6px 14px', borderRadius: '9999px', background: 'rgba(34,85,236,0.07)', border: '1px solid rgba(34,85,236,0.18)', fontSize: '12px', fontWeight: 600, color: '#2255ec', marginBottom: '20px' }}>

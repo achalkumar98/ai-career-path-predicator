@@ -1,6 +1,7 @@
 'use client';
 import { useState } from 'react';
-import { Compass, Sparkles, Target, TrendingUp, X, ArrowRight, Loader2 } from 'lucide-react';
+import Link from 'next/link';
+import { Compass, Sparkles, Target, TrendingUp, X, ArrowRight, Loader2, ArrowLeft } from 'lucide-react';
 import { submitAssessmentApi } from '@/api/assessmentApi';
 
 export default function CareerNavigator() {
@@ -38,6 +39,12 @@ export default function CareerNavigator() {
 
   return (
     <div style={{ minHeight: 'calc(100vh - 56px)', background: '#f9fafb' }}>
+      {/* Back bar */}
+      <div style={{ background: '#fff', borderBottom: '1px solid #e5e7eb', padding: '12px 48px' }}>
+        <Link href="/homepage" style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', textDecoration: 'none', color: '#374151', fontSize: '13px' }}>
+          <ArrowLeft size={14} /> Back to Dashboard
+        </Link>
+      </div>
       {/* Hero */}
       <div style={{
         background: 'linear-gradient(135deg, #eef2ff 0%, #f9fafb 60%)',

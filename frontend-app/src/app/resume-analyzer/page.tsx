@@ -1,6 +1,7 @@
 'use client';
 import { useState } from 'react';
-import { FileText, Upload, Cpu, CheckCircle, X } from 'lucide-react';
+import Link from 'next/link';
+import { FileText, Upload, Cpu, CheckCircle, X, ArrowLeft } from 'lucide-react';
 import ResumeNLP from '@/components/ResumeNLP';
 
 export default function ResumeAnalyzer() {
@@ -14,6 +15,12 @@ export default function ResumeAnalyzer() {
 
   return (
     <div style={{ minHeight: 'calc(100vh - 56px)', background: '#f9fafb' }}>
+      {/* Back bar */}
+      <div style={{ background: '#fff', borderBottom: '1px solid #e5e7eb', padding: '12px 48px' }}>
+        <Link href="/homepage" style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', textDecoration: 'none', color: '#374151', fontSize: '13px' }}>
+          <ArrowLeft size={14} /> Back to Dashboard
+        </Link>
+      </div>
       {/* Hero */}
       <div style={{ background: 'linear-gradient(135deg, #faf5ff 0%, #f9fafb 60%)', borderBottom: '1px solid #e5e7eb', padding: '64px 48px', textAlign: 'center' }}>
         <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '6px 14px', borderRadius: '9999px', background: 'rgba(124,58,237,0.08)', border: '1px solid rgba(124,58,237,0.2)', fontSize: '12px', fontWeight: 600, color: '#7c3aed', marginBottom: '24px' }}>

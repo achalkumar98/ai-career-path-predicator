@@ -1,6 +1,7 @@
 'use client';
 import { useState } from 'react';
-import { Sparkles, Brain, LineChart, X, Loader2 } from 'lucide-react';
+import Link from 'next/link';
+import { Sparkles, Brain, LineChart, X, Loader2, ArrowLeft } from 'lucide-react';
 import { getInsightsApi } from '@/api/insightsApi';
 
 export default function Insights() {
@@ -16,7 +17,7 @@ export default function Insights() {
     try {
       const res = await getInsightsApi(userInput);
       setResult(res.data.insight || res.data);
-    } catch (err) {
+    } catch {
       alert('Error fetching insights. Is your backend running?');
     } finally {
       setLoading(false);
@@ -31,6 +32,12 @@ export default function Insights() {
 
   return (
     <div style={{ minHeight: 'calc(100vh - 56px)', background: '#f9fafb' }}>
+      {/* Back bar */}
+      <div style={{ background: '#fff', borderBottom: '1px solid #e5e7eb', padding: '12px 48px' }}>
+        <Link href="/homepage" style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', textDecoration: 'none', color: '#374151', fontSize: '13px' }}>
+          <ArrowLeft size={14} /> Back to Dashboard
+        </Link>
+      </div>
       {/* Hero */}
       <div style={{ background: 'linear-gradient(135deg, #fffbeb 0%, #f9fafb 60%)', borderBottom: '1px solid #e5e7eb', padding: '64px 48px', textAlign: 'center' }}>
         <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '6px 14px', borderRadius: '9999px', background: 'rgba(245,158,11,0.08)', border: '1px solid rgba(245,158,11,0.2)', fontSize: '12px', fontWeight: 600, color: '#d97706', marginBottom: '24px' }}>

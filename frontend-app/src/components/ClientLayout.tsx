@@ -1,6 +1,6 @@
 'use client';
-import { useState } from 'react';
-import { usePathname } from 'next/navigation';
+import { useState, useEffect } from 'react';
+import { usePathname, useRouter } from 'next/navigation';
 import Sidebar from './Sidebar';
 import AppHeader from './AppHeader';
 import Footer from './Footer';
@@ -10,9 +10,22 @@ const PUBLIC_PATHS = ['/', '/login', '/register', '/contact', '/upgrade'];
 
 export default function ClientLayout({ children }: { children: React.ReactNode }) {
   const [isOpen, setIsOpen] = useState(true);
+  const [authChecked, setAuthChecked] = useState(false);
   const pathname = usePathname();
+  const router = useRouter();
   const currentPath = stripBasePath(pathname || '/');
   const isPublic = PUBLIC_PATHS.includes(currentPath);
+
+  useEffect(() => {
+    if (!isPublic) {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        router.replace('/login');
+      } else {
+        setAuthChecked(true);
+      }
+    }
+  }, [isPublic, router]);
 
   if (isPublic) {
     return (
@@ -22,6 +35,8 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
       </>
     );
   }
+
+  if (!authChecked) return null;
 
   return (
     <div style={{ display: 'flex', minHeight: '100vh', background: '#f9fafb' }}>

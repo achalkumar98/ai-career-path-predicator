@@ -1,6 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
-import { User, Mail, Phone, MapPin, FileText, Save, Loader2, CheckCircle } from 'lucide-react';
+import Link from 'next/link';
+import { User, Mail, Phone, MapPin, FileText, Save, Loader2, CheckCircle, ArrowLeft } from 'lucide-react';
 import { getProfileApi, updateProfileApi } from '@/api/authApi';
 
 export default function Profile() {
@@ -55,6 +56,12 @@ export default function Profile() {
 
   return (
     <div style={{ minHeight: 'calc(100vh - 56px)', background: '#f9fafb', padding: '40px 48px' }}>
+      {/* Back bar */}
+      <div style={{ marginBottom: '24px' }}>
+        <Link href="/homepage" style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', textDecoration: 'none', color: '#374151', fontSize: '13px' }}>
+          <ArrowLeft size={14} /> Back to Dashboard
+        </Link>
+      </div>
       <div style={{ maxWidth: '640px', margin: '0 auto' }}>
         {/* Header */}
         <div style={{ marginBottom: '32px' }}>

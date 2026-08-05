@@ -1,6 +1,7 @@
 'use client';
 import { useState } from 'react';
-import { Lock, Bell, Shield, Eye, EyeOff, Save, Loader2, CheckCircle } from 'lucide-react';
+import Link from 'next/link';
+import { Lock, Bell, Shield, Eye, EyeOff, Save, Loader2, CheckCircle, ArrowLeft } from 'lucide-react';
 import { resetPasswordApi } from '@/api/authApi';
 
 export default function AccountSettings() {
@@ -36,6 +37,12 @@ export default function AccountSettings() {
 
   return (
     <div style={{ minHeight: 'calc(100vh - 56px)', background: '#f9fafb', padding: '40px 48px' }}>
+      {/* Back bar */}
+      <div style={{ maxWidth: '640px', margin: '0 auto 24px' }}>
+        <Link href="/homepage" style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', textDecoration: 'none', color: '#374151', fontSize: '13px' }}>
+          <ArrowLeft size={14} /> Back to Dashboard
+        </Link>
+      </div>
       <div style={{ maxWidth: '640px', margin: '0 auto' }}>
         <div style={{ marginBottom: '32px' }}>
           <h1 style={{ fontSize: '28px', fontWeight: 700, color: '#0f1729', marginBottom: '6px' }}>Account Settings</h1>
