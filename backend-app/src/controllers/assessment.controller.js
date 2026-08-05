@@ -3,7 +3,7 @@ const assessmentService = require('../services/assessment.service');
 const createAssessment = async (req, res) => {
   try {
     const { skills = [], interests = [] } = req.body;
-    const result = await assessmentService.createAssessment(req.user, skills, interests);
+    const result = await assessmentService.createAssessment(req.user.userId, skills, interests);
     res.status(200).json(result);
   } catch (error) {
     if (error.message === 'Invalid skills or interests format') {
@@ -16,7 +16,7 @@ const createAssessment = async (req, res) => {
 
 const getHistory = async (req, res) => {
   try {
-    const result = await assessmentService.getAssessmentHistory(req.user);
+    const result = await assessmentService.getAssessmentHistory(req.user.userId);
     res.status(200).json(result);
   } catch (error) {
     console.error('History fetch error:', error.message);

@@ -10,7 +10,7 @@ const postChat = async (req, res) => {
       });
     }
 
-    const sessionId = req.user.id;
+    const sessionId = req.user.userId;
     const userName = req.user.name;
 
     const reply = await chatService.getChatReply(

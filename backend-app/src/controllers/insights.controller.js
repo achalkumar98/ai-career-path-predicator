@@ -6,7 +6,7 @@ const createInsight = async (req, res) => {
     if (!input) {
       return res.status(400).json({ message: 'Input is required.' });
     }
-    const result = await insightsService.createInsight(req.user, input);
+    const result = await insightsService.createInsight(req.user.userId, input);
     res.status(200).json(result);
   } catch (error) {
     console.error('Insight error:', error.message);
