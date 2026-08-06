@@ -25,7 +25,7 @@ const sendContactMessage = async ({ name, email, subject, message }) => {
     html: htmlTemplate,
   });
 
-  return { msg: 'Message sent successfully! We\'ll get back to you soon.' };
+  return { msg: "Message sent successfully! We'll get back to you soon." };
 };
 
 module.exports = {
