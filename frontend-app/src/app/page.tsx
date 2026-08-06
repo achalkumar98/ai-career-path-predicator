@@ -665,10 +665,11 @@ export default function LandingPage() {
               style={{
                 fontSize: '38px',
                 fontWeight: 800,
+                lineHeight: 1.15,
                 color: '#0f1729',
                 marginBottom: '12px',
               }}
-              className="section-h2"
+              className="section-h2 landing-section-h2"
             >
               Six Tools to <span style={{ color: '#2255ec' }}>Career Success</span>
             </h2>
@@ -877,9 +878,11 @@ export default function LandingPage() {
               style={{
                 fontSize: '38px',
                 fontWeight: 800,
+                lineHeight: 1.15,
                 color: '#0f1729',
                 marginBottom: '12px',
               }}
+              className="landing-section-h2"
             >
               One Click, <span style={{ color: '#059669' }}>Every Major Portal</span>
             </h2>
@@ -1018,9 +1021,11 @@ export default function LandingPage() {
             style={{
               fontSize: '38px',
               fontWeight: 800,
+              lineHeight: 1.15,
               color: '#0f1729',
               marginBottom: '14px',
             }}
+            className="landing-section-h2"
           >
             Ready to <span style={{ color: '#2255ec' }}>Navigate Your Career</span>?
           </h2>

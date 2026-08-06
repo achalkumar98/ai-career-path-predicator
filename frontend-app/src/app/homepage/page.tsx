@@ -71,11 +71,8 @@ export default function Homepage() {
 
       {/* Header */}
       <div style={{ marginBottom: '36px' }}>
-        <p style={{ fontSize: '11px', fontWeight: 700, color: '#2255ec', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
-          Dashboard
-        </p>
-        <h1 style={{ fontSize: '32px', fontWeight: 800, color: '#0f1729', marginBottom: '8px', lineHeight: 1.2 }}>
-          Welcome back, {user?.name || 'there'}
+        <h1 style={{ fontSize: '32px', fontWeight: 800, color: 'var(--color-text-primary)', marginBottom: '8px', lineHeight: 1.2 }}>
+          Welcome back, <span className="gradient-text">{user?.name}</span>
         </h1>
         <p style={{ fontSize: '14px', color: '#6b7280', lineHeight: 1.6 }}>
           Your AI-powered career command center. Pick a tool below to continue your journey.
