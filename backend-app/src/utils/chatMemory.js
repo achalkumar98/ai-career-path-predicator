@@ -1,12 +1,10 @@
 class ChatMemory {
-
   constructor() {
     this.sessions = new Map();
     this.maxHistory = 10;
   }
 
   getHistory(sessionId) {
-
     if (!this.sessions.has(sessionId)) {
       this.sessions.set(sessionId, []);
     }
@@ -15,13 +13,12 @@ class ChatMemory {
   }
 
   addMessage(sessionId, userMsg, assistantMsg) {
-
     const history = this.getHistory(sessionId);
 
     history.push({
       user: userMsg,
       assistant: assistantMsg,
-      timestamp: Date.now()
+      timestamp: Date.now(),
     });
 
     if (history.length > this.maxHistory) {

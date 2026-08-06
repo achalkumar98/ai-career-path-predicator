@@ -3,6 +3,17 @@ import { useState } from 'react';
 import { sendChatMessageApi } from '@/api/chatApi';
 import { FaMicrophone, FaPaperPlane } from 'react-icons/fa';
 
+interface SpeechRecognitionInstance {
+  lang: string;
+  interimResults: boolean;
+  onstart: (() => void) | null;
+  onend: (() => void) | null;
+  onresult: ((e: { results: { [key: number]: { [key: number]: { transcript: string } } } }) => void) | null;
+  start: () => void;
+}
+
+type SpeechRecognitionConstructor = new () => SpeechRecognitionInstance;
+
 export default function Chatbot() {
   const [chatMessage, setChatMessage] = useState('');
   const [chatResponse, setChatResponse] = useState('');
@@ -10,15 +21,17 @@ export default function Chatbot() {
   const [loading, setLoading] = useState(false);
 
   const handleVoiceInput = () => {
-    const SpeechRecognition = (window as Window & { webkitSpeechRecognition?: new () => SpeechRecognition; SpeechRecognition?: new () => SpeechRecognition }).webkitSpeechRecognition
-      || (window as Window & { SpeechRecognition?: new () => SpeechRecognition }).SpeechRecognition;
-    if (!SpeechRecognition) { alert('Speech recognition not supported in this browser.'); return; }
-    const recognition = new SpeechRecognition();
+    const SpeechRecognitionCtor = (
+      (window as Window & { webkitSpeechRecognition?: SpeechRecognitionConstructor }).webkitSpeechRecognition ||
+      (window as Window & { SpeechRecognition?: SpeechRecognitionConstructor }).SpeechRecognition
+    );
+    if (!SpeechRecognitionCtor) { alert('Speech recognition not supported in this browser.'); return; }
+    const recognition = new SpeechRecognitionCtor();
     recognition.lang = 'en-US';
     recognition.interimResults = false;
     recognition.onstart = () => setIsListening(true);
     recognition.onend = () => setIsListening(false);
-    recognition.onresult = (event: SpeechRecognitionEvent) => setChatMessage(event.results[0][0].transcript);
+    recognition.onresult = (event) => setChatMessage(event.results[0][0].transcript);
     recognition.start();
   };
 

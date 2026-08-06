@@ -1,16 +1,8 @@
-const {
-  callGroqWithRetry,
-  fallbackChatReply
-} = require('../utils/groqHelper');
+const { callGroqWithRetry, fallbackChatReply } = require('../utils/groqHelper');
 
 const chatMemory = require('../utils/chatMemory');
 
-const getChatReply = async (
-  message,
-  sessionId,
-  userName
-) => {
-
+const getChatReply = async (message, sessionId, userName) => {
   const history = chatMemory.getHistory(sessionId);
 
   const isFirstMessage = history.length === 0;
@@ -77,10 +69,12 @@ Response:
   } else {
     const previousConversation = history
       .slice(-5)
-      .map(item => `
+      .map(
+        (item) => `
 User: ${item.user}
 Assistant: ${item.assistant}
-`)
+`
+      )
       .join('\n');
 
     prompt = `
@@ -102,37 +96,23 @@ Response:
 `;
   }
 
+  try {
+    const reply = await callGroqWithRetry(prompt);
 
+    chatMemory.addMessage(sessionId, message, reply);
 
+    return reply;
+  } catch (err) {
+    console.error('Groq Error:', err);
 
-try {
+    const reply = fallbackChatReply(message);
 
-  const reply = await callGroqWithRetry(prompt);
+    chatMemory.addMessage(sessionId, message, reply);
 
-  chatMemory.addMessage(
-    sessionId,
-    message,
-    reply
-  );
-
-  return reply;
-
-} catch (err) {
-
-  console.error('Groq Error:', err);
-
-  const reply = fallbackChatReply(message);
-
-  chatMemory.addMessage(
-    sessionId,
-    message,
-    reply
-  );
-
-  return reply;
-}
+    return reply;
+  }
 };
 
 module.exports = {
-  getChatReply
+  getChatReply,
 };

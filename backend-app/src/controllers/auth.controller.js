@@ -2,7 +2,11 @@
 const authService = require('../services/auth.service');
 
 const registerUser = async (req, res) => {
-  const schema = z.object({ name: z.string().min(1), email: z.string().email(), password: z.string().min(6) });
+  const schema = z.object({
+    name: z.string().min(1),
+    email: z.string().email(),
+    password: z.string().min(6),
+  });
   const parsed = schema.safeParse(req.body);
   if (!parsed.success) return res.status(400).json({ errors: parsed.error.errors });
 

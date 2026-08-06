@@ -7,7 +7,9 @@ const createUser = {
     email: Joi.string().required().email(),
     password: Joi.string().required().custom(password),
     role: Joi.string().required().valid('user', 'admin'),
-    userType: Joi.string().required().valid('super_admin', 'main_dealer', 'dealer', 'user', 'custom'),
+    userType: Joi.string()
+      .required()
+      .valid('super_admin', 'main_dealer', 'dealer', 'user', 'custom'),
   }),
 };
 

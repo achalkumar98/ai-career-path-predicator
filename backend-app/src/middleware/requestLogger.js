@@ -9,7 +9,7 @@ module.exports = function requestLogger(req, res, next) {
 
     // Special-case login POST — log the email but never log passwords
     if (method === 'POST' && /auth\/login$/.test(url)) {
-      const email = (req.body && req.body.email) ? req.body.email : 'unknown';
+      const email = req.body && req.body.email ? req.body.email : 'unknown';
       msg += ` LOGIN email=${email}`;
     }
 
