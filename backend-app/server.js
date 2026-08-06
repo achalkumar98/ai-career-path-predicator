@@ -9,7 +9,9 @@ const connectDB = require('./src/config/db');
 const app = express();
 app.use(
   cors({
-    origin: 'http://localhost:3000',
+    origin: process.env.CORS_ORIGIN
+      ? process.env.CORS_ORIGIN.split(',')
+      : ['http://localhost:3000'],
     credentials: true,
   })
 );
