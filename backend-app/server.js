@@ -21,7 +21,7 @@ const apiRoutePrefix = process.env.NODE_ENV === 'production' ? '/api' : '/v1';
 const swaggerServerUrl = process.env.SWAGGER_SERVER_URL
   || (process.env.NODE_ENV === 'production'
     ? `https://aicareernav${apiRoutePrefix}`
-    : `http://localhost:${process.env.PORT || 5000}${apiRoutePrefix}`);
+    : `http://localhost:${process.env.PORT || 5001}${apiRoutePrefix}`);
 
 const swaggerOptions = {
   definition: {
@@ -52,5 +52,5 @@ connectDB();
 
 app.get('/', (req, res) => res.send('API is working'));
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5001;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

@@ -6,14 +6,14 @@ const getBaseURL = () => {
       return process.env.NEXT_PUBLIC_BASE_API_URL || 'https://aicareernav/api/v1/';
     }
 
-    return process.env.NEXT_PUBLIC_BASE_API_URL || 'http://localhost:5000/v1/';
+    return process.env.NEXT_PUBLIC_BASE_API_URL || 'http://localhost:5001/v1/';
   }
 
   if (process.env.NODE_ENV === 'production') {
     return process.env.BASE_API_URL || 'https://aicareernav/api/v1/';
   }
 
-  return process.env.BASE_API_URL || 'http://localhost:5000/v1/';
+  return process.env.BASE_API_URL || 'http://localhost:5001/v1/';
 };
 
 const api = axios.create({
