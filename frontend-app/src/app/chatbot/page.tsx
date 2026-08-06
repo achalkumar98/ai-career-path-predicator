@@ -3,11 +3,74 @@ import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import { MessageSquare, Mic, Send, X, Loader2, Bot, User, ArrowLeft } from 'lucide-react';
 import { sendChatMessageApi } from '@/api/chatApi';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { oneDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
 
 interface Message {
   role: 'user' | 'bot';
   text: string;
 }
+
+function CodeBlock({
+  language,
+  value,
+}: {
+  language: string;
+  value: string;
+}) {
+  const copyCode = () => {
+    navigator.clipboard.writeText(value);
+  };
+
+  return (
+    <div
+      style={{
+        marginTop: 10,
+        borderRadius: 12,
+        overflow: 'hidden',
+        border: '1px solid #374151',
+      }}
+    >
+      <div
+        style={{
+          background: '#111827',
+          color: '#fff',
+          padding: '8px 12px',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+        }}
+      >
+        <span>{language}</span>
+
+        <button
+          onClick={copyCode}
+          style={{
+            background: 'transparent',
+            border: 'none',
+            color: '#fff',
+            cursor: 'pointer',
+          }}
+        >
+          Copy
+        </button>
+      </div>
+
+      <SyntaxHighlighter
+        language={language}
+        style={oneDark}
+        customStyle={{
+          margin: 0,
+        }}
+      >
+        {value}
+      </SyntaxHighlighter>
+    </div>
+  );
+}
+
 
 export default function ChatAssistant() {
   const [open, setOpen] = useState(false);
@@ -149,7 +212,50 @@ export default function ChatAssistant() {
                     {m.role === 'user' ? <User size={14} style={{ color: '#fff' }} /> : <Bot size={14} style={{ color: '#059669' }} />}
                   </div>
                   <div style={{ maxWidth: '75%', padding: '10px 14px', borderRadius: m.role === 'user' ? '14px 4px 14px 14px' : '4px 14px 14px 14px', background: m.role === 'user' ? '#2255ec' : '#f9fafb', border: m.role === 'bot' ? '1px solid #e5e7eb' : 'none', fontSize: '13px', color: m.role === 'user' ? '#fff' : '#374151', lineHeight: 1.65 }}>
-                    {m.text}
+                    {/* {m.text} */}
+                    {m.role === 'bot' ? (
+  <ReactMarkdown
+  remarkPlugins={[remarkGfm]}
+  components={{
+    code({
+      className,
+      children,
+    }: {
+      className?: string;
+      children?: React.ReactNode;
+    }) {
+      const match = /language-(\w+)/.exec(
+        className || ''
+      );
+
+      if (match) {
+        return (
+          <CodeBlock
+            language={match[1]}
+            value={String(children)}
+          />
+        );
+      }
+
+      return (
+        <code
+          style={{
+            background: '#eef2ff',
+            padding: '2px 5px',
+            borderRadius: '4px',
+          }}
+        >
+          {children}
+        </code>
+      );
+    },
+  }}
+>
+  {m.text}
+</ReactMarkdown>
+) : (
+  m.text
+)}
                   </div>
                 </div>
               ))}

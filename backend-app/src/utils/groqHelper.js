@@ -5,8 +5,8 @@ const groq = new OpenAI({
   baseURL: 'https://api.groq.com/openai/v1',
 });
 
-// Retry Gemini with exponential backoff on 429
-async function callGroqWithRetry(prompt, retries = 3, delayMs = 15000) {
+// Retry groq  with exponential backoff on 429
+async function callGroqWithRetry(prompt, retries = 3, delayMs = 15001) {
   for (let attempt = 1; attempt <= retries; attempt++) {
     try {
       const result = await groq.chat.completions.create({
@@ -28,7 +28,7 @@ async function callGroqWithRetry(prompt, retries = 3, delayMs = 15000) {
   }
 }
 
-// Rule-based fallback when Gemini is unavailable
+// Rule-based fallback when groq  is unavailable
 function fallbackCareerInsight(skills = [], interests = []) {
   const s = skills.map(x => x.toLowerCase()).join(' ');
   const i = interests.map(x => x.toLowerCase()).join(' ');

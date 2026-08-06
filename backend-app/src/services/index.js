@@ -1,4 +1,4 @@
-﻿module.exports.geminiService = require('./gemini.service');
+﻿module.exports.groqService = require('./groq.service');
 module.exports.assessmentService = require('./assessment.service');
 module.exports.authService = require('./auth.service');
 module.exports.chatService = require('./chat.service');
