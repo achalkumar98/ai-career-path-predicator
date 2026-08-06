@@ -57,14 +57,14 @@ Runs on `http://localhost:3000`
 ### Environment Variables (`frontend-app/.env.local`)
 
 ```env
-NEXT_PUBLIC_API_URL=http://localhost:5000
+NEXT_PUBLIC_API_URL=http://localhost:5001
 ```
 
 ---
 
 ## Backend App (`backend-app/`)
 
-Built with **Node.js**, **Express**, **MongoDB (Mongoose)**, and **Google Gemini AI**.
+Built with **Node.js**, **Express**, **MongoDB (Mongoose)**, and **Google groq  AI**.
 
 ### API Routes
 
@@ -77,7 +77,7 @@ Built with **Node.js**, **Express**, **MongoDB (Mongoose)**, and **Google Gemini
 | GET | `/api/auth/profile` | Get user profile (auth required) |
 | PUT | `/api/auth/profile` | Update user profile (auth required) |
 | POST | `/api/contact` | Send contact form email via Nodemailer |
-| POST | `/api/chat` | AI chat via Gemini |
+| POST | `/api/chat` | AI chat via groq  |
 | POST | `/api/resume` | Upload & analyze resume PDF |
 | POST | `/api/assessment` | Submit skill assessment |
 | GET | `/api/insights` | Get AI career insights |
@@ -103,15 +103,15 @@ npm install
 npm run dev
 ```
 
-Runs on `http://localhost:5000`
+Runs on `http://localhost:5001`
 
 ### Environment Variables (`backend-app/.env`)
 
 ```env
-PORT=5000
+PORT=5001
 MONGO_URI=mongodb://localhost:27017/ai-career-nav
 JWT_SECRET=your_jwt_secret_here
-GEMINI_API_KEY=your_gemini_api_key
+groq _API_KEY=your_groq _api_key
 SMTP_USER=your-gmail@gmail.com
 SMTP_PASS=your-gmail-app-password
 ```
@@ -136,7 +136,7 @@ SMTP_PASS=your-gmail-app-password
 |---|---|
 | Frontend | Next.js 15, TypeScript, Tailwind CSS v4 |
 | Backend | Node.js, Express 5, MongoDB, Mongoose |
-| AI | Google Gemini API |
+| AI | Google groq  API |
 | Auth | JWT + bcryptjs |
 | Email | Nodemailer (Gmail SMTP) |
 | File Upload | Multer + pdf-parse |
@@ -209,8 +209,8 @@ The backend uses `zod` for request validation on key routes (for example, `route
 
 Swagger UI is available once the backend server is running. Open in your browser:
 
-- Swagger UI: `http://localhost:5000/v1/docs`
-- Raw OpenAPI JSON: `http://localhost:5000/v1/docs.json`
+- Swagger UI: `http://localhost:5001/v1/docs`
+- Raw OpenAPI JSON: `http://localhost:5001/v1/docs.json`
 
 The OpenAPI spec is generated from JSDoc-style annotations found in `backend-app/routes/*.js`.
 

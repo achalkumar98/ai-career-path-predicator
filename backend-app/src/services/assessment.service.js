@@ -1,6 +1,6 @@
 const Assessment = require('../models/Assessment');
 const Insights = require('../models/Insights');
-const { getCareerInsight } = require('./gemini.service');
+const { getCareerInsight } = require('./groq.service');
 
 const createAssessment = async (user, skills, interests) => {
   if (!Array.isArray(skills) || !Array.isArray(interests)) {
