@@ -12,9 +12,8 @@ const resourcesController = require('../../controllers/resources.controller');
  * @swagger
  * /resources:
  *   post:
- *     tags:
- *       - Resources
- *     summary: Get learning resources for a topic
+ *     tags: [Resources]
+ *     summary: Get AI-recommended learning resources
  *     requestBody:
  *       required: true
  *       content:
@@ -22,11 +21,37 @@ const resourcesController = require('../../controllers/resources.controller');
  *           schema:
  *             type: object
  *             properties:
- *               topic:
- *                 type: string
+ *               skills:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *                 example: ["Python", "Machine Learning"]
+ *               interests:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *                 example: ["AI", "Data Science"]
  *     responses:
  *       200:
- *         description: Resources list
+ *         description: List of learning resources
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 resources:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       title:
+ *                         type: string
+ *                       url:
+ *                         type: string
+ *                       type:
+ *                         type: string
+ *       500:
+ *         description: Failed to fetch resources
  */
 router.post('/', resourcesController.getResources);
 

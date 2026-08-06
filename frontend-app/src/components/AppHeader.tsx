@@ -150,7 +150,7 @@ export default function AppHeader({ toggleSidebar }: AppHeaderProps) {
           </button>
 
           {showBell && (
-            <div style={{ ...dropdownBase, width: '340px' }}>
+            <div style={{ ...dropdownBase, width: '340px' }} className="notif-dropdown">
               {/* Header */}
               <div style={{ padding: '16px 18px 12px', borderBottom: '1px solid #f3f4f6', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                 <div>

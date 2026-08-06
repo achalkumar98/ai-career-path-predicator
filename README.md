@@ -3,6 +3,7 @@
 An AI-powered career platform that helps users build ATS-ready resumes, find matching jobs across major portals, and ace interviews with AI mock sessions.
 
 🌐 **Live Frontend**: [https://ai-career-path-predicator-tawny.vercel.app](https://ai-career-path-predicator-tawny.vercel.app)
+
 🚀 **Live Backend**: [https://ai-career-path-predicator.onrender.com](https://ai-career-path-predicator.onrender.com)
 
 ---
@@ -232,7 +233,6 @@ The backend uses `zod` for request validation on key routes (e.g. `routes/auth.j
 Swagger UI is available once the backend server is running:
 
 - **Dev**: `http://localhost:5000/v1/docs`
-- **Production**: `https://ai-career-path-predicator.onrender.com/api/docs`
 
 ## Auth Pattern
 

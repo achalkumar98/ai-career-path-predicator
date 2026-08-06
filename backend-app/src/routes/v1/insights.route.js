@@ -13,21 +13,35 @@ const insightsController = require('../../controllers/insights.controller');
  * @swagger
  * /insights:
  *   post:
- *     tags:
- *       - Insights
- *     summary: Create an insight from input text
+ *     tags: [Insights]
+ *     summary: Generate AI career insight from user input
+ *     security:
+ *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
  *             type: object
+ *             required: [input]
  *             properties:
  *               input:
  *                 type: string
+ *                 example: I am good at problem solving and love building products
  *     responses:
  *       200:
- *         description: Insight created
+ *         description: Generated insight
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 insight:
+ *                   type: string
+ *       400:
+ *         description: Input is required
+ *       401:
+ *         description: Unauthorized
  */
 router.post('/', authMiddleware, insightsController.createInsight);
 

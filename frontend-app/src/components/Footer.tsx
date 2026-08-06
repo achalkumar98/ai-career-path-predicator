@@ -83,7 +83,7 @@ export default function Footer() {
       }}
     >
       {/* Main grid */}
-      <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '64px 48px 48px' }}>
+      <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '64px 48px 48px' }} className="footer-pad">
         <div
           style={{
             display: 'grid',
@@ -91,9 +91,10 @@ export default function Footer() {
             gap: '48px',
             marginBottom: '56px',
           }}
+          className="footer-grid"
         >
           {/* Brand column */}
-          <div>
+          <div className="footer-brand">
             <Link
               href="/"
               style={{

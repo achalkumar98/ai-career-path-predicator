@@ -55,7 +55,7 @@ export default function Profile() {
   );
 
   return (
-    <div style={{ minHeight: 'calc(100vh - 56px)', background: '#f9fafb', padding: '40px 48px' }}>
+    <div style={{ minHeight: 'calc(100vh - 56px)', background: '#f9fafb', padding: '40px 48px' }} className="page-pad">
       {/* Back bar */}
       <div style={{ marginBottom: '24px' }}>
         <Link href="/homepage" style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', textDecoration: 'none', color: '#374151', fontSize: '13px' }}>
@@ -84,7 +84,7 @@ export default function Profile() {
         <form onSubmit={handleSave}>
           <div style={{ background: '#fff', border: '1px solid #e5e7eb', borderRadius: '12px', padding: '24px', marginBottom: '20px' }}>
             <p style={{ fontSize: '13px', fontWeight: 600, color: '#0f1729', marginBottom: '20px', paddingBottom: '12px', borderBottom: '1px solid #f3f4f6' }}>Personal Information</p>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }} className="form-row">
               {fields.map(({ key, label, icon: Icon, type, placeholder }) => (
                 <div key={key}>
                   <label style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px', fontWeight: 500, color: '#374151', marginBottom: '6px' }}>

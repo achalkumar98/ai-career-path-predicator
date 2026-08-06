@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { MessageCircle, Star, Send, Loader2, CheckCircle, ArrowLeft } from 'lucide-react';
+import api from '@/lib/axios';
 
 export default function Feedback() {
   const [rating, setRating] = useState(0);
@@ -10,6 +11,7 @@ export default function Feedback() {
   const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [error, setError] = useState('');
 
   const categories = ['general', 'bug', 'feature', 'design', 'performance'];
 
@@ -17,10 +19,17 @@ export default function Feedback() {
     e.preventDefault();
     if (!rating) { alert('Please select a rating'); return; }
     setLoading(true);
-    // Simulate API call — replace with real feedback API if needed
-    await new Promise(r => setTimeout(r, 1000));
-    setLoading(false);
-    setSubmitted(true);
+    setError('');
+    try {
+      const stored = localStorage.getItem('user');
+      const user = stored ? JSON.parse(stored) : {};
+      await api.post('/feedback', { name: user.name || 'Anonymous', email: user.email || '', rating, category, message });
+      setSubmitted(true);
+    } catch {
+      setError('Failed to submit feedback. Please try again.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   if (submitted) return (
@@ -31,7 +40,7 @@ export default function Feedback() {
         </div>
         <h2 style={{ fontSize: '22px', fontWeight: 700, color: '#0f1729', marginBottom: '8px' }}>Thank you!</h2>
         <p style={{ fontSize: '14px', color: '#6b7280', marginBottom: '24px' }}>Your feedback helps us improve CareerNav for everyone.</p>
-        <button onClick={() => { setSubmitted(false); setRating(0); setMessage(''); setCategory('general'); }} style={{ padding: '10px 24px', borderRadius: '8px', background: '#2255ec', color: '#fff', fontSize: '13px', fontWeight: 600, border: 'none', cursor: 'pointer' }}>
+        <button onClick={() => { setSubmitted(false); setRating(0); setMessage(''); setCategory('general'); setError(''); }} style={{ padding: '10px 24px', borderRadius: '8px', background: '#2255ec', color: '#fff', fontSize: '13px', fontWeight: 600, border: 'none', cursor: 'pointer' }}>
           Submit Another
         </button>
       </div>
@@ -39,7 +48,7 @@ export default function Feedback() {
   );
 
   return (
-    <div style={{ minHeight: 'calc(100vh - 56px)', background: '#f9fafb', padding: '40px 48px' }}>
+    <div style={{ minHeight: 'calc(100vh - 56px)', background: '#f9fafb', padding: '40px 48px' }} className="page-pad">
       {/* Back bar */}
       <div style={{ maxWidth: '560px', margin: '0 auto 24px' }}>
         <Link href="/homepage" style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', textDecoration: 'none', color: '#374151', fontSize: '13px' }}>
@@ -118,9 +127,9 @@ export default function Feedback() {
               />
             </div>
 
+            {error && <p style={{ fontSize: '12px', color: '#dc2626', background: '#fef2f2', padding: '10px 12px', borderRadius: '8px', border: '1px solid #fecaca' }}>{error}</p>}
+
             <button
-              type="submit"
-              disabled={loading}
               style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '11px 24px', borderRadius: '10px', background: '#2255ec', color: '#fff', fontSize: '13px', fontWeight: 600, border: 'none', cursor: loading ? 'not-allowed' : 'pointer', width: 'fit-content' }}
             >
               {loading ? <><Loader2 size={14} style={{ animation: 'spin 1s linear infinite' }} /> Submitting...</> : <><Send size={13} /> Submit Feedback</>}

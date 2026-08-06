@@ -36,7 +36,7 @@ export default function AccountSettings() {
   const inputStyle = { width: '100%', padding: '9px 40px 9px 12px', borderRadius: '8px', border: '1px solid #e5e7eb', fontSize: '13px', color: '#0f1729', outline: 'none', boxSizing: 'border-box' as const, transition: 'border-color 150ms' };
 
   return (
-    <div style={{ minHeight: 'calc(100vh - 56px)', background: '#f9fafb', padding: '40px 48px' }}>
+    <div style={{ minHeight: 'calc(100vh - 56px)', background: '#f9fafb', padding: '40px 48px' }} className="page-pad">
       {/* Back bar */}
       <div style={{ maxWidth: '640px', margin: '0 auto 24px' }}>
         <Link href="/homepage" style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', textDecoration: 'none', color: '#374151', fontSize: '13px' }}>

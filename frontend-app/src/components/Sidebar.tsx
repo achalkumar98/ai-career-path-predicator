@@ -11,6 +11,7 @@ import {
 interface SidebarProps {
   isOpen: boolean;
   toggleSidebar: () => void;
+  isMobile?: boolean;
 }
 
 const navGroups = [
@@ -31,7 +32,7 @@ const navGroups = [
   },
 ];
 
-export default function Sidebar({ isOpen, toggleSidebar }: SidebarProps) {
+export default function Sidebar({ isOpen, toggleSidebar, isMobile }: SidebarProps) {
   const pathname = usePathname();
   const currentPath = stripBasePath(pathname || '/');
   const router = useRouter();
@@ -56,7 +57,7 @@ export default function Sidebar({ isOpen, toggleSidebar }: SidebarProps) {
   return (
     <div style={{
       position: 'fixed', top: 0, left: 0, height: '100vh',
-      width: isOpen ? '240px' : '64px',
+      width: isOpen ? '240px' : isMobile ? '0px' : '64px',
       background: '#ffffff',
       borderRight: '1px solid #e5e7eb',
       display: 'flex', flexDirection: 'column',

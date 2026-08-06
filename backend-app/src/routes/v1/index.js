@@ -8,7 +8,7 @@ const chatRoute = require('./chat.route');
 const resumeRoute = require('./resume.route');
 const insightsRoute = require('./insights.route');
 const contactRoute = require('./contact.route');
-const docsRoute = require('./docs.route');
+const feedbackRoute = require('./feedback.route');
 
 const router = express.Router();
 
@@ -21,13 +21,10 @@ const defaultRoutes = [
   { path: '/resume', route: resumeRoute },
   { path: '/insights', route: insightsRoute },
   { path: '/contact', route: contactRoute },
+  { path: '/feedback', route: feedbackRoute },
 ];
 
 defaultRoutes.forEach((r) => router.use(r.path, r.route));
 
-/* Dev-only docs route */
-if (process.env.NODE_ENV === 'development') {
-  router.use('/docs', docsRoute);
-}
 
 module.exports = router;

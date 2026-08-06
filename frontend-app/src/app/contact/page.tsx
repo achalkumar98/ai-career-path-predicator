@@ -37,7 +37,7 @@ export default function ContactPage() {
   return (
     <div style={{ minHeight: '100vh', background: '#f9fafb', fontFamily: 'Inter, sans-serif' }}>
       {/* Top bar */}
-      <div style={{ background: '#fff', borderBottom: '1px solid #e5e7eb', padding: '14px 48px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+      <div style={{ background: '#fff', borderBottom: '1px solid #e5e7eb', padding: '14px 48px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }} className="topbar-pad">
         <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: '6px', textDecoration: 'none', color: '#374151', fontSize: '13px' }}>
           <ArrowLeft size={14} /> Back to home
         </Link>
@@ -50,11 +50,11 @@ export default function ContactPage() {
       </div>
 
       {/* Hero */}
-      <div style={{ background: 'linear-gradient(160deg,#f0f4ff 0%,#f9fafb 60%)', padding: '64px 48px 48px', textAlign: 'center', borderBottom: '1px solid #e5e7eb' }}>
+      <div style={{ background: 'linear-gradient(160deg,#f0f4ff 0%,#f9fafb 60%)', padding: '64px 48px 48px', textAlign: 'center', borderBottom: '1px solid #e5e7eb' }} className="hero-pad">
         <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '6px 14px', borderRadius: '9999px', background: 'rgba(34,85,236,0.07)', border: '1px solid rgba(34,85,236,0.18)', fontSize: '12px', fontWeight: 600, color: '#2255ec', marginBottom: '20px' }}>
           ✦ We&apos;re here to help
         </div>
-        <h1 style={{ fontSize: '42px', fontWeight: 800, color: '#0f1729', marginBottom: '12px' }}>
+        <h1 style={{ fontSize: '42px', fontWeight: 800, color: '#0f1729', marginBottom: '12px' }} className="hero-title">
           Get in <span style={{ color: '#2255ec' }}>Touch</span>
         </h1>
         <p style={{ fontSize: '15px', color: '#6b7280', maxWidth: '480px', margin: '0 auto', lineHeight: 1.7 }}>
@@ -63,7 +63,7 @@ export default function ContactPage() {
       </div>
 
       {/* Content */}
-      <div style={{ maxWidth: '1000px', margin: '0 auto', padding: '56px 48px', display: 'grid', gridTemplateColumns: '1fr 1.6fr', gap: '48px', alignItems: 'start' }}>
+      <div style={{ maxWidth: '1000px', margin: '0 auto', padding: '56px 48px', display: 'grid', gridTemplateColumns: '1fr 1.6fr', gap: '48px', alignItems: 'start' }} className="contact-grid page-pad">
         {/* Left — info */}
         <div>
           <h2 style={{ fontSize: '18px', fontWeight: 700, color: '#0f1729', marginBottom: '8px' }}>Contact Information</h2>
@@ -100,7 +100,7 @@ export default function ContactPage() {
             <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
               <h3 style={{ fontSize: '16px', fontWeight: 700, color: '#0f1729', marginBottom: '4px' }}>Send us a message</h3>
 
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }} className="form-row">
                 {[
                   { id: 'name', label: 'Full name', type: 'text', placeholder: 'John Doe', val: form.name, key: 'name' },
                   { id: 'email', label: 'Email address', type: 'email', placeholder: 'you@example.com', val: form.email, key: 'email' },

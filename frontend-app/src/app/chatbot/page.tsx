@@ -150,17 +150,17 @@ type SpeechRecognitionConstructor = new () => SpeechRecognitionInstance;
   return (
     <div style={{ minHeight: 'calc(100vh - 56px)', background: '#f9fafb' }}>
       {/* Back bar */}
-      <div style={{ background: '#fff', borderBottom: '1px solid #e5e7eb', padding: '12px 48px' }}>
+      <div style={{ background: '#fff', borderBottom: '1px solid #e5e7eb', padding: '12px 48px' }} className="back-bar">
         <Link href="/homepage" style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', textDecoration: 'none', color: '#374151', fontSize: '13px' }}>
           <ArrowLeft size={14} /> Back to Dashboard
         </Link>
       </div>
       {/* Hero */}
-      <div style={{ background: 'linear-gradient(135deg,#f0fdf4 0%,#f9fafb 60%)', borderBottom: '1px solid #e5e7eb', padding: '64px 48px', textAlign: 'center' }}>
+      <div style={{ background: 'linear-gradient(135deg,#f0fdf4 0%,#f9fafb 60%)', borderBottom: '1px solid #e5e7eb', padding: '64px 48px', textAlign: 'center' }} className="inner-hero">
         <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '6px 14px', borderRadius: '9999px', background: 'rgba(16,185,129,0.08)', border: '1px solid rgba(16,185,129,0.2)', fontSize: '12px', fontWeight: 600, color: '#059669', marginBottom: '24px' }}>
           <MessageSquare size={13} /> AI Assistant
         </div>
-        <h1 style={{ fontSize: '42px', fontWeight: 800, color: '#0f1729', lineHeight: 1.15, marginBottom: '16px' }}>
+        <h1 style={{ fontSize: '42px', fontWeight: 800, color: '#0f1729', lineHeight: 1.15, marginBottom: '16px' }} className="hero-title">
           Career<br /><span style={{ color: '#059669' }}>Chat Assistant</span>
         </h1>
         <p style={{ fontSize: '16px', color: '#6b7280', maxWidth: '520px', margin: '0 auto 32px', lineHeight: 1.7 }}>
@@ -175,8 +175,8 @@ type SpeechRecognitionConstructor = new () => SpeechRecognitionInstance;
       </div>
 
       {/* Highlights */}
-      <div style={{ padding: '48px', maxWidth: '900px', margin: '0 auto' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '20px' }}>
+      <div style={{ padding: '48px', maxWidth: '900px', margin: '0 auto' }} className="page-pad">
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '20px' }} className="highlights-grid">
           {highlights.map(({ icon: Icon, label, desc }) => (
             <div key={label} style={{ background: '#fff', border: '1px solid #e5e7eb', borderRadius: '12px', padding: '24px', transition: 'box-shadow 200ms, transform 200ms' }}
               onMouseEnter={e => { (e.currentTarget as HTMLElement).style.boxShadow = '0 8px 24px rgba(0,0,0,0.08)'; (e.currentTarget as HTMLElement).style.transform = 'translateY(-2px)'; }}
@@ -194,7 +194,7 @@ type SpeechRecognitionConstructor = new () => SpeechRecognitionInstance;
       {/* Chat Modal */}
       {open && (
         <div style={{ position: 'fixed', inset: 0, background: 'rgba(15,23,41,0.5)', backdropFilter: 'blur(4px)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 200, padding: '24px' }}>
-          <div style={{ background: '#fff', borderRadius: '16px', width: '100%', maxWidth: '560px', height: '600px', boxShadow: '0 20px 40px rgba(0,0,0,0.15)', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+          <div style={{ background: '#fff', borderRadius: '16px', width: '100%', maxWidth: '560px', height: '600px', boxShadow: '0 20px 40px rgba(0,0,0,0.15)', display: 'flex', flexDirection: 'column', overflow: 'hidden' }} className="chat-modal">
 
             {/* Header */}
             <div style={{ padding: '16px 20px', borderBottom: '1px solid #f3f4f6', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0 }}>
