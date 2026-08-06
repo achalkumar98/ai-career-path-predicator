@@ -1,4 +1,5 @@
-﻿const express = require('express');
+﻿// routes/jobMatching.route.js
+const express = require('express');
 const router = express.Router();
 const jobMatchingController = require('../../controllers/jobMatching.controller');
 
@@ -6,15 +7,16 @@ const jobMatchingController = require('../../controllers/jobMatching.controller'
  * @swagger
  * tags:
  *   name: JobMatching
- *   description: Job matching endpoints
+ *   description: Job fetching endpoints
  */
+
 /**
  * @swagger
  * /job-matching:
  *   post:
  *     tags:
  *       - JobMatching
- *     summary: Find job matches for a user profile
+ *     summary: Fetch jobs based on keyword and location
  *     requestBody:
  *       required: true
  *       content:
@@ -22,14 +24,20 @@ const jobMatchingController = require('../../controllers/jobMatching.controller'
  *           schema:
  *             type: object
  *             properties:
- *               skills:
- *                 type: array
- *                 items:
- *                   type: string
+ *               keyword:
+ *                 type: string
+ *                 example: "AIML"
+ *                 description: Job search keyword
+ *               location:
+ *                 type: string
+ *                 example: "Noida"
+ *                 description: Job location
  *     responses:
  *       200:
- *         description: Matches returned
+ *         description: Jobs fetched successfully
+ *       500:
+ *         description: Failed to fetch jobs
  */
-router.post('/', jobMatchingController.findMatches);
+router.post('/', jobMatchingController.fetchJobs);
 
 module.exports = router;

@@ -1,15 +1,32 @@
-﻿const jobMatchingService = require('../services/jobMatching.service');
+﻿// controllers/jobMatching.controller.js
+const jobMatchingService = require('../services/jobMatching.service');
 
-const findMatches = async (req, res) => {
+const fetchJobs = async (req, res) => {
   try {
-    const { skills = [], interests = [] } = req.body;
-    const result = await jobMatchingService.findJobMatches(skills, interests);
-    res.json(result);
+    const { keyword = '', location = '' } = req.body;
+    
+    const result = await jobMatchingService.fetchJobs(keyword, location);
+    
+    res.status(200).json({
+      success: true,
+      data: {
+        jobs: result.jobs,
+        totalJobs: result.totalJobs,
+        searchCriteria: result.searchCriteria
+      },
+      message: 'Jobs fetched successfully'
+    });
+    
   } catch (error) {
-    res.status(500).json({ message: 'Failed to fetch job matches' });
+    console.error('Fetch jobs error:', error.message);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to fetch jobs',
+      error: error.message
+    });
   }
 };
 
 module.exports = {
-  findMatches,
+  fetchJobs,
 };
