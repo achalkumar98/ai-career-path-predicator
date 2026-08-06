@@ -10,7 +10,9 @@ const createInsight = async (req, res) => {
     res.status(200).json(result);
   } catch (error) {
     console.error('Insight error:', error.message);
-    res.status(error.status || 500).json({ message: error.message || 'Internal server error while generating insight.' });
+    res
+      .status(error.status || 500)
+      .json({ message: error.message || 'Internal server error while generating insight.' });
   }
 };
 

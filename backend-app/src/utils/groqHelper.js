@@ -18,20 +18,21 @@ async function callGroqWithRetry(prompt, retries = 3, delayMs = 15001) {
       const is429 = err?.status === 429 || err?.message?.includes('429');
       if (is429 && attempt < retries) {
         const wait = delayMs * attempt;
-        console.warn(`[Groq] 429 quota hit — retrying in ${wait / 1000}s (attempt ${attempt}/${retries})`);
-        await new Promise(r => setTimeout(r, wait));
+        console.warn(
+          `[Groq] 429 quota hit — retrying in ${wait / 1000}s (attempt ${attempt}/${retries})`
+        );
+        await new Promise((r) => setTimeout(r, wait));
       } else {
         throw err;
       }
     }
- 
   }
 }
 
 // Rule-based fallback when groq  is unavailable
 function fallbackCareerInsight(skills = [], interests = []) {
-  const s = skills.map(x => x.toLowerCase()).join(' ');
-  const i = interests.map(x => x.toLowerCase()).join(' ');
+  const s = skills.map((x) => x.toLowerCase()).join(' ');
+  const i = interests.map((x) => x.toLowerCase()).join(' ');
   const combined = s + ' ' + i;
 
   if (combined.match(/data|ml|machine learning|ai|python|analytics/)) {
@@ -92,4 +93,9 @@ function fallbackChatReply(message = '') {
   return `That's a great career question! As your AI career advisor, I'd suggest focusing on three things: (1) Identify your core strengths and how they create value for employers, (2) Research the specific roles and companies that align with your goals, and (3) Build a consistent personal brand across LinkedIn and your portfolio. Career growth is about strategic positioning, not just hard work. What specific aspect would you like to explore further?`;
 }
 
-module.exports = { callGroqWithRetry, fallbackCareerInsight, fallbackPersonalityInsight, fallbackChatReply };
+module.exports = {
+  callGroqWithRetry,
+  fallbackCareerInsight,
+  fallbackPersonalityInsight,
+  fallbackChatReply,
+};

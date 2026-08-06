@@ -6,7 +6,7 @@ const createToken = (user) =>
   jwt.sign(
     {
       userId: user._id,
-      name: user.name
+      name: user.name,
     },
     process.env.JWT_SECRET,
     { expiresIn: '7d' }
@@ -87,7 +87,17 @@ const updateProfile = async (userId, update) => {
     error.status = 404;
     throw error;
   }
-  return { msg: 'Profile updated', user: { id: user._id, name: user.name, email: user.email, bio: user.bio, phone: user.phone, location: user.location } };
+  return {
+    msg: 'Profile updated',
+    user: {
+      id: user._id,
+      name: user.name,
+      email: user.email,
+      bio: user.bio,
+      phone: user.phone,
+      location: user.location,
+    },
+  };
 };
 
 module.exports = {

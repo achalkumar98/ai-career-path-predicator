@@ -3,18 +3,18 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { TrendingUp, Clock, BarChart2, X, Loader2, RefreshCw, ArrowLeft } from 'lucide-react';
 import { getAssessmentHistoryApi } from '@/api/assessmentApi';
-import History from '@/components/History';
+import History, { InsightItem, AssessmentItem } from '@/components/History';
 
 export default function ProgressTracker() {
   const [open, setOpen] = useState(false);
-  const [historyData, setHistoryData] = useState<{ insight?: unknown[]; assessments?: unknown[] } | null>(null);
+  const [historyData, setHistoryData] = useState<{ insight?: InsightItem[]; assessments?: AssessmentItem[] } | null>(null);
   const [loading, setLoading] = useState(false);
 
   const fetchHistory = async () => {
     setLoading(true);
     try {
       const res = await getAssessmentHistoryApi();
-      setHistoryData(res.data as { insight?: unknown[]; assessments?: unknown[] });
+      setHistoryData(res.data as { insight?: InsightItem[]; assessments?: AssessmentItem[] });
     } catch (err) {
       console.error('History fetch error:', err);
     } finally {

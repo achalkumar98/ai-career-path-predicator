@@ -19,6 +19,4 @@ const insightSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-
 module.exports = mongoose.model('Insight', insightSchema);
- 

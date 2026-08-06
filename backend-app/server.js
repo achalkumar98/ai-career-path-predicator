@@ -7,10 +7,12 @@ require('dotenv').config();
 const connectDB = require('./src/config/db');
 
 const app = express();
-app.use(cors({
-  'origin': 'http://localhost:3000',
-  'credentials': true,
-}));
+app.use(
+  cors({
+    origin: 'http://localhost:3000',
+    credentials: true,
+  })
+);
 app.use(express.json());
 
 // Request logging (prints API hits to the backend terminal)
@@ -18,10 +20,11 @@ const requestLogger = require('./src/middleware/requestLogger');
 app.use(requestLogger);
 
 const apiRoutePrefix = process.env.NODE_ENV === 'production' ? '/api' : '/v1';
-const swaggerServerUrl = process.env.SWAGGER_SERVER_URL
-  || (process.env.NODE_ENV === 'production'
+const swaggerServerUrl =
+  process.env.SWAGGER_SERVER_URL ||
+  (process.env.NODE_ENV === 'production'
     ? `https://aicareernav${apiRoutePrefix}`
-    : `http://localhost:${process.env.PORT || 5001}${apiRoutePrefix}`);
+    : `http://localhost:${process.env.PORT || 5000}${apiRoutePrefix}`);
 
 const swaggerOptions = {
   definition: {
@@ -52,5 +55,5 @@ connectDB();
 
 app.get('/', (req, res) => res.send('API is working'));
 
-const PORT = process.env.PORT || 5001;
+const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

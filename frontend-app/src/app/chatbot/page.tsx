@@ -99,15 +99,28 @@ export default function ChatAssistant() {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages, loading]);
 
+interface SpeechRecognitionInstance {
+  lang: string;
+  interimResults: boolean;
+  onstart: (() => void) | null;
+  onend: (() => void) | null;
+  onresult: ((e: { results: { [key: number]: { [key: number]: { transcript: string } } } }) => void) | null;
+  start: () => void;
+}
+
+type SpeechRecognitionConstructor = new () => SpeechRecognitionInstance;
+
   const handleVoice = () => {
-    const SR = (window as Window & { webkitSpeechRecognition?: new () => SpeechRecognition; SpeechRecognition?: new () => SpeechRecognition }).webkitSpeechRecognition
-      || (window as Window & { SpeechRecognition?: new () => SpeechRecognition }).SpeechRecognition;
+    const SR = (
+      (window as Window & { webkitSpeechRecognition?: SpeechRecognitionConstructor }).webkitSpeechRecognition ||
+      (window as Window & { SpeechRecognition?: SpeechRecognitionConstructor }).SpeechRecognition
+    );
     if (!SR) { alert('Speech recognition not supported.'); return; }
     const r = new SR();
     r.lang = 'en-US'; r.interimResults = false;
     r.onstart = () => setIsListening(true);
     r.onend = () => setIsListening(false);
-    r.onresult = (e: SpeechRecognitionEvent) => setInput(e.results[0][0].transcript);
+    r.onresult = (e) => setInput(e.results[0][0].transcript);
     r.start();
   };
 

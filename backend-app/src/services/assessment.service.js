@@ -8,7 +8,10 @@ const createAssessment = async (user, skills, interests) => {
   }
 
   const insightText = await getCareerInsight(skills, interests);
-  const recommendedCareers = insightText.split(',').map((c) => c.trim()).filter(Boolean);
+  const recommendedCareers = insightText
+    .split(',')
+    .map((c) => c.trim())
+    .filter(Boolean);
 
   const newAssessment = new Assessment({
     userId: user,
