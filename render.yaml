@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: ai-career-path-predicator
+    runtime: node
+    rootDir: backend-app
+    buildCommand: npm install && npm run install:chrome
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
