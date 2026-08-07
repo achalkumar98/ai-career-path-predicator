@@ -2,6 +2,8 @@
 const router = express.Router();
 const authMiddleware = require('../../middleware/authMiddleware');
 const insightsController = require('../../controllers/insights.controller');
+const insightsValidation = require('../../validations/insights.validation');
+const validate = require('../../middleware/validate');
 
 /**
  * @swagger
@@ -43,6 +45,6 @@ const insightsController = require('../../controllers/insights.controller');
  *       401:
  *         description: Unauthorized
  */
-router.post('/', authMiddleware, insightsController.createInsight);
+router.post('/', authMiddleware, validate(insightsValidation.createInsight), insightsController.createInsight);
 
 module.exports = router;

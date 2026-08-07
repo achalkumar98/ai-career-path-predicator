@@ -1,5 +1,7 @@
 const express = require('express');
 const { submitFeedback } = require('../../controllers/feedback.controller');
+const feedbackValidation = require('../../validations/feedback.validation');
+const validate = require('../../middleware/validate');
 
 const router = express.Router();
 
@@ -55,6 +57,6 @@ const router = express.Router();
  *       500:
  *         description: Failed to submit feedback
  */
-router.post('/', submitFeedback);
+router.post('/', validate(feedbackValidation.submitFeedback), submitFeedback);
 
 module.exports = router;

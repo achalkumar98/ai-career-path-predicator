@@ -2,6 +2,8 @@
 const router = express.Router();
 const auth = require('../../middleware/auth');
 const authController = require('../../controllers/auth.controller');
+const authValidation = require('../../validations/auth.validation');
+const validate = require('../../middleware/validate');
 
 /**
  * @swagger
@@ -39,7 +41,7 @@ const authController = require('../../controllers/auth.controller');
  *       200:
  *         description: Registered successfully
  */
-router.post('/register', authController.registerUser);
+router.post('/register', validate(authValidation.register), authController.registerUser);
 
 /**
  * @swagger
@@ -67,7 +69,7 @@ router.post('/register', authController.registerUser);
  *       200:
  *         description: Login successful
  */
-router.post('/login', authController.loginUser);
+router.post('/login', validate(authValidation.login), authController.loginUser);
 
 /**
  * @swagger
@@ -92,7 +94,7 @@ router.post('/login', authController.loginUser);
  *       400:
  *         description: Validation error
  */
-router.post('/forgot-password', authController.forgotPassword);
+router.post('/forgot-password', validate(authValidation.forgotPassword), authController.forgotPassword);
 
 /**
  * @swagger
@@ -119,7 +121,7 @@ router.post('/forgot-password', authController.forgotPassword);
  *       400:
  *         description: Invalid or expired token
  */
-router.post('/reset-password', authController.resetPassword);
+router.post('/reset-password', validate(authValidation.resetPassword), authController.resetPassword);
 
 /**
  * @swagger
@@ -179,6 +181,6 @@ router.post('/reset-password', authController.resetPassword);
  *         description: Unauthorized
  */
 router.get('/profile', auth, authController.getProfile);
-router.put('/profile', auth, authController.updateProfile);
+router.put('/profile', auth, validate(authValidation.updateProfile), authController.updateProfile);
 
 module.exports = router;

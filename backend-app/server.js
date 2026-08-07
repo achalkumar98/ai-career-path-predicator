@@ -60,7 +60,16 @@ const swaggerOptions = {
 };
 
 const swaggerSpec = swaggerJsdoc(swaggerOptions);
-app.use(`${apiRoutePrefix}/docs`, swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+app.use(
+  `${apiRoutePrefix}/docs`,
+  swaggerUi.serve,
+  swaggerUi.setup(swaggerSpec, {
+    swaggerOptions: {
+      tagsSorter: 'alpha',
+      operationsSorter: 'alpha',
+    },
+  })
+);
 app.get(`${apiRoutePrefix}/docs.json`, (req, res) => res.json(swaggerSpec));
 
 // Mount central routes at /v1 in development and /api in production

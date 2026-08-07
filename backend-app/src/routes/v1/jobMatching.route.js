@@ -2,6 +2,8 @@
 const express = require('express');
 const router = express.Router();
 const jobMatchingController = require('../../controllers/jobMatching.controller');
+const jobMatchingValidation = require('../../validations/jobMatching.validation');
+const validate = require('../../middleware/validate');
 
 /**
  * @swagger
@@ -38,6 +40,6 @@ const jobMatchingController = require('../../controllers/jobMatching.controller'
  *       500:
  *         description: Failed to fetch jobs
  */
-router.post('/', jobMatchingController.fetchJobs);
+router.post('/', validate(jobMatchingValidation.fetchJobs), jobMatchingController.fetchJobs);
 
 module.exports = router;

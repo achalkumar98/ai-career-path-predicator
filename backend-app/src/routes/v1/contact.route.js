@@ -1,7 +1,8 @@
 ﻿const express = require('express');
 const router = express.Router();
-const { body, validationResult } = require('express-validator');
 const contactController = require('../../controllers/contact.controller');
+const contactValidation = require('../../validations/contact.validation');
+const validate = require('../../middleware/validate');
 
 /**
  * @swagger
@@ -9,18 +10,6 @@ const contactController = require('../../controllers/contact.controller');
  *   name: Contact
  *   description: Contact form endpoint
  */
-
-const contactValidation = [
-  body('name').notEmpty().withMessage('Name is required'),
-  body('email').isEmail().withMessage('Valid email is required'),
-  body('subject').notEmpty().withMessage('Subject is required'),
-  body('message').isLength({ min: 10 }).withMessage('Message must be at least 10 characters'),
-  (req, res, next) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
-    next();
-  },
-];
 
 /**
  * @swagger
@@ -50,6 +39,6 @@ const contactValidation = [
  *       200:
  *         description: Message sent
  */
-router.post('/', contactValidation, contactController.sendContactMessage);
+router.post('/', validate(contactValidation.sendContactMessage), contactController.sendContactMessage);
 
 module.exports = router;
