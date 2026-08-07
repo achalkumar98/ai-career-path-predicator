@@ -6,7 +6,7 @@ const groq = new OpenAI({
 });
 
 // Retry groq  with exponential backoff on 429
-async function callGroqWithRetry(prompt, retries = 3, delayMs = 15001) {
+async function callGroqWithRetry(prompt, retries = 3, delayMs = 15000) {
   for (let attempt = 1; attempt <= retries; attempt++) {
     try {
       const result = await groq.chat.completions.create({
