@@ -6,6 +6,7 @@
     "start": "node server.js",
     "dev": "nodemon server.js",
     "install:chrome": "puppeteer browsers install chrome",
+    "postinstall": "npm run install:chrome",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "prettier": "prettier --check \"**/*.{js,json,md}\"",

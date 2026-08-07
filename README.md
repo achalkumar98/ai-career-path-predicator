@@ -151,7 +151,7 @@ CORS_ORIGIN=http://localhost:3000,https://ai-career-path-predicator-tawny.vercel
 
 1. Push `backend-app/` to GitHub
 2. Create a new **Web Service** in [render.com](https://render.com), set **Root Directory** to `backend-app`
-3. Set **Build Command**: `npm install && npm run install:chrome` and **Start Command**: `npm start`. The Chrome-install step is required because job matching uses Puppeteer to browse LinkedIn.
+3. Set **Build Command**: `npm install && npm run install:chrome` and **Start Command**: `npm start`. The Chrome-install step is required because job matching uses Puppeteer to browse LinkedIn. The backend also runs this step automatically after dependency installation.
 4. Add environment variables in Render dashboard:
 
 | Key | Value |
