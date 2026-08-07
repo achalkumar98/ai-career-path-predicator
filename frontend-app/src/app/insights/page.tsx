@@ -3,6 +3,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { Sparkles, Brain, LineChart, X, Loader2, ArrowLeft } from 'lucide-react';
 import { getInsightsApi } from '@/api/insightsApi';
+import toast from 'react-hot-toast';
 
 export default function Insights() {
   const [open, setOpen] = useState(false);
@@ -18,7 +19,7 @@ export default function Insights() {
       const res = await getInsightsApi(userInput);
       setResult(res.data.insight || res.data);
     } catch {
-      alert('Error fetching insights. Is your backend running?');
+      toast.error('Error fetching insights. Is your backend running?');
     } finally {
       setLoading(false);
     }

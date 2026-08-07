@@ -12,6 +12,7 @@ import {
   ArrowLeft,
 } from 'lucide-react';
 import { submitAssessmentApi } from '@/api/assessmentApi';
+import toast from 'react-hot-toast';
 
 export default function CareerNavigator() {
   const [open, setOpen] = useState(false);
@@ -32,7 +33,7 @@ export default function CareerNavigator() {
       .map((i) => i.trim())
       .filter(Boolean);
     if (!cleanedSkills.length || !cleanedInterests.length) {
-      alert('Please enter at least one skill and one interest.');
+      toast.error('Please enter at least one skill and one interest.');
       setLoading(false);
       return;
     }
@@ -40,7 +41,7 @@ export default function CareerNavigator() {
       const res = await submitAssessmentApi(cleanedSkills, cleanedInterests);
       setResult(res.data.insight);
     } catch {
-      alert("Error: Make sure you're logged in and your server is running.");
+      toast.error("Error: Make sure you're logged in and your server is running.");
     } finally {
       setLoading(false);
     }

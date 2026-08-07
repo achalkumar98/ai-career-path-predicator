@@ -1,6 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
+import { Toaster } from 'react-hot-toast';
 import Sidebar from './Sidebar';
 import AppHeader from './AppHeader';
 import Footer from './Footer';
@@ -47,6 +48,7 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
   if (isPublic) {
     return (
       <>
+        <Toaster position="top-right" toastOptions={{ duration: 4000 }} />
         {children}
         <Footer />
       </>
@@ -83,6 +85,7 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
       >
         <AppHeader toggleSidebar={() => setIsOpen(!isOpen)} />
         <main style={{ flex: 1 }}>{children}</main>
+        <Toaster position="top-right" toastOptions={{ duration: 4000 }} />
         <Footer />
       </div>
     </div>

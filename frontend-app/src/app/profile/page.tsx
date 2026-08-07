@@ -13,6 +13,7 @@ import {
   ArrowLeft,
 } from 'lucide-react';
 import { getProfileApi, updateProfileApi } from '@/api/authApi';
+import toast from 'react-hot-toast';
 
 export default function Profile() {
   const [form, setForm] = useState({ name: '', email: '', bio: '', phone: '', location: '' });
@@ -47,10 +48,11 @@ export default function Profile() {
       const res = await updateProfileApi(form);
       localStorage.setItem('user', JSON.stringify(res.data.user));
       setSaved(true);
+      toast.success('Profile updated successfully!');
       setTimeout(() => setSaved(false), 3000);
     } catch (err) {
       const e = err as { response?: { data?: { msg?: string } } };
-      alert(e.response?.data?.msg || 'Failed to update profile');
+      toast.error(e.response?.data?.msg || 'Failed to update profile');
     } finally {
       setSaving(false);
     }

@@ -3,6 +3,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { MessageCircle, Star, Send, Loader2, CheckCircle, ArrowLeft } from 'lucide-react';
 import api from '@/lib/axios';
+import toast from 'react-hot-toast';
 
 export default function Feedback() {
   const [rating, setRating] = useState(0);
@@ -18,7 +19,7 @@ export default function Feedback() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!rating) {
-      alert('Please select a rating');
+      toast.error('Please select a rating');
       return;
     }
     setLoading(true);
@@ -34,6 +35,7 @@ export default function Feedback() {
         message,
       });
       setSubmitted(true);
+      toast.success('Feedback submitted — thank you!');
     } catch {
       setError('Failed to submit feedback. Please try again.');
     } finally {

@@ -1,6 +1,7 @@
 'use client';
 import { useState } from 'react';
 import { sendChatMessageApi } from '@/api/chatApi';
+import toast from 'react-hot-toast';
 import { FaMicrophone, FaPaperPlane } from 'react-icons/fa';
 
 interface SpeechRecognitionInstance {
@@ -25,7 +26,7 @@ export default function Chatbot() {
       (window as Window & { webkitSpeechRecognition?: SpeechRecognitionConstructor }).webkitSpeechRecognition ||
       (window as Window & { SpeechRecognition?: SpeechRecognitionConstructor }).SpeechRecognition
     );
-    if (!SpeechRecognitionCtor) { alert('Speech recognition not supported in this browser.'); return; }
+    if (!SpeechRecognitionCtor) { toast.error('Speech recognition not supported in this browser.'); return; }
     const recognition = new SpeechRecognitionCtor();
     recognition.lang = 'en-US';
     recognition.interimResults = false;
@@ -44,7 +45,7 @@ export default function Chatbot() {
       setChatResponse(res.data.reply);
     } catch (err) {
       console.error(err);
-      alert('Chatbot error. Make sure the server is running.');
+      toast.error('Chatbot error. Make sure the server is running.');
     } finally {
       setLoading(false);
     }
