@@ -12,8 +12,8 @@ const testAPI = async () => {
     console.log('✅ Success:', response.data.success);
     console.log('📊 Total Jobs:', response.data.data.totalJobs);
     console.log('🔍 Search Criteria:', response.data.data.searchCriteria);
-    console.log('📝 First Job:', response.data.data.jobs[0]);
-    console.log('📝 All Jobs:', response.data.data.jobs);
+    console.log('📝 First Job data :', response.data.data.jobs[0]);
+    console.log('📝 All Jobs data :', response.data.data.jobs);
   } catch (error) {
     console.error('❌ Error:', error.response?.data || error.message);
   }
