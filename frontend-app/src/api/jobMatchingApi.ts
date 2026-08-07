@@ -1,4 +1,4 @@
 import api from '@/lib/axios';
 
-export const findJobMatchesApi = (skills: string[], interests: string[]) =>
-  api.post('/job-matching', { skills, interests });
+export const findJobMatchesApi = (keyword: string, location: string) =>
+  api.post('/job-matching', { keyword, location });

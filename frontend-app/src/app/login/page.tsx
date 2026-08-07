@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Eye, EyeOff, Lock, ArrowLeft, Shield } from 'lucide-react';
 import { loginApi, forgotPasswordApi } from '@/api/authApi';
+import toast from 'react-hot-toast';
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -23,13 +24,14 @@ export default function Login() {
       const res = await loginApi(email, password);
       localStorage.setItem('token', res.data.token);
       localStorage.setItem('user', JSON.stringify(res.data.user));
+      toast.success('Welcome back! Signing you in...');
       router.push('/homepage');
     } catch (err) {
       const e = err as {
         response?: { data?: { msg?: string; message?: string } };
         message?: string;
       };
-      alert('Login failed: ' + (e.response?.data?.msg || e.response?.data?.message || e.message));
+      toast.error('Login failed: ' + (e.response?.data?.msg || e.response?.data?.message || e.message));
     } finally {
       setLoading(false);
     }
@@ -41,9 +43,10 @@ export default function Login() {
     try {
       await forgotPasswordApi(forgotEmail);
       setForgotSent(true);
+      toast.success('Reset link sent! Check your inbox.');
     } catch (err) {
       const e = err as { response?: { data?: { msg?: string } } };
-      alert(e.response?.data?.msg || 'Something went wrong');
+      toast.error(e.response?.data?.msg || 'Something went wrong');
     } finally {
       setForgotLoading(false);
     }

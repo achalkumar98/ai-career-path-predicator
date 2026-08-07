@@ -13,6 +13,7 @@ import {
   ArrowLeft,
 } from 'lucide-react';
 import { resetPasswordApi } from '@/api/authApi';
+import toast from 'react-hot-toast';
 
 export default function AccountSettings() {
   const [currentPw, setCurrentPw] = useState('');
@@ -27,11 +28,11 @@ export default function AccountSettings() {
   const handlePasswordChange = async (e: React.FormEvent) => {
     e.preventDefault();
     if (newPw !== confirmPw) {
-      alert('New passwords do not match');
+      toast.error('New passwords do not match');
       return;
     }
     if (newPw.length < 6) {
-      alert('Password must be at least 6 characters');
+      toast.error('Password must be at least 6 characters');
       return;
     }
     setSaving(true);
@@ -42,10 +43,11 @@ export default function AccountSettings() {
       setCurrentPw('');
       setNewPw('');
       setConfirmPw('');
+      toast.success('Password updated successfully!');
       setTimeout(() => setSaved(false), 3000);
     } catch (err) {
       const e = err as { response?: { data?: { msg?: string } } };
-      alert(
+      toast.error(
         e.response?.data?.msg ||
           'Failed to update password. Make sure your current password is correct.',
       );

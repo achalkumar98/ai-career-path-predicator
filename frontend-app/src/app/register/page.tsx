@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Eye, EyeOff, ArrowLeft, Shield } from 'lucide-react';
 import { registerApi } from '@/api/authApi';
+import toast from 'react-hot-toast';
 
 export default function Register() {
   const [name, setName] = useState('');
@@ -20,10 +21,11 @@ export default function Register() {
       const res = await registerApi(name, email, password);
       localStorage.setItem('token', res.data.token);
       localStorage.setItem('user', JSON.stringify(res.data.user));
+      toast.success('Account created! Welcome to AiCareerNav.');
       router.push('/homepage');
     } catch (err) {
       const e = err as { response?: { data?: { message?: string } }; message?: string };
-      alert('Registration failed: ' + (e.response?.data?.message || e.message));
+      toast.error('Registration failed: ' + (e.response?.data?.message || e.message));
     } finally {
       setLoading(false);
     }

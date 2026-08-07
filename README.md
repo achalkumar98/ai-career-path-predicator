@@ -68,6 +68,7 @@ NEXT_PUBLIC_BASE_API_URL=http://localhost:5000/v1/
 
 ```env
 NEXT_PUBLIC_BASE_API_URL=https://ai-career-path-predicator.onrender.com/api/
+NEXT_PUBLIC_API_URL=http://localhost:5000
 ```
 
 ---
@@ -116,12 +117,14 @@ npm run dev
 ```
 
 Runs on `http://localhost:5000`
+Runs on `http://localhost:5000`
 
 ### Environment Variables (`backend-app/.env`)
 
 ```env
 PORT=5000
 NODE_ENV=development
+PORT=5000
 MONGO_URI=mongodb://localhost:27017/ai-career-nav
 JWT_SECRET=your_jwt_secret_here
 GROQ_API_KEY=your_groq_api_key
@@ -257,5 +260,18 @@ Built with ❤️ as a college project by:
 | Sachin Kumar | Full Stack Developer |
 
 ---
+- Swagger UI: `http://localhost:5000/v1/docs`
+- Raw OpenAPI JSON: `http://localhost:5000/v1/docs.json`
+
+The OpenAPI spec is generated from JSDoc-style annotations found in `backend-app/routes/*.js`.
+
+If you add new routes, annotate them with `@swagger` blocks to include them in the spec.
+
+## Notes & Troubleshooting
+
+- If `npm install` fails with version errors, the README's recommended tools use conservative versions (Prettier 2.x) known to be available on public registries. Update `package.json` otherwise.
+- After changing `package.json`, run `npm install` in each app.
+- Restart dev servers after installing or changing environment variables.
+
 
 © 2025 CareerNav. Crafted to help you land your next role.

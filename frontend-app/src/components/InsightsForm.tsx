@@ -1,5 +1,6 @@
 'use client';
 import { getInsightsApi } from '@/api/insightsApi';
+import toast from 'react-hot-toast';
 
 interface InsightsFormProps {
   userInput: string;
@@ -19,7 +20,7 @@ export default function InsightsForm({ userInput, setUserInput, setResult, setLo
       setResult(res.data.insight || res.data);
     } catch (err) {
       console.error(err);
-      alert('Error fetching insights. Is your backend running?');
+      toast.error('Error fetching insights. Is your backend running?');
     }
     setLoading(false);
   };

@@ -1,6 +1,7 @@
 'use client';
 import { useState } from 'react';
 import { uploadResumeApi } from '@/api/resumeApi';
+import toast from 'react-hot-toast';
 import { FaUpload, FaFilePdf } from 'react-icons/fa';
 
 interface ResumeResult {
@@ -16,14 +17,15 @@ export default function ResumeNLP() {
 
   const handleUpload = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!file) { alert('Please select a resume PDF first!'); return; }
+    if (!file) { toast.error('Please select a resume PDF first!'); return; }
     try {
       setLoading(true);
       const res = await uploadResumeApi(file);
       setResult(res.data);
+      toast.success('Resume analyzed successfully!');
     } catch (err) {
       console.error('Upload error:', err);
-      alert('Failed to analyze resume.');
+      toast.error('Failed to analyze resume.');
     } finally {
       setLoading(false);
     }

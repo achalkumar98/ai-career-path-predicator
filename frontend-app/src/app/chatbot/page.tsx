@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { MessageSquare, Mic, Send, X, Loader2, Bot, User, ArrowLeft } from 'lucide-react';
 import { sendChatMessageApi } from '@/api/chatApi';
 import ReactMarkdown from 'react-markdown';
+import toast from 'react-hot-toast';
 import remarkGfm from 'remark-gfm';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { oneDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
@@ -115,7 +116,7 @@ type SpeechRecognitionConstructor = new () => SpeechRecognitionInstance;
       (window as Window & { webkitSpeechRecognition?: SpeechRecognitionConstructor }).webkitSpeechRecognition ||
       (window as Window & { SpeechRecognition?: SpeechRecognitionConstructor }).SpeechRecognition
     );
-    if (!SR) { alert('Speech recognition not supported.'); return; }
+    if (!SR) { toast.error('Speech recognition not supported.'); return; }
     const r = new SR();
     r.lang = 'en-US'; r.interimResults = false;
     r.onstart = () => setIsListening(true);

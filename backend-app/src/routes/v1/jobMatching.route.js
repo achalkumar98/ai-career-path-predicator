@@ -1,4 +1,5 @@
-﻿const express = require('express');
+﻿// routes/jobMatching.route.js
+const express = require('express');
 const router = express.Router();
 const jobMatchingController = require('../../controllers/jobMatching.controller');
 
@@ -6,14 +7,16 @@ const jobMatchingController = require('../../controllers/jobMatching.controller'
  * @swagger
  * tags:
  *   name: JobMatching
- *   description: Job matching endpoints
+ *   description: Job fetching endpoints
  */
+
 /**
  * @swagger
  * /job-matching:
  *   post:
- *     tags: [JobMatching]
- *     summary: Find job matches based on skills and interests
+ *     tags:
+ *       - JobMatching
+ *     summary: Fetch jobs based on keyword and location
  *     requestBody:
  *       required: true
  *       content:
@@ -21,38 +24,20 @@ const jobMatchingController = require('../../controllers/jobMatching.controller'
  *           schema:
  *             type: object
  *             properties:
- *               skills:
- *                 type: array
- *                 items:
- *                   type: string
- *                 example: ["React", "Node.js"]
- *               interests:
- *                 type: array
- *                 items:
- *                   type: string
- *                 example: ["Frontend", "Startups"]
+ *               keyword:
+ *                 type: string
+ *                 example: "AIML"
+ *                 description: Job search keyword
+ *               location:
+ *                 type: string
+ *                 example: "Noida"
+ *                 description: Job location
  *     responses:
  *       200:
- *         description: List of matched jobs
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 jobs:
- *                   type: array
- *                   items:
- *                     type: object
- *                     properties:
- *                       title:
- *                         type: string
- *                       company:
- *                         type: string
- *                       match:
- *                         type: string
+ *         description: Jobs fetched successfully
  *       500:
- *         description: Failed to fetch job matches
+ *         description: Failed to fetch jobs
  */
-router.post('/', jobMatchingController.findMatches);
+router.post('/', jobMatchingController.fetchJobs);
 
 module.exports = router;
