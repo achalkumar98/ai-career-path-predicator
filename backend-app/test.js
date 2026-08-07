@@ -5,7 +5,7 @@ const testAPI = async () => {
   try {
     const BASE_URL = process.env.BASE_URL || 'http://localhost:5000/v1';
     const response = await axios.post(`${BASE_URL}/job-matching`, {
-      keyword: 'AIML',
+      keyword: 'DATASCIENCE',
       location: 'Noida'
     });
     
