@@ -5,7 +5,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import { stripBasePath } from '@/lib/pathHelper';
 import {
   LayoutDashboard, Compass, TrendingUp, FileText, Sparkles, MessageSquare,
-  Zap, ChevronUp, User, Settings, MessageCircle, LogOut,
+  Zap, ChevronUp, User, Settings, MessageCircle, LogOut, Briefcase,
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -24,6 +24,7 @@ const navGroups = [
     label: 'TOOLS',
     items: [
       { path: '/career-navigator', label: 'Career Navigator', icon: Compass },
+      { path: '/job-matching', label: 'Job Matching', icon: Briefcase },
       { path: '/progress-tracker', label: 'Progress Tracker', icon: TrendingUp },
       { path: '/resume-analyzer', label: 'Resume Analyzer', icon: FileText },
       { path: '/insights', label: 'Personality & Trends', icon: Sparkles },

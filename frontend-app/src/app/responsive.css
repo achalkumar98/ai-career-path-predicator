@@ -186,6 +186,11 @@
     width: 100% !important;
     justify-content: center !important;
   }
+
+  /* ── Job matching cards (2-col → 1-col) ── */
+  .job-cards-grid {
+    grid-template-columns: 1fr !important;
+  }
 }
 
 @media (max-width: 480px) {
