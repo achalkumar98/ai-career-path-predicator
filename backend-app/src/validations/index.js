@@ -7,3 +7,4 @@ module.exports.insightsValidation = require('./insights.validation');
 module.exports.jobMatchingValidation = require('./jobMatching.validation');
 module.exports.resourcesValidation = require('./resources.validation');
 module.exports.resumeValidation = require('./resume.validation');
+module.exports.dashboardValidation = require('./dashboard.validation');
