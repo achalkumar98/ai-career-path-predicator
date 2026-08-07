@@ -57,7 +57,7 @@ Runs on `http://localhost:3000`
 ### Environment Variables (`frontend-app/.env.local`)
 
 ```env
-NEXT_PUBLIC_API_URL=http://localhost:5001
+NEXT_PUBLIC_API_URL=http://localhost:5000
 ```
 
 ---
@@ -103,12 +103,12 @@ npm install
 npm run dev
 ```
 
-Runs on `http://localhost:5001`
+Runs on `http://localhost:5000`
 
 ### Environment Variables (`backend-app/.env`)
 
 ```env
-PORT=5001
+PORT=5000
 MONGO_URI=mongodb://localhost:27017/ai-career-nav
 JWT_SECRET=your_jwt_secret_here
 groq _API_KEY=your_groq _api_key
@@ -209,8 +209,8 @@ The backend uses `zod` for request validation on key routes (for example, `route
 
 Swagger UI is available once the backend server is running. Open in your browser:
 
-- Swagger UI: `http://localhost:5001/v1/docs`
-- Raw OpenAPI JSON: `http://localhost:5001/v1/docs.json`
+- Swagger UI: `http://localhost:5000/v1/docs`
+- Raw OpenAPI JSON: `http://localhost:5000/v1/docs.json`
 
 The OpenAPI spec is generated from JSDoc-style annotations found in `backend-app/routes/*.js`.
 
