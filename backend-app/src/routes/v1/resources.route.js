@@ -1,6 +1,8 @@
 ﻿const express = require('express');
 const router = express.Router();
 const resourcesController = require('../../controllers/resources.controller');
+const resourcesValidation = require('../../validations/resources.validation');
+const validate = require('../../middleware/validate');
 
 /**
  * @swagger
@@ -53,6 +55,6 @@ const resourcesController = require('../../controllers/resources.controller');
  *       500:
  *         description: Failed to fetch resources
  */
-router.post('/', resourcesController.getResources);
+router.post('/', validate(resourcesValidation.getResources), resourcesController.getResources);
 
 module.exports = router;

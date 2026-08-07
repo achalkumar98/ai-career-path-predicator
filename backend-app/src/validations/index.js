@@ -1,2 +1,9 @@
-module.exports.userValidation = require('./user.validation');
-module.exports.customValidation = require('./custom.validation');
+module.exports.authValidation = require('./auth.validation');
+module.exports.assessmentValidation = require('./assessment.validation');
+module.exports.chatValidation = require('./chat.validation');
+module.exports.contactValidation = require('./contact.validation');
+module.exports.feedbackValidation = require('./feedback.validation');
+module.exports.insightsValidation = require('./insights.validation');
+module.exports.jobMatchingValidation = require('./jobMatching.validation');
+module.exports.resourcesValidation = require('./resources.validation');
+module.exports.resumeValidation = require('./resume.validation');

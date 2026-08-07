@@ -2,6 +2,8 @@
 const router = express.Router();
 const authMiddleware = require('../../middleware/authMiddleware');
 const chatController = require('../../controllers/chat.controller');
+const chatValidation = require('../../validations/chat.validation');
+const validate = require('../../middleware/validate');
 
 /**
  * @swagger
@@ -43,6 +45,6 @@ const chatController = require('../../controllers/chat.controller');
  *       401:
  *         description: Unauthorized
  */
-router.post('/', authMiddleware, chatController.postChat);
+router.post('/', authMiddleware, validate(chatValidation.postChat), chatController.postChat);
 
 module.exports = router;

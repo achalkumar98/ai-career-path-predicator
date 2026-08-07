@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 const authMiddleware = require('../../middleware/authMiddleware');
 const { createAssessment, getHistory } = require('../../controllers/assessment.controller');
+const assessmentValidation = require('../../validations/assessment.validation');
+const validate = require('../../middleware/validate');
 
 /**
  * @swagger
@@ -42,7 +44,7 @@ const { createAssessment, getHistory } = require('../../controllers/assessment.c
  *       401:
  *         description: Unauthorized
  */
-router.post('/', authMiddleware, createAssessment);
+router.post('/', authMiddleware, validate(assessmentValidation.createAssessment), createAssessment);
 
 /**
  * @swagger

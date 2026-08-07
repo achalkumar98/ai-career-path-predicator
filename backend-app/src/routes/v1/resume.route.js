@@ -2,6 +2,8 @@
 const multer = require('multer');
 const authMiddleware = require('../../middleware/auth');
 const resumeController = require('../../controllers/resume.controller');
+const resumeValidation = require('../../validations/resume.validation');
+const validate = require('../../middleware/validate');
 
 const router = express.Router();
 const upload = multer({ storage: multer.memoryStorage() });
@@ -52,6 +54,12 @@ const upload = multer({ storage: multer.memoryStorage() });
  *       500:
  *         description: Failed to process resume
  */
-router.post('/upload', authMiddleware, upload.single('resume'), resumeController.uploadResume);
+router.post(
+  '/upload',
+  authMiddleware,
+  upload.single('resume'),
+  validate(resumeValidation.uploadResume),
+  resumeController.uploadResume
+);
 
 module.exports = router;
