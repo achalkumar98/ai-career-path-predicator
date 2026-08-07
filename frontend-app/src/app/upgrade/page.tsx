@@ -78,7 +78,7 @@ export default function UpgradePage() {
   return (
     <div style={{ minHeight: 'calc(100vh - 56px)', background: '#f9fafb', fontFamily: 'Inter, sans-serif' }}>
       {/* Top bar */}
-      <div style={{ background: '#fff', borderBottom: '1px solid #e5e7eb', padding: '14px 48px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+      <div style={{ background: '#fff', borderBottom: '1px solid #e5e7eb', padding: '14px 48px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }} className="topbar-pad">
         <Link
           href={isLoggedIn ? '/homepage' : '/'}
           style={{ display: 'flex', alignItems: 'center', gap: '6px', textDecoration: 'none', color: '#374151', fontSize: '13px' }}
@@ -95,11 +95,11 @@ export default function UpgradePage() {
       </div>
 
       {/* Hero */}
-      <div style={{ background: 'linear-gradient(160deg,#f0f4ff 0%,#f9fafb 60%)', borderBottom: '1px solid #e5e7eb', padding: '64px 48px 56px', textAlign: 'center' }}>
+      <div style={{ background: 'linear-gradient(160deg,#f0f4ff 0%,#f9fafb 60%)', borderBottom: '1px solid #e5e7eb', padding: '64px 48px 56px', textAlign: 'center' }} className="hero-pad">
         <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '6px 14px', borderRadius: '9999px', background: 'rgba(34,85,236,0.07)', border: '1px solid rgba(34,85,236,0.18)', fontSize: '12px', fontWeight: 600, color: '#2255ec', marginBottom: '20px' }}>
           ✦ Simple, transparent pricing
         </div>
-        <h1 style={{ fontSize: '42px', fontWeight: 800, color: '#0f1729', marginBottom: '12px' }}>
+        <h1 style={{ fontSize: '42px', fontWeight: 800, color: '#0f1729', marginBottom: '12px' }} className="hero-title">
           Choose Your <span style={{ color: '#2255ec' }}>Plan</span>
         </h1>
         <p style={{ fontSize: '15px', color: '#6b7280', maxWidth: '480px', margin: '0 auto', lineHeight: 1.7 }}>
@@ -108,8 +108,8 @@ export default function UpgradePage() {
       </div>
 
       {/* Plans */}
-      <div style={{ maxWidth: '1100px', margin: '0 auto', padding: '56px 48px' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '24px', alignItems: 'start' }}>
+      <div style={{ maxWidth: '1100px', margin: '0 auto', padding: '56px 48px' }} className="page-pad">
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '24px', alignItems: 'start' }} className="plans-grid">
           {plans.map(plan => {
             const Icon = plan.icon;
             return (

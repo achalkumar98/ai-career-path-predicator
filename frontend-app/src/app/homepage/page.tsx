@@ -67,15 +67,12 @@ export default function Homepage() {
   }, []);
 
   return (
-    <div style={{ background: '#f9fafb', minHeight: '100vh', padding: '40px 48px' }}>
+    <div style={{ background: '#f9fafb', minHeight: '100vh', padding: '40px 48px' }} className="page-pad">
 
       {/* Header */}
       <div style={{ marginBottom: '36px' }}>
-        <p style={{ fontSize: '11px', fontWeight: 700, color: '#2255ec', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
-          Dashboard
-        </p>
-        <h1 style={{ fontSize: '32px', fontWeight: 800, color: '#0f1729', marginBottom: '8px', lineHeight: 1.2 }}>
-          Welcome back, {user?.name || 'there'}
+        <h1 style={{ fontSize: '32px', fontWeight: 800, color: 'var(--color-text-primary)', marginBottom: '8px', lineHeight: 1.2 }}>
+          Welcome back, <span className="gradient-text">{user?.name}</span>
         </h1>
         <p style={{ fontSize: '14px', color: '#6b7280', lineHeight: 1.6 }}>
           Your AI-powered career command center. Pick a tool below to continue your journey.
@@ -83,7 +80,7 @@ export default function Homepage() {
       </div>
 
       {/* Stats */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px', marginBottom: '36px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px', marginBottom: '36px' }} className="grid-auto">
         {stats.map(s => {
           const Icon = s.icon;
           return (
@@ -102,7 +99,7 @@ export default function Homepage() {
 
       {/* Feature cards */}
       <p style={{ fontSize: '13px', fontWeight: 700, color: '#0f1729', marginBottom: '16px', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Tools</p>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '20px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '20px' }} className="grid-auto">
         {features.map(f => {
           const Icon = f.icon;
           return (
@@ -133,7 +130,7 @@ export default function Homepage() {
       </div>
 
       {/* Quick tip */}
-      <div style={{ marginTop: '32px', background: '#fff', border: '1px solid #e5e7eb', borderRadius: '14px', padding: '24px 28px', display: 'flex', alignItems: 'center', gap: '20px' }}>
+      <div style={{ marginTop: '32px', background: '#fff', border: '1px solid #e5e7eb', borderRadius: '14px', padding: '24px 28px', display: 'flex', alignItems: 'center', gap: '20px' }} className="tip-banner">
         <div style={{ width: '44px', height: '44px', borderRadius: '10px', background: '#eef2ff', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
           <Users size={20} style={{ color: '#2255ec' }} />
         </div>

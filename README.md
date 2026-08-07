@@ -2,6 +2,10 @@
 
 An AI-powered career platform that helps users build ATS-ready resumes, find matching jobs across major portals, and ace interviews with AI mock sessions.
 
+🌐 **Live Frontend**: [https://ai-career-path-predicator-tawny.vercel.app](https://ai-career-path-predicator-tawny.vercel.app)
+
+🚀 **Live Backend**: [https://ai-career-path-predicator.onrender.com](https://ai-career-path-predicator.onrender.com)
+
 ---
 
 ## Project Structure
@@ -39,10 +43,10 @@ Built with **Next.js 15**, **TypeScript**, and **Tailwind CSS v4**.
 
 ### Key Components
 
-- `ClientLayout.tsx` — wraps all pages, shows Sidebar + AppHeader + Footer for authenticated routes
+- `ClientLayout.tsx` — wraps all pages, shows Sidebar + AppHeader + Footer for authenticated routes; includes client-side auth guard
 - `Sidebar.tsx` — collapsible navigation with user menu and Upgrade to Pro button
-- `AppHeader.tsx` — sticky top bar with notifications and profile avatar
-- `Footer.tsx` — shared footer with product, career tools, company, and legal links
+- `AppHeader.tsx` — sticky top bar with avatar dropdown (profile, settings, sign out) and bell notification dropdown
+- `Footer.tsx` — light-theme footer with brand column, social icons, 4 link columns (Product, Resources, Company, Legal)
 
 ### Running the Frontend
 
@@ -57,14 +61,20 @@ Runs on `http://localhost:3000`
 ### Environment Variables (`frontend-app/.env.local`)
 
 ```env
-NEXT_PUBLIC_API_URL=http://localhost:5000
+NEXT_PUBLIC_BASE_API_URL=http://localhost:5000/v1/
+```
+
+### Environment Variables (`frontend-app/.env.production`)
+
+```env
+NEXT_PUBLIC_BASE_API_URL=https://ai-career-path-predicator.onrender.com/api/
 ```
 
 ---
 
 ## Backend App (`backend-app/`)
 
-Built with **Node.js**, **Express**, **MongoDB (Mongoose)**, and **Google groq  AI**.
+Built with **Node.js**, **Express 5**, **MongoDB (Mongoose)**, and **Groq AI**.
 
 ### API Routes
 
@@ -77,12 +87,14 @@ Built with **Node.js**, **Express**, **MongoDB (Mongoose)**, and **Google groq  
 | GET | `/api/auth/profile` | Get user profile (auth required) |
 | PUT | `/api/auth/profile` | Update user profile (auth required) |
 | POST | `/api/contact` | Send contact form email via Nodemailer |
-| POST | `/api/chat` | AI chat via groq  |
+| POST | `/api/chat` | AI chat via Groq |
 | POST | `/api/resume` | Upload & analyze resume PDF |
 | POST | `/api/assessment` | Submit skill assessment |
 | GET | `/api/insights` | Get AI career insights |
 | GET | `/api/resources` | Get learning resources |
 | POST | `/api/job-matching` | Match jobs to user profile |
+
+> Routes use `/v1/` prefix in development and `/api/` prefix in production (`NODE_ENV=production`).
 
 ### Email (Contact Form)
 
@@ -109,18 +121,52 @@ Runs on `http://localhost:5000`
 
 ```env
 PORT=5000
+NODE_ENV=development
 MONGO_URI=mongodb://localhost:27017/ai-career-nav
 JWT_SECRET=your_jwt_secret_here
-groq _API_KEY=your_groq _api_key
+GROQ_API_KEY=your_groq_api_key
 SMTP_USER=your-gmail@gmail.com
 SMTP_PASS=your-gmail-app-password
+CORS_ORIGIN=http://localhost:3000,https://ai-career-path-predicator-tawny.vercel.app
 ```
+
+---
+
+## Deployment
+
+### Frontend — Vercel
+
+1. Push `frontend-app/` to GitHub
+2. Import repo in [vercel.com](https://vercel.com), set **Root Directory** to `frontend-app`
+3. Add environment variable in Vercel dashboard:
+
+| Key | Value |
+|---|---|
+| `NEXT_PUBLIC_BASE_API_URL` | `https://ai-career-path-predicator.onrender.com/api/` |
+
+### Backend — Render
+
+1. Push `backend-app/` to GitHub
+2. Create a new **Web Service** in [render.com](https://render.com), set **Root Directory** to `backend-app`
+3. Set **Build Command**: `npm install` and **Start Command**: `npm start`
+4. Add environment variables in Render dashboard:
+
+| Key | Value |
+|---|---|
+| `NODE_ENV` | `production` |
+| `PORT` | `5000` |
+| `MONGO_URI` | your MongoDB Atlas URI |
+| `JWT_SECRET` | your secret |
+| `GROQ_API_KEY` | your Groq API key |
+| `SMTP_USER` | your Gmail |
+| `SMTP_PASS` | your Gmail app password |
+| `CORS_ORIGIN` | `http://localhost:3000,https://ai-career-path-predicator-tawny.vercel.app` |
 
 ---
 
 ## Pricing Plans
 
-> ⚠️ Payment integration via **Razorpay** is pending — assigned to the team.
+> ⚠️ Payment integration via **Razorpay** is pending.
 
 | Plan | Price | Key Features |
 |---|---|---|
@@ -136,11 +182,12 @@ SMTP_PASS=your-gmail-app-password
 |---|---|
 | Frontend | Next.js 15, TypeScript, Tailwind CSS v4 |
 | Backend | Node.js, Express 5, MongoDB, Mongoose |
-| AI | Google groq  API |
+| AI | Groq API (`llama-3.3-70b-versatile`) |
 | Auth | JWT + bcryptjs |
 | Email | Nodemailer (Gmail SMTP) |
 | File Upload | Multer + pdf-parse |
 | Icons | Lucide React |
+| Validation | Zod |
 
 ---
 
@@ -160,42 +207,18 @@ cd frontend-app && npm run dev
 
 ## Tooling & Developer Scripts
 
-Both apps include linting, formatting, and validation tooling to keep the codebase consistent.
-
 Frontend (`frontend-app`):
-
-- Install dependencies and start dev server:
-
-```bash
-cd frontend-app
-npm install
-npm run dev
-```
-
-- Useful scripts:
 
 ```bash
 npm run compile-ts    # TypeScript type-check (no emit)
 npm run lint          # Run ESLint
 npm run lint:fix      # Fix lintable issues
-npm run prettier      # Check formatting with Prettier
-npm run prettier:fix  # Auto-format files with Prettier
 ```
 
 Backend (`backend-app`):
 
-- Install dependencies and start dev server:
-
 ```bash
-cd backend-app
-npm install
-npm run dev
-```
-
-- Useful scripts:
-
-```bash
-npm run lint          # Run ESLint on the backend
+npm run lint          # Run ESLint
 npm run lint:fix      # Fix lintable issues
 npm run prettier      # Check formatting with Prettier
 npm run prettier:fix  # Auto-format files with Prettier
@@ -203,24 +226,36 @@ npm run prettier:fix  # Auto-format files with Prettier
 
 ## Validation (Zod)
 
-The backend uses `zod` for request validation on key routes (for example, `routes/auth.js`). Schemas are applied server-side and return structured error messages on validation failure.
+The backend uses `zod` for request validation on key routes (e.g. `routes/auth.js`). Schemas are applied server-side and return structured error messages on validation failure.
 
-## API documentation (Swagger)
+## API Documentation (Swagger)
 
-Swagger UI is available once the backend server is running. Open in your browser:
+Swagger UI is available once the backend server is running:
 
-- Swagger UI: `http://localhost:5000/v1/docs`
-- Raw OpenAPI JSON: `http://localhost:5000/v1/docs.json`
+- **Dev**: `http://localhost:5000/v1/docs`
 
-The OpenAPI spec is generated from JSDoc-style annotations found in `backend-app/routes/*.js`.
+## Auth Pattern
 
-If you add new routes, annotate them with `@swagger` blocks to include them in the spec.
+- JWT token stored in `localStorage` under key `token`; user object under `user`
+- JWT payload uses `userId` and `name` (not `id`)
+- `ClientLayout.tsx` guards all authenticated routes — redirects to `/login` if no token found
+- Public paths: `/`, `/login`, `/register`, `/contact`, `/upgrade`
 
-## Notes & Troubleshooting
+---
 
-- If `npm install` fails with version errors, the README's recommended tools use conservative versions (Prettier 2.x) known to be available on public registries. Update `package.json` otherwise.
-- After changing `package.json`, run `npm install` in each app.
-- Restart dev servers after installing or changing environment variables.
+---
 
+## Team
+
+Built with ❤️ as a college project by:
+
+| Name | Role |
+|---|---|
+| Achal Kumar | Software Engineer |
+| Adarsh Bhagat | Ai Engineer |
+| Aastha Jaiswal | Devops Engineer |
+| Sachin Kumar | Full Stack Developer |
+
+---
 
 © 2025 CareerNav. Crafted to help you land your next role.

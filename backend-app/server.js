@@ -9,10 +9,15 @@ const connectDB = require('./src/config/db');
 const app = express();
 app.use(
   cors({
-    origin: 'http://localhost:3000',
+    origin: process.env.CORS_ORIGIN
+      ? process.env.CORS_ORIGIN.split(',').map(o => o.trim())
+      : ['http://localhost:3000'],
     credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
   })
 );
+app.options('/{*path}', cors());
 app.use(express.json());
 
 // Request logging (prints API hits to the backend terminal)
@@ -23,7 +28,7 @@ const apiRoutePrefix = process.env.NODE_ENV === 'production' ? '/api' : '/v1';
 const swaggerServerUrl =
   process.env.SWAGGER_SERVER_URL ||
   (process.env.NODE_ENV === 'production'
-    ? `https://aicareernav${apiRoutePrefix}`
+    ? `https://ai-career-path-predicator.onrender.com${apiRoutePrefix}`
     : `http://localhost:${process.env.PORT || 5000}${apiRoutePrefix}`);
 
 const swaggerOptions = {
@@ -34,6 +39,16 @@ const swaggerOptions = {
       version: '1.0.0',
       description: 'REST API documentation for the AI Career Navigator backend',
     },
+    components: {
+      securitySchemes: {
+        bearerAuth: {
+          type: 'http',
+          scheme: 'bearer',
+          bearerFormat: 'JWT',
+        },
+      },
+    },
+    security: [{ bearerAuth: [] }],
     servers: [
       {
         url: swaggerServerUrl,

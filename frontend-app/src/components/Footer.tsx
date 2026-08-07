@@ -1,3 +1,5 @@
+'use client';
+
 import Link from 'next/link';
 
 const cols = [
@@ -72,32 +74,94 @@ const socials = [
 
 export default function Footer() {
   return (
-    <footer style={{ background: '#f9fafb', borderTop: '1px solid #e5e7eb', color: '#374151', fontFamily: 'Inter, sans-serif' }}>
+    <footer
+      style={{
+        background: '#f9fafb',
+        borderTop: '1px solid #e5e7eb',
+        color: '#374151',
+        fontFamily: 'Inter, sans-serif',
+      }}
+    >
       {/* Main grid */}
-      <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '64px 48px 48px' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: '1.6fr repeat(4, 1fr)', gap: '48px', marginBottom: '56px' }}>
-
+      <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '64px 48px 48px' }} className="footer-pad">
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: '1.6fr repeat(4, 1fr)',
+            gap: '48px',
+            marginBottom: '56px',
+          }}
+          className="footer-grid"
+        >
           {/* Brand column */}
-          <div>
-            <Link href="/" style={{ display: 'inline-flex', alignItems: 'center', gap: '10px', textDecoration: 'none', marginBottom: '16px' }}>
-              <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: '#2255ec', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+          <div className="footer-brand">
+            <Link
+              href="/"
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '10px',
+                textDecoration: 'none',
+                marginBottom: '16px',
+              }}
+            >
+              <div
+                style={{
+                  width: '36px',
+                  height: '36px',
+                  borderRadius: '10px',
+                  background: '#2255ec',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  flexShrink: 0,
+                }}
+              >
                 <span style={{ color: '#fff', fontWeight: 800, fontSize: '16px' }}>A</span>
               </div>
-              <span style={{ fontSize: '16px', fontWeight: 700, color: '#0f1729' }}>AICareerNav</span>
+              <span style={{ fontSize: '16px', fontWeight: 700, color: '#0f1729' }}>
+                AICareerNav
+              </span>
             </Link>
-            <p style={{ fontSize: '13px', color: '#6b7280', lineHeight: 1.75, marginBottom: '24px', maxWidth: '220px' }}>
+            <p
+              style={{
+                fontSize: '13px',
+                color: '#6b7280',
+                lineHeight: 1.75,
+                marginBottom: '24px',
+                maxWidth: '220px',
+              }}
+            >
               AI-powered career platform to build ATS-ready resumes, find jobs, and ace interviews.
             </p>
             {/* Socials */}
             <div style={{ display: 'flex', gap: '10px' }}>
-              {socials.map(s => (
+              {socials.map((s) => (
                 <a
                   key={s.label}
                   href={s.href}
                   aria-label={s.label}
-                  style={{ width: '34px', height: '34px', borderRadius: '8px', background: '#fff', border: '1px solid #e5e7eb', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#6b7280', textDecoration: 'none', transition: 'background 150ms, color 150ms' }}
-                  onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = '#2255ec'; (e.currentTarget as HTMLElement).style.color = '#fff'; }}
-                  onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = '#fff'; (e.currentTarget as HTMLElement).style.color = '#6b7280'; }}
+                  style={{
+                    width: '34px',
+                    height: '34px',
+                    borderRadius: '8px',
+                    background: '#fff',
+                    border: '1px solid #e5e7eb',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    color: '#6b7280',
+                    textDecoration: 'none',
+                    transition: 'background 150ms, color 150ms',
+                  }}
+                  onMouseEnter={(e) => {
+                    (e.currentTarget as HTMLElement).style.background = '#2255ec';
+                    (e.currentTarget as HTMLElement).style.color = '#fff';
+                  }}
+                  onMouseLeave={(e) => {
+                    (e.currentTarget as HTMLElement).style.background = '#fff';
+                    (e.currentTarget as HTMLElement).style.color = '#6b7280';
+                  }}
                 >
                   {s.icon}
                 </a>
@@ -106,16 +170,34 @@ export default function Footer() {
           </div>
 
           {/* Link columns */}
-          {cols.map(col => (
+          {cols.map((col) => (
             <div key={col.title}>
-              <p style={{ fontSize: '11px', fontWeight: 700, color: '#0f1729', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '16px' }}>{col.title}</p>
-              {col.links.map(l => (
+              <p
+                style={{
+                  fontSize: '11px',
+                  fontWeight: 700,
+                  color: '#0f1729',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.08em',
+                  marginBottom: '16px',
+                }}
+              >
+                {col.title}
+              </p>
+              {col.links.map((l) => (
                 <Link
                   key={l.label}
                   href={l.href}
-                  style={{ display: 'block', fontSize: '13px', color: '#6b7280', textDecoration: 'none', marginBottom: '10px', transition: 'color 150ms' }}
-                  onMouseEnter={e => (e.currentTarget.style.color = '#2255ec')}
-                  onMouseLeave={e => (e.currentTarget.style.color = '#6b7280')}
+                  style={{
+                    display: 'block',
+                    fontSize: '13px',
+                    color: '#6b7280',
+                    textDecoration: 'none',
+                    marginBottom: '10px',
+                    transition: 'color 150ms',
+                  }}
+                  onMouseEnter={(e) => (e.currentTarget.style.color = '#2255ec')}
+                  onMouseLeave={(e) => (e.currentTarget.style.color = '#6b7280')}
                 >
                   {l.label}
                 </Link>
@@ -125,18 +207,33 @@ export default function Footer() {
         </div>
 
         {/* Divider */}
-        <div style={{ borderTop: '1px solid #e5e7eb', paddingTop: '24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px' }}>
+        <div
+          style={{
+            borderTop: '1px solid #e5e7eb',
+            paddingTop: '24px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            flexWrap: 'wrap',
+            gap: '12px',
+          }}
+        >
           <p style={{ fontSize: '12px', color: '#9ca3af' }}>
             © 2025 CareerNav. Crafted to help you land your next role.
           </p>
           <div style={{ display: 'flex', gap: '20px' }}>
-            {['Privacy', 'Terms', 'Cookies', 'Refund'].map(l => (
+            {['Privacy', 'Terms', 'Cookies', 'Refund'].map((l) => (
               <a
                 key={l}
                 href="#"
-                style={{ fontSize: '12px', color: '#9ca3af', textDecoration: 'none', transition: 'color 150ms' }}
-                onMouseEnter={e => (e.currentTarget.style.color = '#374151')}
-                onMouseLeave={e => (e.currentTarget.style.color = '#9ca3af')}
+                style={{
+                  fontSize: '12px',
+                  color: '#9ca3af',
+                  textDecoration: 'none',
+                  transition: 'color 150ms',
+                }}
+                onMouseEnter={(e) => (e.currentTarget.style.color = '#374151')}
+                onMouseLeave={(e) => (e.currentTarget.style.color = '#9ca3af')}
               >
                 {l}
               </a>
