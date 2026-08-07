@@ -1,0 +1,41 @@
+{
+  "info": {
+    "_postman_id": "8f566245-10c6-4c08-bbc3-a58c019d8cf1",
+    "name": "AICareerNav",
+    "description": "AI Career Navigator API collection. Login/Register response automatically saves authToken; Forgot Password automatically saves resetToken.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "https://ai-career-path-predicator.onrender.com/api" },
+    { "key": "authToken", "value": "" },
+    { "key": "resetToken", "value": "" },
+    { "key": "resumeFile", "value": "C:/path/to/your-resume.pdf" }
+  ],
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        { "name": "Register", "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\n  \"name\": \"Test User\",\n  \"email\": \"testuser@example.com\",\n  \"password\": \"Test@12345\"", "options": { "raw": { "language": "json" } } }, "url": "{{baseUrl}}/auth/register" }, "event": [{ "listen": "test", "script": { "exec": ["const data = pm.response.json();", "if (data.token) pm.collectionVariables.set('authToken', data.token);"] } }] },
+        { "name": "Login", "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\n  \"email\": \"testuser@example.com\",\n  \"password\": \"Test@12345\"", "options": { "raw": { "language": "json" } } }, "url": "{{baseUrl}}/auth/login" }, "event": [{ "listen": "test", "script": { "exec": ["const data = pm.response.json();", "if (data.token) pm.collectionVariables.set('authToken', data.token);"] } }] },
+        { "name": "Forgot Password", "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\n  \"email\": \"testuser@example.com\"\n}", "options": { "raw": { "language": "json" } } }, "url": "{{baseUrl}}/auth/forgot-password" }, "event": [{ "listen": "test", "script": { "exec": ["const data = pm.response.json();", "if (data.resetToken) pm.collectionVariables.set('resetToken', data.resetToken);"] } }] },
+        { "name": "Reset Password", "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\n  \"token\": \"{{resetToken}}\",\n  \"password\": \"NewTest@12345\"\n}", "options": { "raw": { "language": "json" } } }, "url": "{{baseUrl}}/auth/reset-password" } },
+        { "name": "Get Profile", "request": { "method": "GET", "header": [{ "key": "Authorization", "value": "Bearer {{authToken}}" }], "url": "{{baseUrl}}/auth/profile" } },
+        { "name": "Update Profile", "request": { "method": "PUT", "header": [{ "key": "Authorization", "value": "Bearer {{authToken}}" }, { "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\n  \"name\": \"Test User\",\n  \"bio\": \"Aspiring data scientist\",\n  \"phone\": \"9999999999\",\n  \"location\": \"Noida\"\n}", "options": { "raw": { "language": "json" } } }, "url": "{{baseUrl}}/auth/profile" } }
+      ]
+    },
+    {
+      "name": "Assessment",
+      "item": [
+        { "name": "Create Assessment", "request": { "method": "POST", "header": [{ "key": "Authorization", "value": "Bearer {{authToken}}" }, { "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\n  \"skills\": [\"JavaScript\", \"Python\"],\n  \"interests\": [\"AI\", \"Data Science\"]\n}", "options": { "raw": { "language": "json" } } }, "url": "{{baseUrl}}/assessment" } },
+        { "name": "Assessment History", "request": { "method": "GET", "header": [{ "key": "Authorization", "value": "Bearer {{authToken}}" }], "url": "{{baseUrl}}/assessment/history" } }
+      ]
+    },
+    { "name": "Job Matching", "item": [{ "name": "Fetch LinkedIn Jobs", "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\n  \"keyword\": \"datascience\",\n  \"location\": \"Noida\"\n}", "options": { "raw": { "language": "json" } } }, "url": "{{baseUrl}}/job-matching" } }] },
+    { "name": "Resources", "item": [{ "name": "Get Learning Resources", "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\n  \"skills\": [\"Python\", \"Machine Learning\"],\n  \"interests\": [\"AI\", \"Data Science\"]\n}", "options": { "raw": { "language": "json" } } }, "url": "{{baseUrl}}/resources" } }] },
+    { "name": "Chat", "item": [{ "name": "Ask Career Assistant", "request": { "method": "POST", "header": [{ "key": "Authorization", "value": "Bearer {{authToken}}" }, { "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\n  \"message\": \"What skills do I need to become a data scientist?\"\n}", "options": { "raw": { "language": "json" } } }, "url": "{{baseUrl}}/chat" } }] },
+    { "name": "Resume", "item": [{ "name": "Upload and Analyze Resume", "request": { "method": "POST", "header": [{ "key": "Authorization", "value": "Bearer {{authToken}}" }], "body": { "mode": "formdata", "formdata": [{ "key": "resume", "type": "file", "src": "{{resumeFile}}" }] }, "url": "{{baseUrl}}/resume/upload" } }] },
+    { "name": "Insights", "item": [{ "name": "Generate Career Insight", "request": { "method": "POST", "header": [{ "key": "Authorization", "value": "Bearer {{authToken}}" }, { "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\n  \"input\": \"I enjoy problem solving, Python, and building AI products.\"\n}", "options": { "raw": { "language": "json" } } }, "url": "{{baseUrl}}/insights" } }] },
+    { "name": "Contact", "item": [{ "name": "Send Contact Message", "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\n  \"name\": \"Test User\",\n  \"email\": \"testuser@example.com\",\n  \"subject\": \"Postman API test\",\n  \"message\": \"This is a test message sent from Postman.\"\n}", "options": { "raw": { "language": "json" } } }, "url": "{{baseUrl}}/contact" } }] },
+    { "name": "Feedback", "item": [{ "name": "Submit Feedback", "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\n  \"name\": \"Test User\",\n  \"email\": \"testuser@example.com\",\n  \"rating\": 5,\n  \"category\": \"general\",\n  \"message\": \"Postman feedback API test.\"\n}", "options": { "raw": { "language": "json" } } }, "url": "{{baseUrl}}/feedback" } }] }
+  ]
+}
