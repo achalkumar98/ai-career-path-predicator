@@ -48,7 +48,13 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
   if (isPublic) {
     return (
       <>
-        <Toaster position="top-right" toastOptions={{ duration: 4000 }} />
+        <Toaster
+          position="bottom-right"
+          toastOptions={{
+            duration: 4000,
+            success: { iconTheme: { primary: '#166534', secondary: '#ffffff' } },
+          }}
+        />
         {children}
         <Footer />
       </>
@@ -85,7 +91,13 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
       >
         <AppHeader toggleSidebar={() => setIsOpen(!isOpen)} />
         <main style={{ flex: 1 }}>{children}</main>
-        <Toaster position="top-right" toastOptions={{ duration: 4000 }} />
+        <Toaster
+          position="bottom-right"
+          toastOptions={{
+            duration: 4000,
+            success: { iconTheme: { primary: '#166534', secondary: '#ffffff' } },
+          }}
+        />
         <Footer />
       </div>
     </div>
