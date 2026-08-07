@@ -73,12 +73,12 @@ export default function Sidebar({ isOpen, toggleSidebar, isMobile }: SidebarProp
             background: '#2255ec', display: 'flex', alignItems: 'center', justifyContent: 'center',
             flexShrink: 0,
           }}>
-            <span style={{ color: '#fff', fontWeight: 800, fontSize: '16px' }}>N</span>
+            <span style={{ color: '#fff', fontWeight: 800, fontSize: '16px' }}>A</span>
           </div>
           {isOpen && (
             <div>
               <div style={{ display: 'flex', alignItems: 'baseline', gap: '4px' }}>
-                <span style={{ fontSize: '14px', fontWeight: 700, color: '#0f1729' }}>CareerNav</span>
+                <span style={{ fontSize: '14px', fontWeight: 700, color: '#0f1729' }}>AiCareerNav</span>
               </div>
               <p style={{ fontSize: '11px', color: '#9ca3af', marginTop: '1px' }}>AI Career Platform</p>
             </div>
