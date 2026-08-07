@@ -2,7 +2,7 @@
   "info": {
     "_postman_id": "8f566245-10c6-4c08-bbc3-a58c019d8cf1",
     "name": "AICareerNav",
-    "description": "AI Career Navigator API collection. Login/Register response automatically saves authToken; Forgot Password automatically saves resetToken.",
+    "description": "AI Career Navigator API collection. Set loginEmail and loginPassword in the AICareerNav environment; the collection pre-request script automatically refreshes the JWT for protected requests.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "variable": [
@@ -10,6 +10,56 @@
     { "key": "authToken", "value": "" },
     { "key": "resetToken", "value": "" },
     { "key": "resumeFile", "value": "C:/path/to/your-resume.pdf" }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "const protectedPaths = ['/auth/profile', '/assessment', '/chat', '/resume/upload', '/insights'];",
+          "const requestUrl = pm.request.url.toString();",
+          "const requiresAuth = protectedPaths.some((path) => requestUrl.includes(path));",
+          "",
+          "if (requiresAuth) {",
+          "  const token = pm.environment.get('currentAccessToken');",
+          "  const expiry = Number(pm.environment.get('accessTokenExpiry') || 0);",
+          "  const tokenIsValid = token && expiry > Date.now();",
+          "",
+          "  if (tokenIsValid) {",
+          "    pm.collectionVariables.set('authToken', token);",
+          "    console.log('Token and expiry date are all good.');",
+          "  } else {",
+          "    const baseUrl = pm.environment.get('baseUrl') || pm.collectionVariables.get('baseUrl');",
+          "    const email = pm.environment.get('loginEmail');",
+          "    const password = pm.environment.get('loginPassword');",
+          "",
+          "    if (!email || !password) {",
+          "      console.error('Set loginEmail and loginPassword in the AICareerNav environment first.');",
+          "    } else {",
+          "      pm.sendRequest({",
+          "        url: `${baseUrl}/auth/login`,",
+          "        method: 'POST',",
+          "        header: { 'Content-Type': 'application/json' },",
+          "        body: { mode: 'raw', raw: JSON.stringify({ email, password }) }",
+          "      }, (err, res) => {",
+          "        if (err) return console.error('Automatic login failed:', err);",
+          "        const response = res.json();",
+          "        if (!response.token) return console.error('Automatic login did not return a token:', response);",
+          "",
+          "        const payload = JSON.parse(atob(response.token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/')));",
+          "        const expiresAt = payload.exp ? payload.exp * 1000 : Date.now() + 6 * 24 * 60 * 60 * 1000;",
+          "        pm.environment.set('currentAccessToken', response.token);",
+          "        pm.environment.set('accessTokenExpiry', String(expiresAt));",
+          "        pm.collectionVariables.set('authToken', response.token);",
+          "        console.log('Saved a fresh access token and expiry date.');",
+          "      });",
+          "    }",
+          "  }",
+          "}"
+        ]
+      }
+    }
   ],
   "item": [
     {
