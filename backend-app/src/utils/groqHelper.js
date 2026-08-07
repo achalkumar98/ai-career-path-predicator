@@ -88,9 +88,9 @@ function fallbackChatReply(message = '') {
     return `The most in-demand skills right now are: AI/ML fundamentals, data analysis, cloud computing (AWS/GCP/Azure), product management, and digital marketing. For learning, I recommend Coursera, edX, and LinkedIn Learning for structured courses. Build real projects alongside courses — employers value demonstrated skills over certificates alone.`;
   }
   if (msg.match(/job|find|search|apply/)) {
-    return `For an effective job search: optimize your LinkedIn profile with keywords, set up job alerts on LinkedIn, Indeed, and Naukri. Apply within the first 24-48 hours of a posting going live. Aim for quality over quantity — 10 tailored applications beat 100 generic ones. Follow up after 5-7 business days. 70% of jobs are filled through networking, so prioritize building genuine professional relationships.`;
+    return `For an effective job search: optimize your LinkedIn profile with keywords, set up job alerts on LinkedIn, Indeed, and Naukri. Apply within the first 24-48 hours of a posting going live. Aim for quality over quantity — 10 tailored  applications beat 100 generic ones. Follow up after 5-7 business days. 70% of jobs are filled through networking, so prioritize building genuine professional relationships.`;
   }
-  return `That's a great career question! As your AI career advisor, I'd suggest focusing on three things: (1) Identify your core strengths and how they create value for employers, (2) Research the specific roles and companies that align with your goals, and (3) Build a consistent personal brand across LinkedIn and your portfolio. Career growth is about strategic positioning, not just hard work. What specific aspect would you like to explore further?`;
+  return `That's a great career question! As your AI career advisor, I'd suggest focusing on three things: (1) Identify your core strengths and how they create value for employers, (2) Research the specific roles and companies that align with your goals, and (3) Build a consistent personal brand across LinkedIn and your portfolio. Career growth is about strategic positioning, not just hard work. What specific aspect would you like to explore further? `;
 }
 
 module.exports = {
