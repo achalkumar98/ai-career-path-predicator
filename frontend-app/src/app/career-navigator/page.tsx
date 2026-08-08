@@ -1,4 +1,5 @@
 'use client';
+import { useTheme } from '@/context/ThemeContext';
 import { useState } from 'react';
 import Link from 'next/link';
 import {
@@ -15,6 +16,7 @@ import { submitAssessmentApi } from '@/api/assessmentApi';
 import toast from 'react-hot-toast';
 
 export default function CareerNavigator() {
+  const { isDark } = useTheme();
   const [open, setOpen] = useState(false);
   const [skills, setSkills] = useState('');
   const [interests, setInterests] = useState('');
@@ -54,7 +56,7 @@ export default function CareerNavigator() {
   ];
 
   return (
-    <div style={{ minHeight: 'calc(100vh - 56px)', background: '#f9fafb' }}>
+    <div style={{ minHeight: 'calc(100vh - 56px)', background: isDark ? '#141720' : '#f9fafb', transition: 'background 300ms' }}>
       {/* Back bar */}
       <div
         style={{ background: '#fff', borderBottom: '1px solid #e5e7eb', padding: '12px 48px' }}
@@ -216,233 +218,68 @@ export default function CareerNavigator() {
       </div>
 
       {/* Modal */}
-      {open && (
-        <div
-          style={{
-            position: 'fixed',
-            inset: 0,
-            background: 'rgba(15,23,41,0.5)',
-            backdropFilter: 'blur(4px)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            zIndex: 200,
-            padding: '24px',
-          }}
-        >
-          <div
-            style={{
-              background: '#fff',
-              borderRadius: '16px',
-              width: '100%',
-              maxWidth: '520px',
-              boxShadow: '0 20px 40px rgba(0,0,0,0.15)',
-              overflow: 'hidden',
-            }}
-          >
-            {/* Modal header */}
-            <div
-              style={{
-                padding: '20px 24px',
-                borderBottom: '1px solid #f3f4f6',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-              }}
-            >
-              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                <div
-                  style={{
-                    width: '32px',
-                    height: '32px',
-                    borderRadius: '8px',
-                    background: '#eef2ff',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}
-                >
-                  <Compass size={15} style={{ color: '#2255ec' }} />
+      {open && (() => {
+        const mBg  = isDark ? '#1a1f2e' : '#ffffff';
+        const mBdr = isDark ? '#272d3d' : '#f3f4f6';
+        const mTxt = isDark ? '#f1f5f9' : '#0f1729';
+        const mSub = isDark ? '#64748b' : '#9ca3af';
+        const mBody= isDark ? '#cbd5e1' : '#374151';
+        const iBg  = isDark ? '#0f1117' : '#ffffff';
+        const iClr = isDark ? '#e2e8f0' : '#0f1729';
+        const iBdr = isDark ? '#272d3d' : '#e5e7eb';
+        const resBg= isDark ? '#0f1117' : '#f9fafb';
+        const rBdr = isDark ? '#272d3d' : '#e5e7eb';
+        const taStyle: React.CSSProperties = { width:'100%', padding:'10px 12px', borderRadius:'8px', border:`1px solid ${iBdr}`, fontSize:'13px', color:iClr, background:iBg, outline:'none', resize:'none', boxSizing:'border-box', transition:'border-color 150ms', fontFamily:'inherit' };
+        return (
+        <div style={{ position:'fixed', inset:0, background:'rgba(15,23,41,0.55)', backdropFilter:'blur(4px)', display:'flex', alignItems:'center', justifyContent:'center', zIndex:200, padding:'24px' }}
+          onClick={() => setOpen(false)}>
+          <div style={{ background:mBg, borderRadius:'16px', width:'100%', maxWidth:'520px', boxShadow: isDark ? '0 20px 40px rgba(0,0,0,0.5)' : '0 20px 40px rgba(0,0,0,0.15)', overflow:'hidden', border:`1px solid ${mBdr}` }}
+            onClick={(e) => e.stopPropagation()}>
+            {/* header */}
+            <div style={{ padding:'20px 24px', borderBottom:`1px solid ${mBdr}`, display:'flex', alignItems:'center', justifyContent:'space-between' }}>
+              <div style={{ display:'flex', alignItems:'center', gap:'10px' }}>
+                <div style={{ width:'32px', height:'32px', borderRadius:'8px', background: isDark ? '#1e2844' : '#eef2ff', display:'flex', alignItems:'center', justifyContent:'center' }}>
+                  <Compass size={15} style={{ color:'#2255ec' }} />
                 </div>
                 <div>
-                  <p style={{ fontSize: '14px', fontWeight: 700, color: '#0f1729' }}>
-                    Career Navigator
-                  </p>
-                  <p style={{ fontSize: '11px', color: '#9ca3af' }}>
-                    AI-powered career suggestions
-                  </p>
+                  <p style={{ fontSize:'14px', fontWeight:700, color:mTxt }}>Career Navigator</p>
+                  <p style={{ fontSize:'11px', color:mSub }}>AI-powered career suggestions</p>
                 </div>
               </div>
-              <button
-                onClick={() => setOpen(false)}
-                style={{
-                  background: 'none',
-                  border: 'none',
-                  cursor: 'pointer',
-                  color: '#9ca3af',
-                  padding: '4px',
-                }}
-              >
-                <X size={18} />
-              </button>
+              <button onClick={() => setOpen(false)} style={{ background:'none', border:'none', cursor:'pointer', color:mSub, padding:'4px' }}><X size={18} /></button>
             </div>
-
-            {/* Modal body */}
-            <div style={{ padding: '24px' }}>
+            {/* body */}
+            <div style={{ padding:'24px' }}>
               {!result ? (
-                <form
-                  onSubmit={handleSubmit}
-                  style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}
-                >
-                  <div>
-                    <label
-                      style={{
-                        display: 'block',
-                        fontSize: '12px',
-                        fontWeight: 500,
-                        color: '#374151',
-                        marginBottom: '6px',
-                      }}
-                    >
-                      Your Skills{' '}
-                      <span style={{ color: '#9ca3af', fontWeight: 400 }}>(comma separated)</span>
-                    </label>
-                    <textarea
-                      rows={3}
-                      value={skills}
-                      onChange={(e) => setSkills(e.target.value)}
-                      placeholder="e.g. JavaScript, React, Machine Learning"
-                      required
-                      style={{
-                        width: '100%',
-                        padding: '10px 12px',
-                        borderRadius: '8px',
-                        border: '1px solid #e5e7eb',
-                        fontSize: '13px',
-                        color: '#0f1729',
-                        outline: 'none',
-                        resize: 'none',
-                        boxSizing: 'border-box',
-                        transition: 'border-color 150ms',
-                        fontFamily: 'inherit',
-                      }}
-                      onFocus={(e) => (e.currentTarget.style.borderColor = '#2255ec')}
-                      onBlur={(e) => (e.currentTarget.style.borderColor = '#e5e7eb')}
-                    />
-                  </div>
-                  <div>
-                    <label
-                      style={{
-                        display: 'block',
-                        fontSize: '12px',
-                        fontWeight: 500,
-                        color: '#374151',
-                        marginBottom: '6px',
-                      }}
-                    >
-                      Your Interests{' '}
-                      <span style={{ color: '#9ca3af', fontWeight: 400 }}>(comma separated)</span>
-                    </label>
-                    <textarea
-                      rows={3}
-                      value={interests}
-                      onChange={(e) => setInterests(e.target.value)}
-                      placeholder="e.g. AI, Web Development, Finance"
-                      required
-                      style={{
-                        width: '100%',
-                        padding: '10px 12px',
-                        borderRadius: '8px',
-                        border: '1px solid #e5e7eb',
-                        fontSize: '13px',
-                        color: '#0f1729',
-                        outline: 'none',
-                        resize: 'none',
-                        boxSizing: 'border-box',
-                        transition: 'border-color 150ms',
-                        fontFamily: 'inherit',
-                      }}
-                      onFocus={(e) => (e.currentTarget.style.borderColor = '#2255ec')}
-                      onBlur={(e) => (e.currentTarget.style.borderColor = '#e5e7eb')}
-                    />
-                  </div>
-                  <button
-                    type="submit"
-                    disabled={loading}
-                    style={{
-                      width: '100%',
-                      padding: '11px',
-                      borderRadius: '10px',
-                      background: loading ? '#93a5f5' : '#2255ec',
-                      color: '#fff',
-                      fontSize: '13px',
-                      fontWeight: 600,
-                      border: 'none',
-                      cursor: loading ? 'not-allowed' : 'pointer',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      gap: '8px',
-                    }}
-                  >
-                    {loading ? (
-                      <>
-                        <Loader2 size={14} style={{ animation: 'spin 1s linear infinite' }} />{' '}
-                        Analyzing...
-                      </>
-                    ) : (
-                      'Get Career Suggestions →'
-                    )}
+                <form onSubmit={handleSubmit} style={{ display:'flex', flexDirection:'column', gap:'16px' }}>
+                  {[
+                    { label:'Your Skills', hint:'(comma separated)', val:skills, set:setSkills, ph:'e.g. JavaScript, React, Machine Learning' },
+                    { label:'Your Interests', hint:'(comma separated)', val:interests, set:setInterests, ph:'e.g. AI, Web Development, Finance' },
+                  ].map(({ label, hint, val, set: s, ph }) => (
+                    <div key={label}>
+                      <label style={{ display:'block', fontSize:'12px', fontWeight:500, color:mBody, marginBottom:'6px' }}>
+                        {label} <span style={{ color:mSub, fontWeight:400 }}>{hint}</span>
+                      </label>
+                      <textarea rows={3} value={val} onChange={(e) => s(e.target.value)} placeholder={ph} required style={taStyle}
+                        onFocus={(e) => (e.currentTarget.style.borderColor='#2255ec')}
+                        onBlur={(e)  => (e.currentTarget.style.borderColor=iBdr)} />
+                    </div>
+                  ))}
+                  <button type="submit" disabled={loading} style={{ width:'100%', padding:'11px', borderRadius:'10px', background:loading?'#93a5f5':'#2255ec', color:'#fff', fontSize:'13px', fontWeight:600, border:'none', cursor:loading?'not-allowed':'pointer', display:'flex', alignItems:'center', justifyContent:'center', gap:'8px' }}>
+                    {loading ? <><Loader2 size={14} className="spin" /> Analyzing...</> : 'Get Career Suggestions →'}
                   </button>
                 </form>
               ) : (
                 <div>
-                  <div
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '8px',
-                      marginBottom: '16px',
-                    }}
-                  >
-                    <Sparkles size={15} style={{ color: '#2255ec' }} />
-                    <p style={{ fontSize: '13px', fontWeight: 600, color: '#0f1729' }}>
-                      AI Recommendations
-                    </p>
+                  <div style={{ display:'flex', alignItems:'center', gap:'8px', marginBottom:'16px' }}>
+                    <Sparkles size={15} style={{ color:'#2255ec' }} />
+                    <p style={{ fontSize:'13px', fontWeight:600, color:mTxt }}>AI Recommendations</p>
                   </div>
-                  <div
-                    style={{
-                      background: '#f9fafb',
-                      border: '1px solid #e5e7eb',
-                      borderRadius: '10px',
-                      padding: '16px',
-                      fontSize: '13px',
-                      color: '#374151',
-                      lineHeight: 1.7,
-                      maxHeight: '300px',
-                      overflowY: 'auto',
-                    }}
-                  >
+                  <div style={{ background:resBg, border:`1px solid ${rBdr}`, borderRadius:'10px', padding:'16px', fontSize:'13px', color:mBody, lineHeight:1.7, maxHeight:'300px', overflowY:'auto' }}>
                     {result}
                   </div>
-                  <button
-                    onClick={() => {
-                      setResult('');
-                      setSkills('');
-                      setInterests('');
-                    }}
-                    style={{
-                      marginTop: '16px',
-                      width: '100%',
-                      padding: '10px',
-                      borderRadius: '8px',
-                      border: '1px solid #e5e7eb',
-                      background: '#fff',
-                      fontSize: '13px',
-                      cursor: 'pointer',
-                      color: '#374151',
-                    }}
-                  >
+                  <button onClick={() => { setResult(''); setSkills(''); setInterests(''); }}
+                    style={{ marginTop:'16px', width:'100%', padding:'10px', borderRadius:'8px', border:`1px solid ${rBdr}`, background: isDark?'#0f1117':'#fff', fontSize:'13px', cursor:'pointer', color:mBody }}>
                     Try Again
                   </button>
                 </div>
@@ -450,9 +287,9 @@ export default function CareerNavigator() {
             </div>
           </div>
         </div>
-      )}
+        );
+      })()}
 
-      <style>{`@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }`}</style>
     </div>
   );
 }

@@ -677,6 +677,8 @@ body {
   align-items: flex-end;
   flex-shrink: 0;
   background: var(--dash-card-bg, #fff);
+  box-sizing: border-box;
+  width: 100%;
 }
 .fchat-input {
   flex: 1;
@@ -727,3 +729,186 @@ body {
   place-items: center;
   border: 2px solid #fff;
 }
+
+
+/* ─────────────────────────────────────────────────────────────
+   GLOBAL DARK MODE OVERRIDES
+   Applied via  data-theme="dark"  on <html>
+   Covers every page that uses shared CSS class names and the
+   common inline-style patterns we cannot change easily.
+───────────────────────────────────────────────────────────── */
+
+/* ── Page backgrounds ─────────────────────────────────────── */
+[data-theme='dark'] body          { background: #0f1117; color: #cbd5e1; }
+
+/* public pages that set minHeight/background on their root div via inline style
+   are patched in-component; this catches any we missed */
+[data-theme='dark'] .page-root    { background: #0f1117 !important; }
+
+/* ── Back / top bars ──────────────────────────────────────── */
+[data-theme='dark'] .back-bar,
+[data-theme='dark'] .topbar-pad   {
+  background: #0f1117 !important;
+  border-bottom-color: #272d3d !important;
+}
+[data-theme='dark'] .back-bar a,
+[data-theme='dark'] .topbar-pad a { color: #94a3b8 !important; }
+
+/* ── Inner hero sections ──────────────────────────────────── */
+[data-theme='dark'] .inner-hero   {
+  background: linear-gradient(135deg, #111827 0%, #141720 60%) !important;
+  border-bottom-color: #272d3d !important;
+}
+[data-theme='dark'] .inner-hero h1,
+[data-theme='dark'] .inner-hero .hero-title { color: #f1f5f9 !important; }
+[data-theme='dark'] .inner-hero p           { color: #94a3b8 !important; }
+
+/* ── Highlights / feature card grids ─────────────────────── */
+[data-theme='dark'] .highlights-grid > div,
+[data-theme='dark'] .chart-card,
+[data-theme='dark'] .glass {
+  background: #1a1f2e !important;
+  border-color: #272d3d !important;
+}
+[data-theme='dark'] .highlights-grid > div p:first-of-type { color: #f1f5f9 !important; }
+[data-theme='dark'] .highlights-grid > div p:last-of-type  { color: #94a3b8 !important; }
+
+/* ── Auth / public page card containers (login, register) ── */
+[data-theme='dark'] .auth-card {
+  background: #1a1f2e !important;
+  border-color: #272d3d !important;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.4) !important;
+}
+
+/* ── Modals ───────────────────────────────────────────────── */
+[data-theme='dark'] .modal-card {
+  background: #1a1f2e !important;
+  border-color: #272d3d !important;
+}
+[data-theme='dark'] .modal-card .modal-header,
+[data-theme='dark'] .modal-header {
+  border-bottom-color: #272d3d !important;
+  background: #1a1f2e !important;
+}
+
+/* generic white modal panel — the pages use inline styles on the modal div,
+   so we target the modal overlay's direct child div */
+[data-theme='dark'] .modal-overlay > div {
+  background: #1a1f2e !important;
+}
+
+/* ── Section results / content cards ─────────────────────── */
+[data-theme='dark'] .result-card,
+[data-theme='dark'] .job-card {
+  background: #1a1f2e !important;
+  border-color: #272d3d !important;
+}
+
+/* ── Generic text colour helpers ─────────────────────────── */
+[data-theme='dark'] .text-title  { color: #f1f5f9 !important; }
+[data-theme='dark'] .text-body   { color: #cbd5e1 !important; }
+[data-theme='dark'] .text-muted  { color: #64748b !important; }
+
+/* ── Form inputs (catch any page using inline styles for inputs) ── */
+[data-theme='dark'] input:not([type='file']):not([type='checkbox']):not([type='radio']),
+[data-theme='dark'] textarea,
+[data-theme='dark'] select {
+  background: #0f1117 !important;
+  border-color: #272d3d !important;
+  color: #e2e8f0 !important;
+}
+[data-theme='dark'] input::placeholder,
+[data-theme='dark'] textarea::placeholder { color: #475569 !important; }
+[data-theme='dark'] input:focus,
+[data-theme='dark'] textarea:focus { border-color: #2255ec !important; }
+
+/* ── Dividers ─────────────────────────────────────────────── */
+[data-theme='dark'] hr,
+[data-theme='dark'] [style*="borderTop"],
+[data-theme='dark'] [style*="border-top"],
+[data-theme='dark'] [style*="borderBottom"],
+[data-theme='dark'] [style*="border-bottom"] {
+  /* targeted by CSS — only affects elements that explicitly draw dividers
+     without inline styles overriding; for inline styles we rely on per-component tokens */
+}
+
+/* ── Landing page specific ────────────────────────────────── */
+[data-theme='dark'] .landing-nav {
+  background: rgba(15,17,23,0.97) !important;
+  border-bottom-color: #272d3d !important;
+}
+[data-theme='dark'] .landing-nav a,
+[data-theme='dark'] .landing-nav span { color: #cbd5e1 !important; }
+[data-theme='dark'] .landing-nav-cta {
+  background: #1a1f2e !important;
+  border-color: #272d3d !important;
+}
+
+[data-theme='dark'] .hero-section {
+  background: linear-gradient(135deg, #0f1117 0%, #141720 100%) !important;
+}
+[data-theme='dark'] .hero-h1,
+[data-theme='dark'] .section-h2,
+[data-theme='dark'] .landing-section-h2 { color: #f1f5f9 !important; }
+
+[data-theme='dark'] .section-pad { background: #0f1117 !important; }
+
+/* stats + features + portals cards */
+[data-theme='dark'] .stats-grid > *,
+[data-theme='dark'] .features-grid > *,
+[data-theme='dark'] .portals-grid > * {
+  background: #1a1f2e !important;
+  border-color: #272d3d !important;
+}
+
+/* ── Upgrade / pricing cards ──────────────────────────────── */
+[data-theme='dark'] .plans-grid > div {
+  background: #1a1f2e !important;
+  border-color: #272d3d !important;
+}
+[data-theme='dark'] .plans-grid > div span,
+[data-theme='dark'] .plans-grid > div p { color: #cbd5e1 !important; }
+[data-theme='dark'] .plans-grid > div h2,
+[data-theme='dark'] .plans-grid p:has(+ div > span) { color: #f1f5f9 !important; }
+
+/* ── Job cards ────────────────────────────────────────────── */
+[data-theme='dark'] .job-cards-grid > div {
+  background: #1a1f2e !important;
+  border-color: #272d3d !important;
+}
+[data-theme='dark'] .job-cards-grid > div p  { color: #cbd5e1 !important; }
+
+/* ── Resume results grid ──────────────────────────────────── */
+[data-theme='dark'] .resume-results-grid > div {
+  background: #1a1f2e !important;
+  border-color: #272d3d !important;
+}
+
+/* ── Pagination buttons ───────────────────────────────────── */
+[data-theme='dark'] button[style*="border: 1px solid #e5e7eb"],
+[data-theme='dark'] button[style*='border: 1px solid #e5e7eb'] {
+  background: #1a1f2e !important;
+  border-color: #272d3d !important;
+  color: #cbd5e1 !important;
+}
+
+/* ── Contact info section ─────────────────────────────────── */
+[data-theme='dark'] .contact-grid { color: #cbd5e1 !important; }
+[data-theme='dark'] .contact-grid h2 { color: #f1f5f9 !important; }
+[data-theme='dark'] .contact-grid p  { color: #94a3b8 !important; }
+
+/* ── Footer (already handled by component, this is a safety net) ── */
+[data-theme='dark'] footer { background: #0f1117 !important; border-top-color: #272d3d !important; }
+
+/* ── Label and heading text throughout ───────────────────── */
+[data-theme='dark'] label { color: #cbd5e1 !important; }
+
+/* ── Security/info note boxes ─────────────────────────────── */
+[data-theme='dark'] [style*="background: #f3f4f6"],
+[data-theme='dark'] [style*="background: rgb(243, 244, 246)"] {
+  background: #1a1f2e !important;
+}
+
+/* ── Scrollbar in dark mode for all pages ─────────────────── */
+[data-theme='dark'] ::-webkit-scrollbar-track { background: #0f1117; }
+[data-theme='dark'] ::-webkit-scrollbar-thumb { background: #2255ec; }

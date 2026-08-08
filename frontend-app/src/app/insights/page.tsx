@@ -1,4 +1,5 @@
 'use client';
+import { useTheme } from '@/context/ThemeContext';
 import { useState } from 'react';
 import Link from 'next/link';
 import { Sparkles, Brain, LineChart, X, Loader2, ArrowLeft } from 'lucide-react';
@@ -6,6 +7,7 @@ import { getInsightsApi } from '@/api/insightsApi';
 import toast from 'react-hot-toast';
 
 export default function Insights() {
+  const { isDark } = useTheme();
   const [open, setOpen] = useState(false);
   const [userInput, setUserInput] = useState('');
   const [loading, setLoading] = useState(false);
@@ -36,7 +38,7 @@ export default function Insights() {
   ];
 
   return (
-    <div style={{ minHeight: 'calc(100vh - 56px)', background: '#f9fafb' }}>
+    <div style={{ minHeight: 'calc(100vh - 56px)', background: isDark ? '#141720' : '#f9fafb', transition: 'background 300ms' }}>
       {/* Back bar */}
       <div
         style={{ background: '#fff', borderBottom: '1px solid #e5e7eb', padding: '12px 48px' }}

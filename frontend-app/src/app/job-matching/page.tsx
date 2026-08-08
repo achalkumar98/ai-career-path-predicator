@@ -1,4 +1,5 @@
 'use client';
+import { useTheme } from '@/context/ThemeContext';
 import { useState } from 'react';
 import Link from 'next/link';
 import {
@@ -31,6 +32,7 @@ const ACCENT_LIGHT = '#eef2ff';
 const ACCENT_HOVER = '#1a44c8';
 
 export default function JobMatching() {
+  const { isDark } = useTheme();
   const [open, setOpen] = useState(false);
   const [keyword, setKeyword] = useState('');
   const [location, setLocation] = useState('');
@@ -83,7 +85,7 @@ export default function JobMatching() {
   const matchCount = jobs.filter(j => j.locationMatch).length;
 
   return (
-    <div style={{ minHeight: 'calc(100vh - 56px)', background: '#f9fafb' }}>
+    <div style={{ minHeight: 'calc(100vh - 56px)', background: isDark ? '#141720' : '#f9fafb', transition: 'background 300ms' }}>
 
       {/* Back bar */}
       <div style={{ background: '#fff', borderBottom: '1px solid #e5e7eb', padding: '12px 48px' }} className="back-bar">

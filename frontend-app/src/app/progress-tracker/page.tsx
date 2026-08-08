@@ -1,4 +1,5 @@
 'use client';
+import { useTheme } from '@/context/ThemeContext';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { TrendingUp, Clock, BarChart2, X, Loader2, RefreshCw, ArrowLeft } from 'lucide-react';
@@ -6,6 +7,7 @@ import { getAssessmentHistoryApi } from '@/api/assessmentApi';
 import History, { InsightItem, AssessmentItem } from '@/components/History';
 
 export default function ProgressTracker() {
+  const { isDark } = useTheme();
   const [open, setOpen] = useState(false);
   const [historyData, setHistoryData] = useState<{
     insight?: InsightItem[];
@@ -40,7 +42,7 @@ export default function ProgressTracker() {
   ];
 
   return (
-    <div style={{ minHeight: 'calc(100vh - 56px)', background: '#f9fafb' }}>
+    <div style={{ minHeight: 'calc(100vh - 56px)', background: isDark ? '#141720' : '#f9fafb', transition: 'background 300ms' }}>
       {/* Back bar */}
       <div
         style={{ background: '#fff', borderBottom: '1px solid #e5e7eb', padding: '12px 48px' }}
@@ -192,101 +194,73 @@ export default function ProgressTracker() {
       {/* Modal */}
       {open && (
         <div
+          onClick={() => setOpen(false)}
           style={{
-            position: 'fixed',
-            inset: 0,
-            background: 'rgba(15,23,41,0.5)',
-            backdropFilter: 'blur(4px)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            zIndex: 200,
-            padding: '24px',
+            position: 'fixed', inset: 0,
+            background: 'rgba(15,23,41,0.55)',
+            backdropFilter: 'blur(6px)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            zIndex: 200, padding: '16px',
           }}
         >
+          {/* Stop click propagation so clicking the modal itself doesn't close it */}
           <div
+            onClick={(e) => e.stopPropagation()}
             style={{
-              background: '#fff',
-              borderRadius: '16px',
-              width: '100%',
-              maxWidth: '640px',
-              maxHeight: '80vh',
-              display: 'flex',
-              flexDirection: 'column',
-              boxShadow: '0 20px 40px rgba(0,0,0,0.15)',
+              background: '#fff', borderRadius: '20px',
+              width: '100%', maxWidth: '720px',
+              maxHeight: 'calc(100vh - 48px)',
+              display: 'flex', flexDirection: 'column',
+              boxShadow: '0 24px 60px rgba(0,0,0,0.2)',
               overflow: 'hidden',
             }}
           >
-            <div
-              style={{
-                padding: '20px 24px',
-                borderBottom: '1px solid #f3f4f6',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                flexShrink: 0,
-              }}
-            >
+            {/* Modal header */}
+            <div style={{
+              padding: '18px 24px',
+              borderBottom: '1px solid #f3f4f6',
+              display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+              flexShrink: 0,
+              background: 'linear-gradient(135deg, #f0fdf4, #fff)',
+            }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                <div
-                  style={{
-                    width: '32px',
-                    height: '32px',
-                    borderRadius: '8px',
-                    background: '#f0fdf4',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}
-                >
-                  <TrendingUp size={15} style={{ color: '#059669' }} />
+                <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: 'rgba(5,150,105,0.12)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <TrendingUp size={17} style={{ color: '#059669' }} />
                 </div>
-                <p style={{ fontSize: '14px', fontWeight: 700, color: '#0f1729' }}>
-                  Progress Tracker
-                </p>
+                <div>
+                  <p style={{ fontSize: '15px', fontWeight: 700, color: '#0f1729', lineHeight: 1 }}>Progress Tracker</p>
+                  <p style={{ fontSize: '11px', color: '#6b7280', marginTop: '3px' }}>Your complete history at a glance</p>
+                </div>
               </div>
-              <div style={{ display: 'flex', gap: '8px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                 <button
                   onClick={fetchHistory}
-                  style={{
-                    background: 'none',
-                    border: 'none',
-                    cursor: 'pointer',
-                    color: '#9ca3af',
-                    padding: '4px',
-                  }}
+                  disabled={loading}
                   title="Refresh"
+                  style={{ width: '32px', height: '32px', borderRadius: '8px', background: 'transparent', border: '1px solid #e5e7eb', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#6b7280', transition: 'all 150ms' }}
+                  onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = '#f3f4f6'; }}
+                  onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = 'transparent'; }}
                 >
-                  <RefreshCw size={15} />
+                  <RefreshCw size={14} className={loading ? 'spin' : ''} />
                 </button>
                 <button
                   onClick={() => setOpen(false)}
-                  style={{
-                    background: 'none',
-                    border: 'none',
-                    cursor: 'pointer',
-                    color: '#9ca3af',
-                    padding: '4px',
-                  }}
+                  title="Close"
+                  style={{ width: '32px', height: '32px', borderRadius: '8px', background: 'transparent', border: '1px solid #e5e7eb', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#6b7280', transition: 'all 150ms' }}
+                  onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = '#fef2f2'; (e.currentTarget as HTMLElement).style.color = '#dc2626'; }}
+                  onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = 'transparent'; (e.currentTarget as HTMLElement).style.color = '#6b7280'; }}
                 >
-                  <X size={18} />
+                  <X size={15} />
                 </button>
               </div>
             </div>
-            <div style={{ padding: '24px', overflowY: 'auto', flex: 1 }}>
+
+            {/* Modal body */}
+            <div style={{ padding: '20px 24px', overflowY: 'auto', flex: 1 }}>
               {loading ? (
-                <div
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    padding: '48px',
-                    gap: '10px',
-                    color: '#9ca3af',
-                  }}
-                >
-                  <Loader2 size={18} style={{ animation: 'spin 1s linear infinite' }} />
-                  <span style={{ fontSize: '13px' }}>Loading history...</span>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '56px', gap: '10px', color: '#9ca3af' }}>
+                  <Loader2 size={18} className="spin" />
+                  <span style={{ fontSize: '13px' }}>Loading your history…</span>
                 </div>
               ) : (
                 <History historyData={historyData} />
@@ -295,6 +269,7 @@ export default function ProgressTracker() {
           </div>
         </div>
       )}
+      <style>{`@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }`}</style>
       <style>{`@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }`}</style>
     </div>
   );

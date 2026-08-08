@@ -1,4 +1,5 @@
 'use client';
+import { useTheme } from '@/context/ThemeContext';
 import { useState } from 'react';
 import Link from 'next/link';
 import {
@@ -53,6 +54,7 @@ const PAGE_SIZE = 9;
 
 // ─── main page ───────────────────────────────────────────────────────────────
 export default function ResumeAnalyzer() {
+  const { isDark } = useTheme();
   // upload modal
   const [open, setOpen] = useState(false);
 
@@ -127,7 +129,7 @@ export default function ResumeAnalyzer() {
   ];
 
   return (
-    <div style={{ minHeight: 'calc(100vh - 56px)', background: '#f9fafb' }}>
+    <div style={{ minHeight: 'calc(100vh - 56px)', background: isDark ? '#141720' : '#f9fafb', transition: 'background 300ms' }}>
       {/* Back bar */}
       <div
         style={{ background: '#fff', borderBottom: '1px solid #e5e7eb', padding: '12px 48px' }}
