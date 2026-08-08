@@ -3,6 +3,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { stripBasePath } from '@/lib/pathHelper';
+import { useTheme } from '@/context/ThemeContext';
 import {
   LayoutDashboard, Compass, TrendingUp, FileText, Sparkles, MessageSquare,
   Zap, ChevronUp, User, Settings, MessageCircle, LogOut, Briefcase,
@@ -24,17 +25,18 @@ const navGroups = [
     label: 'TOOLS',
     items: [
       { path: '/career-navigator', label: 'Career Navigator', icon: Compass },
-      { path: '/job-matching', label: 'Job Matching', icon: Briefcase },
-      { path: '/progress-tracker', label: 'Progress Tracker', icon: TrendingUp },
-      { path: '/resume-analyzer', label: 'Resume Analyzer', icon: FileText },
-      { path: '/insights', label: 'Personality & Trends', icon: Sparkles },
-      { path: '/chatbot', label: 'Chat Assistant', icon: MessageSquare },
+      { path: '/job-matching',      label: 'Job Matching',      icon: Briefcase },
+      { path: '/progress-tracker',  label: 'Progress Tracker',  icon: TrendingUp },
+      { path: '/resume-analyzer',   label: 'Resume Analyzer',   icon: FileText },
+      { path: '/insights',          label: 'Personality & Trends', icon: Sparkles },
+      { path: '/chatbot',           label: 'Chat Assistant',    icon: MessageSquare },
     ],
   },
 ];
 
-export default function Sidebar({ isOpen, toggleSidebar, isMobile }: SidebarProps) {
-  const pathname = usePathname();
+export default function Sidebar({ isOpen, isMobile }: SidebarProps) {
+  const { isDark } = useTheme();
+  const pathname  = usePathname();
   const currentPath = stripBasePath(pathname || '/');
   const router = useRouter();
   const [showUserMenu, setShowUserMenu] = useState(false);
@@ -42,6 +44,23 @@ export default function Sidebar({ isOpen, toggleSidebar, isMobile }: SidebarProp
   const user = typeof window !== 'undefined'
     ? JSON.parse(localStorage.getItem('user') || 'null')
     : null;
+
+  // ── colour tokens ──────────────────────────────────────────
+  const sideBg        = isDark ? '#0f1117' : '#ffffff';
+  const sideBorder    = isDark ? '#272d3d' : '#e5e7eb';
+  const divider       = isDark ? '#272d3d' : '#f3f4f6';
+  const titleColor    = isDark ? '#f1f5f9' : '#0f1729';
+  const bodyColor     = isDark ? '#cbd5e1' : '#374151';
+  const mutedColor    = isDark ? '#64748b' : '#9ca3af';
+  const hoverBg       = isDark ? '#1a1f2e' : '#f9fafb';
+  const activeNavBg   = isDark ? '#1e2844' : '#eef2ff';
+  const activeNavColor= '#2255ec';
+  const iconBg        = isDark ? '#1a1f2e' : '#f3f4f6';
+  const iconBgActive  = isDark ? '#1e2844' : '#dde4fb';
+  const dropdownBg    = isDark ? '#1a1f2e' : '#ffffff';
+  const dropdownShadow= isDark
+    ? '0 10px 25px rgba(0,0,0,0.5)'
+    : '0 10px 25px rgba(0,0,0,0.12)';
 
   const handleLogout = () => {
     localStorage.removeItem('token');
@@ -59,15 +78,16 @@ export default function Sidebar({ isOpen, toggleSidebar, isMobile }: SidebarProp
     <div style={{
       position: 'fixed', top: 0, left: 0, height: '100vh',
       width: isOpen ? '240px' : isMobile ? '0px' : '64px',
-      background: '#ffffff',
-      borderRight: '1px solid #e5e7eb',
+      background: sideBg,
+      borderRight: `1px solid ${sideBorder}`,
       display: 'flex', flexDirection: 'column',
       zIndex: 50,
-      transition: 'width 300ms ease',
+      transition: 'width 300ms ease, background 300ms, border-color 300ms',
       overflow: 'hidden',
     }}>
-      {/* Logo */}
-      <div style={{ padding: '14px 12px', borderBottom: '1px solid #f3f4f6', flexShrink: 0 }}>
+
+      {/* ── Logo ── */}
+      <div style={{ padding: '14px 12px', borderBottom: `1px solid ${divider}`, flexShrink: 0 }}>
         <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: '10px', textDecoration: 'none' }}>
           <div style={{
             width: '36px', height: '36px', borderRadius: '10px',
@@ -78,21 +98,19 @@ export default function Sidebar({ isOpen, toggleSidebar, isMobile }: SidebarProp
           </div>
           {isOpen && (
             <div>
-              <div style={{ display: 'flex', alignItems: 'baseline', gap: '4px' }}>
-                <span style={{ fontSize: '14px', fontWeight: 700, color: '#0f1729' }}>AiCareerNav</span>
-              </div>
-              <p style={{ fontSize: '11px', color: '#9ca3af', marginTop: '1px' }}>AI Career Platform</p>
+              <span style={{ fontSize: '14px', fontWeight: 700, color: titleColor }}>AiCareerNav</span>
+              <p style={{ fontSize: '11px', color: mutedColor, marginTop: '1px' }}>AI Career Platform</p>
             </div>
           )}
         </Link>
       </div>
 
-      {/* Nav */}
+      {/* ── Nav ── */}
       <nav style={{ flex: 1, overflowY: 'auto', padding: '8px' }}>
         {navGroups.map((group, gi) => (
           <div key={gi} style={{ marginBottom: '4px' }}>
             {group.label && isOpen && (
-              <p style={{ fontSize: '10px', fontWeight: 600, color: '#9ca3af', letterSpacing: '0.08em', padding: '8px 8px 4px' }}>
+              <p style={{ fontSize: '10px', fontWeight: 600, color: mutedColor, letterSpacing: '0.08em', padding: '8px 8px 4px' }}>
                 {group.label}
               </p>
             )}
@@ -106,28 +124,25 @@ export default function Sidebar({ isOpen, toggleSidebar, isMobile }: SidebarProp
                   title={!isOpen ? item.label : undefined}
                   style={{
                     display: 'flex', alignItems: 'center', gap: '10px',
-                    padding: '8px 10px',
-                    borderRadius: '8px',
-                    marginBottom: '2px',
-                    background: isActive ? '#eef2ff' : 'transparent',
-                    color: isActive ? '#2255ec' : '#374151',
-                    fontSize: '13px',
-                    fontWeight: isActive ? 600 : 400,
+                    padding: '8px 10px', borderRadius: '8px', marginBottom: '2px',
+                    background: isActive ? activeNavBg : 'transparent',
+                    color: isActive ? activeNavColor : bodyColor,
+                    fontSize: '13px', fontWeight: isActive ? 600 : 400,
                     textDecoration: 'none',
                     transition: 'background 150ms, color 150ms',
                     whiteSpace: 'nowrap',
                   }}
-                  onMouseEnter={e => { if (!isActive) { (e.currentTarget as HTMLElement).style.background = '#f9fafb'; } }}
-                  onMouseLeave={e => { if (!isActive) { (e.currentTarget as HTMLElement).style.background = 'transparent'; } }}
+                  onMouseEnter={e => { if (!isActive) (e.currentTarget as HTMLElement).style.background = hoverBg; }}
+                  onMouseLeave={e => { if (!isActive) (e.currentTarget as HTMLElement).style.background = 'transparent'; }}
                   aria-current={isActive ? 'page' : undefined}
                 >
                   <div style={{
                     width: '28px', height: '28px', borderRadius: '7px',
-                    background: isActive ? '#dde4fb' : '#f3f4f6',
+                    background: isActive ? iconBgActive : iconBg,
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
                     flexShrink: 0,
                   }}>
-                    <Icon size={14} style={{ color: isActive ? '#2255ec' : '#6b7280' }} />
+                    <Icon size={14} style={{ color: isActive ? activeNavColor : mutedColor }} />
                   </div>
                   {isOpen && <span>{item.label}</span>}
                 </Link>
@@ -137,7 +152,7 @@ export default function Sidebar({ isOpen, toggleSidebar, isMobile }: SidebarProp
         ))}
       </nav>
 
-      {/* Upgrade */}
+      {/* ── Upgrade ── */}
       <div style={{ padding: '8px', flexShrink: 0 }}>
         <button
           onClick={() => router.push('/upgrade')}
@@ -156,8 +171,8 @@ export default function Sidebar({ isOpen, toggleSidebar, isMobile }: SidebarProp
         </button>
       </div>
 
-      {/* User profile */}
-      <div style={{ padding: '8px', borderTop: '1px solid #e5e7eb', flexShrink: 0, position: 'relative' }}>
+      {/* ── User profile ── */}
+      <div style={{ padding: '8px', borderTop: `1px solid ${sideBorder}`, flexShrink: 0, position: 'relative' }}>
         <button
           onClick={() => setShowUserMenu(!showUserMenu)}
           style={{
@@ -166,7 +181,7 @@ export default function Sidebar({ isOpen, toggleSidebar, isMobile }: SidebarProp
             display: 'flex', alignItems: 'center', gap: '10px',
             transition: 'background 150ms',
           }}
-          onMouseEnter={e => (e.currentTarget.style.background = '#f9fafb')}
+          onMouseEnter={e => (e.currentTarget.style.background = hoverBg)}
           onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
         >
           <div style={{
@@ -179,14 +194,18 @@ export default function Sidebar({ isOpen, toggleSidebar, isMobile }: SidebarProp
           {isOpen && (
             <>
               <div style={{ flex: 1, textAlign: 'left', overflow: 'hidden' }}>
-                <p style={{ fontSize: '12px', fontWeight: 600, color: '#0f1729', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                <p style={{ fontSize: '12px', fontWeight: 600, color: titleColor, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                   {user?.name || 'User'}
                 </p>
-                <p style={{ fontSize: '11px', color: '#9ca3af', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                <p style={{ fontSize: '11px', color: mutedColor, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                   {user?.email || ''}
                 </p>
               </div>
-              <ChevronUp size={11} style={{ color: '#9ca3af', flexShrink: 0, transform: showUserMenu ? 'rotate(0deg)' : 'rotate(180deg)', transition: 'transform 200ms' }} />
+              <ChevronUp size={11} style={{
+                color: mutedColor, flexShrink: 0,
+                transform: showUserMenu ? 'rotate(0deg)' : 'rotate(180deg)',
+                transition: 'transform 200ms',
+              }} />
             </>
           )}
         </button>
@@ -195,17 +214,18 @@ export default function Sidebar({ isOpen, toggleSidebar, isMobile }: SidebarProp
         {showUserMenu && isOpen && (
           <div style={{
             position: 'absolute', bottom: '60px', left: '8px', right: '8px',
-            background: '#fff', border: '1px solid #e5e7eb', borderRadius: '12px',
-            boxShadow: '0 10px 25px rgba(0,0,0,0.12)', padding: '8px', zIndex: 100,
+            background: dropdownBg, border: `1px solid ${sideBorder}`,
+            borderRadius: '12px', boxShadow: dropdownShadow, padding: '8px', zIndex: 100,
           }}>
-            <div style={{ padding: '8px 10px 10px', borderBottom: '1px solid #f3f4f6', marginBottom: '4px' }}>
-              <p style={{ fontSize: '12px', fontWeight: 600, color: '#0f1729' }}>{user?.name || 'User'}</p>
-              <p style={{ fontSize: '11px', color: '#9ca3af' }}>{user?.email || ''}</p>
+            <div style={{ padding: '8px 10px 10px', borderBottom: `1px solid ${divider}`, marginBottom: '4px' }}>
+              <p style={{ fontSize: '12px', fontWeight: 600, color: titleColor }}>{user?.name || 'User'}</p>
+              <p style={{ fontSize: '11px', color: mutedColor }}>{user?.email || ''}</p>
             </div>
+
             {[
-              { label: 'Profile', icon: User, path: '/profile' },
-              { label: 'Account Settings', icon: Settings, path: '/account-settings' },
-              { label: 'My Feedback', icon: MessageCircle, path: '/feedback' },
+              { label: 'Profile',          icon: User,          path: '/profile' },
+              { label: 'Account Settings', icon: Settings,      path: '/account-settings' },
+              { label: 'My Feedback',      icon: MessageCircle, path: '/feedback' },
             ].map(({ label, icon: Icon, path }) => (
               <button
                 key={label}
@@ -214,17 +234,18 @@ export default function Sidebar({ isOpen, toggleSidebar, isMobile }: SidebarProp
                   width: '100%', display: 'flex', alignItems: 'center', gap: '10px',
                   padding: '8px 10px', borderRadius: '8px',
                   background: 'transparent', border: 'none', cursor: 'pointer',
-                  fontSize: '13px', color: '#374151', textAlign: 'left',
+                  fontSize: '13px', color: bodyColor, textAlign: 'left',
                   transition: 'background 150ms',
                 }}
-                onMouseEnter={e => (e.currentTarget.style.background = '#f9fafb')}
+                onMouseEnter={e => (e.currentTarget.style.background = hoverBg)}
                 onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
               >
-                <Icon size={13} style={{ color: '#6b7280' }} />
+                <Icon size={13} style={{ color: mutedColor }} />
                 {label}
               </button>
             ))}
-            <div style={{ borderTop: '1px solid #f3f4f6', marginTop: '4px', paddingTop: '4px' }}>
+
+            <div style={{ borderTop: `1px solid ${divider}`, marginTop: '4px', paddingTop: '4px' }}>
               <button
                 onClick={handleLogout}
                 style={{
@@ -234,7 +255,7 @@ export default function Sidebar({ isOpen, toggleSidebar, isMobile }: SidebarProp
                   fontSize: '13px', color: '#dc2626', textAlign: 'left',
                   transition: 'background 150ms',
                 }}
-                onMouseEnter={e => (e.currentTarget.style.background = '#fef2f2')}
+                onMouseEnter={e => (e.currentTarget.style.background = isDark ? '#2d1515' : '#fef2f2')}
                 onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
               >
                 <LogOut size={13} />
