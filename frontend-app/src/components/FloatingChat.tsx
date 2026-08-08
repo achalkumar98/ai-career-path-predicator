@@ -1,5 +1,6 @@
 'use client';
 import { useState, useRef, useEffect, useCallback } from 'react';
+import { usePathname } from 'next/navigation';
 import { Bot, X, Send, Mic, User, Minimize2, Maximize2 } from 'lucide-react';
 import { sendChatMessageApi } from '@/api/chatApi';
 import ReactMarkdown from 'react-markdown';
@@ -13,6 +14,7 @@ interface Message {
 }
 
 export default function FloatingChat() {
+  const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const [expanded, setExpanded] = useState(false);
   const [input, setInput] = useState('');
@@ -123,11 +125,16 @@ export default function FloatingChat() {
 
   const panelClass = `fchat-panel ${open ? 'fchat-open' : 'fchat-closed'}`;
 
+  // Don't render the widget at all on the /chatbot page —
+  // that page has its own full chat UI and the trigger would overlap it on mobile.
+  if (pathname === '/chatbot') return null;
+
   return (
     <>
-      {/* Floating trigger button */}
+      {/* Floating trigger button — hidden while panel is open so it never overlaps the send button */}
       <button
         className="fchat-trigger"
+        style={{ display: open ? 'none' : undefined }}
         onClick={() => setOpen(v => !v)}
         aria-label={open ? 'Close chat' : 'Open AI Chat Assistant'}
         title="AI Career Assistant"
@@ -268,6 +275,7 @@ export default function FloatingChat() {
             rows={1}
             aria-label="Chat message input"
             disabled={loading}
+            style={{ minWidth: 0 }}
           />
           <button
             type="button"

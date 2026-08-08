@@ -1,4 +1,5 @@
 'use client';
+import { useTheme } from '@/context/ThemeContext';
 import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import { MessageSquare, Mic, Send, X, Loader2, Bot, User, ArrowLeft } from 'lucide-react';
@@ -74,6 +75,7 @@ function CodeBlock({
 
 
 export default function ChatAssistant() {
+  const { isDark } = useTheme();
   const [open, setOpen] = useState(false);
   const [input, setInput] = useState('');
   const [messages, setMessages] = useState<Message[]>([]);
@@ -149,7 +151,7 @@ type SpeechRecognitionConstructor = new () => SpeechRecognitionInstance;
   ];
 
   return (
-    <div style={{ minHeight: 'calc(100vh - 56px)', background: '#f9fafb' }}>
+    <div style={{ minHeight: 'calc(100vh - 56px)', background: isDark ? '#141720' : '#f9fafb', transition: 'background 300ms' }}>
       {/* Back bar */}
       <div style={{ background: '#fff', borderBottom: '1px solid #e5e7eb', padding: '12px 48px' }} className="back-bar">
         <Link href="/homepage" style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', textDecoration: 'none', color: '#374151', fontSize: '13px' }}>

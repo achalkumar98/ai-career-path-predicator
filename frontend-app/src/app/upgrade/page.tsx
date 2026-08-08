@@ -1,4 +1,5 @@
 'use client';
+import { useTheme } from '@/context/ThemeContext';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { CheckCircle, Zap, Star, Crown, ArrowLeft } from 'lucide-react';
@@ -69,6 +70,7 @@ const plans = [
 ];
 
 export default function UpgradePage() {
+  const { isDark } = useTheme();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
@@ -78,9 +80,7 @@ export default function UpgradePage() {
   return (
     <div
       style={{
-        minHeight: 'calc(100vh - 56px)',
-        background: '#f9fafb',
-        fontFamily: 'Inter, sans-serif',
+        minHeight: 'calc(100vh - 56px)', background: isDark ? '#0f1117' : '#f9fafb', fontFamily: 'Inter, sans-serif',
       }}
     >
       {/* Top bar */}
