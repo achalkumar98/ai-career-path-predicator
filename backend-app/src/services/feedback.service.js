@@ -1,4 +1,5 @@
 const nodemailer = require('nodemailer');
+const { createNotification } = require('./notification.service');
 
 const sendFeedback = async ({ name, email, rating, category, message }) => {
   if (!process.env.SMTP_USER || !process.env.SMTP_PASS) {
@@ -28,6 +29,19 @@ const sendFeedback = async ({ name, email, rating, category, message }) => {
       <p>${message.replace(/\n/g, '<br>')}</p>
     </body></html>`,
   });
+
+  // Save an in-app notification so the header bell shows it
+  try {
+    await createNotification({
+      type: 'feedback',
+      title: 'New feedback received',
+      description: `${name || 'Anonymous'} left a ${stars} feedback in category: ${category}`,
+      meta: { name, email, rating, category },
+    });
+  } catch (notifErr) {
+    // Non-fatal — email already sent, just log the error
+    console.error('[notification] failed to save feedback notification:', notifErr.message);
+  }
 
   return { msg: 'Feedback submitted successfully!' };
 };

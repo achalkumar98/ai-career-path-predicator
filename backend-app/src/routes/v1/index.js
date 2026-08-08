@@ -10,6 +10,7 @@ const insightsRoute = require('./insights.route');
 const contactRoute = require('./contact.route');
 const feedbackRoute = require('./feedback.route');
 const dashboardRoute = require('./dashboard.route');
+const notificationRoute = require('./notification.route');
 
 const router = express.Router();
 
@@ -24,9 +25,9 @@ const defaultRoutes = [
   { path: '/contact', route: contactRoute },
   { path: '/feedback', route: feedbackRoute },
   { path: '/dashboard', route: dashboardRoute },
+  { path: '/notifications', route: notificationRoute },
 ];
 
 defaultRoutes.forEach((r) => router.use(r.path, r.route));
-
 
 module.exports = router;

@@ -13,6 +13,7 @@ const router = express.Router();
  *   description: Live, user-specific career dashboard analytics
  */
 /**
+ * @swagger
  * /dashboard/analytics:
  *   get:
  *     tags: [Dashboard]

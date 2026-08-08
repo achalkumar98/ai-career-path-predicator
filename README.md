@@ -1,82 +1,129 @@
 # AI Career Navigator
 
-AI Career Navigator is a full-stack career-assistance platform for exploring career paths, analyzing resumes, finding jobs, and getting AI-powered guidance. It combines a Next.js frontend with an Express, MongoDB, and Groq-backed API.
+A full-stack AI-powered career platform that helps users explore career paths, analyse resumes, find jobs, and get personalised guidance — all in one place.
 
-- Live frontend: [ai-career-path-predicator-tawny.vercel.app](https://ai-career-path-predicator-tawny.vercel.app)
-- Live backend: [ai-career-path-predicator.onrender.com](https://ai-career-path-predicator.onrender.com)
+**Live Links**
+- Frontend: [ai-career-path-predicator-tawny.vercel.app](https://ai-career-path-predicator-tawny.vercel.app)
+- Backend API: [ai-career-path-predicator.onrender.com](https://ai-career-path-predicator.onrender.com)
+- API Docs (Swagger): [/v1/docs](https://ai-career-path-predicator.onrender.com/v1/docs)
+
+---
 
 ## Features
 
-- Secure user registration, login, password reset, and profile management with JWT authentication.
-- Career assessment using skills and interests, with AI-generated career recommendations.
-- AI career chat for resumes, interviews, learning, job search, and career-growth questions.
-- Resume PDF upload and analysis: extracts text, supported skills, and year values from the document.
-- Personality and career insights generated from a user's written input.
-- LinkedIn job search by keyword and location using Puppeteer.
-- Learning-resource recommendations based on skills and interests.
-- Assessment and insight history for signed-in users.
-- Contact and feedback forms delivered through Gmail SMTP.
-- Swagger API documentation.
-- Joi validation on every API endpoint that accepts request data, including resume uploads.
+| Feature | Description |
+|---|---|
+| **Career Assessment** | Submit your skills and interests; get AI-generated career path recommendations |
+| **AI Chat Assistant** | Ask anything about resumes, interviews, job search, or career growth |
+| **Resume Analyser** | Upload a PDF resume; extract skills, experience years, and structured data |
+| **Personality & Insights** | Generate a career personality profile from free-text input using Groq AI |
+| **Job Matching** | Search LinkedIn public listings by keyword and location via Puppeteer |
+| **Progress Tracker** | Review your full assessment and AI insight history in one view |
+| **Dashboard Analytics** | Live charts — activity trends, top skills, career interests, assessment depth |
+| **Resource Recommendations** | Get curated learning resources matched to your skills and interests |
+| **Auth & Profile** | JWT-based auth with register, login, password reset, and profile editing |
+| **Feedback & Contact** | In-app feedback form and contact form delivered via Gmail SMTP |
+| **Dark / Light Theme** | Toggle between dark and light UI modes from Account Settings |
+| **Floating Chat Widget** | AI chat accessible from any authenticated page via a floating button |
+
+---
 
 ## Tech Stack
 
-| Area              | Technology                                                                 |
-| ----------------- | -------------------------------------------------------------------------- |
-| Frontend          | Next.js 15, React 19, TypeScript, Tailwind CSS                             |
-| Backend           | Node.js, Express 5                                                         |
-| Database          | MongoDB with Mongoose                                                      |
-| AI                | Groq API using `llama-3.3-70b-versatile` through the OpenAI-compatible SDK |
-| Authentication    | JWT and bcryptjs                                                           |
-| Validation        | Joi                                                                        |
-| File upload       | Multer and pdf-parse                                                       |
-| Email             | Nodemailer with Gmail SMTP                                                 |
-| Job search        | Puppeteer and LinkedIn public job listings                                 |
-| API documentation | Swagger UI                                                                 |
+| Layer | Technology |
+|---|---|
+| **Frontend** | Next.js 15, React 19, TypeScript, Tailwind CSS v4 |
+| **Backend** | Node.js, Express 5 |
+| **Database** | MongoDB with Mongoose |
+| **AI** | Groq API — `llama-3.3-70b-versatile` via OpenAI-compatible SDK |
+| **Charts** | Recharts 3 (React 19 compatible) |
+| **Authentication** | JWT + bcryptjs |
+| **Validation** | Joi — every request body/query/file validated before reaching controllers |
+| **File Upload** | Multer + pdf-parse |
+| **Email** | Nodemailer with Gmail SMTP |
+| **Job Search** | Puppeteer + LinkedIn public job listings |
+| **API Docs** | Swagger UI (`/v1/docs`) |
+
+---
 
 ## Project Structure
 
-```text
-ai-career-nav/
-├── frontend-app/             # Next.js client
-├── backend-app/              # Express API
-│   ├── src/controllers/      # HTTP request handlers
-│   ├── src/services/         # Business logic and integrations
-│   ├── src/models/           # MongoDB models
-│   ├── src/routes/v1/        # API routes
-│   ├── src/validations/      # Joi schemas, one file per API area
-│   └── src/middleware/       # Auth and Joi validation middleware
-└── render.yaml               # Render deployment configuration
 ```
+ai-career-nav/
+├── frontend-app/                   # Next.js 15 client (App Router)
+│   └── src/
+│       ├── app/                    # Pages (one folder per route)
+│       │   ├── homepage/           # Main authenticated dashboard
+│       │   ├── career-navigator/   # AI career assessment tool
+│       │   ├── progress-tracker/   # Assessment & insight history
+│       │   ├── insights/           # Personality & trends AI
+│       │   ├── chatbot/            # Full-page AI chat
+│       │   ├── resume-analyzer/    # PDF upload + NLP results
+│       │   ├── job-matching/       # LinkedIn job search
+│       │   ├── profile/            # User profile editor
+│       │   ├── account-settings/   # Password, theme, notifications
+│       │   ├── feedback/           # In-app feedback form
+│       │   ├── login/ register/    # Public auth pages
+│       │   ├── globals.css         # Design system tokens + shared classes
+│       │   └── responsive.css      # All breakpoint overrides
+│       ├── components/             # Shared UI components
+│       │   ├── charts/             # Recharts chart components
+│       │   │   ├── ActivityLineChart.tsx
+│       │   │   ├── SkillsBarChart.tsx
+│       │   │   ├── AssessmentColumnChart.tsx
+│       │   │   └── InterestsDonutChart.tsx
+│       │   ├── ClientLayout.tsx    # Auth guard + sidebar + floating chat
+│       │   ├── FloatingChat.tsx    # AI chat widget (accessible from all pages)
+│       │   ├── Sidebar.tsx
+│       │   ├── AppHeader.tsx
+│       │   └── ...
+│       ├── api/                    # Thin Axios wrappers per domain
+│       └── lib/                    # axios instance, path helpers
+│
+├── backend-app/                    # Express 5 API
+│   └── src/
+│       ├── controllers/            # HTTP handlers
+│       ├── services/               # Business logic + Groq/Puppeteer
+│       ├── models/                 # Mongoose schemas
+│       ├── routes/v1/              # Route definitions
+│       ├── validations/            # Joi schemas (one file per area)
+│       └── middleware/             # Auth JWT + Joi validate
+│
+└── render.yaml                     # Render deployment blueprint
+```
+
+---
 
 ## Prerequisites
 
 - Node.js 20+
 - npm
-- MongoDB (local instance or MongoDB Atlas)
-- A Groq API key
-- Gmail SMTP credentials if contact and feedback emails are enabled
+- MongoDB (local or Atlas)
+- Groq API key — [console.groq.com](https://console.groq.com)
+- Gmail App Password — for contact and feedback emails
+
+---
 
 ## Run Locally
 
-### 1. Clone and install dependencies
+### 1. Clone and install
 
 ```bash
 git clone <your-repository-url>
 cd ai-career-nav
 
+# Backend
 cd backend-app
-npm install
+npm install          # also runs npm run install:chrome for Puppeteer
 
+# Frontend
 cd ../frontend-app
 npm install
 ```
 
-`backend-app` runs `npm run install:chrome` after installation. This downloads the Chrome binary required by the job-matching endpoint.
-
 ### 2. Configure environment variables
 
-Create `backend-app/.env`:
+**`backend-app/.env`**
 
 ```env
 PORT=5000
@@ -89,65 +136,71 @@ SMTP_PASS=your-gmail-app-password
 CORS_ORIGIN=http://localhost:3000
 ```
 
-Create `frontend-app/.env.local`:
+**`frontend-app/.env.local`**
 
 ```env
 NEXT_PUBLIC_BASE_API_URL=http://localhost:5000/v1/
 ```
 
-> `GROQ_API_KEY` is the required AI key. The project uses the OpenAI SDK only because Groq provides an OpenAI-compatible API;
-
-### 3. Start the applications
+### 3. Start both servers
 
 ```bash
-# Terminal 1
-cd backend-app
-npm run dev
+# Terminal 1 — API
+cd backend-app && npm run dev
 
-# Terminal 2
-cd frontend-app
-npm run dev
+# Terminal 2 — Frontend
+cd frontend-app && npm run dev
 ```
 
-- Frontend: `http://localhost:3000`
-- Backend: `http://localhost:5000`
-- Swagger UI: `http://localhost:5000/v1/docs`
+| Service | URL |
+|---|---|
+| Frontend | http://localhost:3000 |
+| Backend API | http://localhost:5000 |
+| Swagger UI | http://localhost:5000/v1/docs |
 
-## API Overview
+---
 
-The development API prefix is `/v1`. When `NODE_ENV=production`, the prefix changes to `/api`.
+## API Reference
 
-| Method | Endpoint                | Authentication | Request validation                                        |
-| ------ | ----------------------- | -------------- | --------------------------------------------------------- |
-| POST   | `/auth/register`        | No             | `name`, `email`, `password`                               |
-| POST   | `/auth/login`           | No             | `email`, `password`                                       |
-| POST   | `/auth/forgot-password` | No             | `email`                                                   |
-| POST   | `/auth/reset-password`  | No             | `token`, `password`                                       |
-| GET    | `/auth/profile`         | JWT            | —                                                         |
-| PUT    | `/auth/profile`         | JWT            | At least one profile field                                |
-| POST   | `/assessment`           | JWT            | `skills`, `interests` string arrays                       |
-| GET    | `/assessment/history`   | JWT            | —                                                         |
-| POST   | `/chat`                 | JWT            | `message`                                                 |
-| POST   | `/resume/upload`        | JWT            | PDF file named `resume`, maximum 10 MB                    |
-| POST   | `/insights`             | JWT            | `input`                                                   |
-| POST   | `/resources`            | No             | `skills`, `interests` string arrays                       |
-| POST   | `/job-matching`         | No             | `keyword`, `location`                                     |
-| POST   | `/contact`              | No             | `name`, `email`, `subject`, `message`                     |
-| POST   | `/feedback`             | No             | `rating`, `category`, `message`; optional `name`, `email` |
+The development prefix is `/v1`. In production (`NODE_ENV=production`) the prefix is `/api`.
 
-All request-data endpoints use Joi schemas from `backend-app/src/validations`. Invalid data returns HTTP `400` with a structured `errors` array before it reaches the controller.
+### Auth
 
-### Authentication
+| Method | Endpoint | Auth | Body |
+|---|---|---|---|
+| `POST` | `/auth/register` | — | `name`, `email`, `password` |
+| `POST` | `/auth/login` | — | `email`, `password` |
+| `POST` | `/auth/forgot-password` | — | `email` |
+| `POST` | `/auth/reset-password` | — | `token`, `password` |
+| `GET` | `/auth/profile` | JWT | — |
+| `PUT` | `/auth/profile` | JWT | Any profile field |
 
-Login and registration return a JWT. Send it on protected routes as:
+### Core Features
+
+| Method | Endpoint | Auth | Body / Notes |
+|---|---|---|---|
+| `POST` | `/assessment` | JWT | `skills[]`, `interests[]` |
+| `GET` | `/assessment/history` | JWT | — |
+| `POST` | `/chat` | JWT | `message` |
+| `POST` | `/resume/upload` | JWT | `multipart/form-data` — field `resume`, PDF ≤ 10 MB |
+| `POST` | `/insights` | JWT | `input` |
+| `GET` | `/dashboard/analytics` | JWT | — |
+| `POST` | `/resources` | — | `skills[]`, `interests[]` |
+| `POST` | `/job-matching` | — | `keyword`, `location` |
+| `POST` | `/contact` | — | `name`, `email`, `subject`, `message` |
+| `POST` | `/feedback` | — | `rating`, `category`, `message`; optional `name`, `email` |
+
+### Authentication Flow
+
+Login and register return a JWT. Attach it to protected requests:
 
 ```http
 Authorization: Bearer <token>
 ```
 
-The frontend stores the token under `token` and the user data under `user` in local storage.
+The frontend stores the token under `token` and the user object under `user` in `localStorage`. Tokens expire after 7 days.
 
-### Example: career assessment
+### Example — Career Assessment
 
 ```http
 POST /v1/assessment
@@ -155,16 +208,18 @@ Authorization: Bearer <token>
 Content-Type: application/json
 
 {
-  "skills": ["JavaScript", "React"],
-  "interests": ["Web Development", "AI"]
+  "skills": ["JavaScript", "React", "Node.js"],
+  "interests": ["Web Development", "AI", "Startups"]
 }
 ```
 
+---
+
 ## Validation Architecture
 
-Each API area has its own Joi schema file:
+Every endpoint that accepts data uses a Joi schema. The `validate` middleware checks `body`, `query`, `params`, and uploaded `file` before the request reaches any controller, returning HTTP `400` with a structured `errors` array on failure.
 
-```text
+```
 backend-app/src/validations/
 ├── auth.validation.js
 ├── assessment.validation.js
@@ -177,98 +232,124 @@ backend-app/src/validations/
 └── resume.validation.js
 ```
 
-Routes apply schemas through the shared `validate` middleware. It validates request `body`, `query`, `params`, and uploaded `file` data.
+---
+
+## Dashboard & Charts
+
+The dashboard (`/homepage`) uses **Recharts 3** (React 19 compatible) with four dedicated chart components:
+
+| Component | Chart Type | Data |
+|---|---|---|
+| `ActivityLineChart` | Dual-line area chart | Assessments + AI insights over 7 days |
+| `SkillsBarChart` | Horizontal bar | Top skills by mention count |
+| `AssessmentColumnChart` | Vertical bar | Skills count per assessment |
+| `InterestsDonutChart` | Donut / pie | Career interest distribution |
+
+All charts use `ResponsiveContainer`, dark custom tooltips, graceful empty states, and CSS custom property tokens for dark/light theme support.
+
+---
 
 ## Job Matching and Puppeteer
 
-Job matching launches a headless Chrome browser to read LinkedIn public job listings. The Chrome binary is installed with:
+Job matching scrapes LinkedIn public listings using a headless Chrome browser. The Chrome binary is installed separately:
 
 ```bash
 cd backend-app
 npm run install:chrome
 ```
 
-If the endpoint reports `Could not find Chrome`, reinstall the browser binary:
+If the endpoint returns `Could not find Chrome`, reinstall the binary:
 
 ```bash
 npm run install:chrome
 ```
 
-If a cache folder exists but the executable is missing, delete only the incomplete folder inside `backend-app/.cache/puppeteer/chrome/`, then run the command again.
+To force a clean install, delete the incomplete folder inside `backend-app/.cache/puppeteer/chrome/` then run the command again.
 
-LinkedIn can rate-limit, change page markup, or block automated browsing. Those failures are separate from Chrome-installation errors and can still cause the endpoint to return HTTP `500`.
+LinkedIn can rate-limit requests or change page structure. Those failures are unrelated to Chrome installation and may still return HTTP `500`.
+
+---
 
 ## Deployment
 
-### Vercel frontend
+### Frontend — Vercel
 
 1. Import the repository into Vercel.
-2. Set the root directory to `frontend-app`.
-3. Add this environment variable:
+2. Set the **root directory** to `frontend-app`.
+3. Add environment variable:
 
-| Key                        | Value                                                 |
-| -------------------------- | ----------------------------------------------------- |
+| Key | Value |
+|---|---|
 | `NEXT_PUBLIC_BASE_API_URL` | `https://ai-career-path-predicator.onrender.com/api/` |
 
-### Render backend
+### Backend — Render
 
-`render.yaml` is configured with `backend-app` as its root directory and installs Chrome during the build.
+`render.yaml` is pre-configured with `backend-app` as the root and installs Chrome during the build.
 
-1. Create a Render Web Service from the repository.
-2. Set the root directory to `backend-app` if not using the included Blueprint.
-3. Use the build command `npm install && npm run install:chrome`.
-4. Use the start command `npm start`.
-5. Add the backend environment variables listed above, with production values.
+1. Create a **Web Service** from the repository on Render (or use the Blueprint).
+2. Set root directory to `backend-app` if not using the Blueprint.
+3. Build command: `npm install && npm run install:chrome`
+4. Start command: `npm start`
+5. Add environment variables (production values).
 
-For a Chrome-missing deployment error, use **Manual Deploy → Clear build cache & deploy** in Render. Confirm the build log contains a line similar to:
+If the deployment fails with a Chrome-missing error, go to **Manual Deploy → Clear build cache & deploy** and confirm the build log contains:
 
-```text
-chrome@<version> <path-to-chrome-executable>
 ```
+chrome@<version> <path-to-chrome>
+```
+
+---
 
 ## Scripts
 
 ### Backend
 
 ```bash
-npm start                 # Start the API
-npm run dev               # Start with nodemon
-npm run install:chrome    # Install Puppeteer's Chrome binary
-npm run lint              # Run ESLint
-npm run lint:fix          # Apply ESLint fixes
-npm run prettier          # Check Prettier formatting
-npm run prettier:fix      # Format supported files
+npm start               # Production server
+npm run dev             # Dev server with nodemon
+npm run install:chrome  # Install Puppeteer Chrome binary
+npm run lint            # ESLint check
+npm run lint:fix        # ESLint auto-fix
+npm run prettier        # Prettier check
+npm run prettier:fix    # Prettier auto-format
 ```
 
 ### Frontend
 
 ```bash
-npm run dev         # Start the Next.js development server
-npm run build       # Create a production build
-npm start           # Start the production server
-npm run compile-ts  # Type-check without emitting files
-npm run lint        # Run ESLint
-npm run lint:fix    # Apply ESLint fixes
+npm run dev         # Next.js dev server (port 3000)
+npm run build       # Production build
+npm start           # Start production server
+npm run compile-ts  # TypeScript type-check (no emit)
+npm run lint        # ESLint check
+npm run lint:fix    # ESLint auto-fix
 ```
+
+---
 
 ## Troubleshooting
 
-| Problem                            | What to check                                                               |
-| ---------------------------------- | --------------------------------------------------------------------------- |
-| API cannot connect to MongoDB      | Verify `MONGO_URI` and MongoDB network access.                              |
-| AI endpoints fail                  | Verify `GROQ_API_KEY`; no `OPENAI_API_KEY` is needed.                       |
-| Contact or feedback email fails    | Configure `SMTP_USER` and a Gmail App Password in `SMTP_PASS`.              |
-| Browser missing for job matching   | Run `npm run install:chrome`; on Render clear the build cache and redeploy. |
-| Frontend CORS error                | Add the deployed frontend URL to `CORS_ORIGIN`, separated by commas.        |
-| API route returns validation error | Review the endpoint's Joi requirements in the API Overview table.           |
+| Problem | What to check |
+|---|---|
+| Cannot connect to MongoDB | Verify `MONGO_URI` and Atlas network access |
+| AI endpoints fail | Verify `GROQ_API_KEY` — no `OPENAI_API_KEY` is needed |
+| Email not sending | Set `SMTP_USER` and a Gmail **App Password** in `SMTP_PASS` |
+| Chrome missing (job matching) | Run `npm run install:chrome`; on Render clear build cache |
+| CORS error in browser | Add your frontend URL to `CORS_ORIGIN` (comma-separated) |
+| Validation error (400) | Check required fields in the API Reference table above |
+| Recharts peer dep warning | Expected — React 19 requires `--legacy-peer-deps`; runtime works fine |
+
+---
 
 ## Team
 
-| Name           | Role                 |
-| -------------- | -------------------- |
-| Achal Kumar    | Software Engineer    |
-| Adarsh Bhagat  | AI Engineer          |
-| Aastha Jaiswal | DevOps Engineer      |
-| Sachin Kumar   | Full Stack Developer |
+| Name | Role |
+|---|---|
+| Achal Kumar | Software Engineer |
+| Adarsh Bhagat | AI Engineer |
+| Aastha Jaiswal | DevOps Engineer |
+| Sachin Kumar | Full Stack Developer |
 
-© 2026 CareerNav.
+---
+
+© 2026 CareerNav. Built with Next.js, Express, MongoDB, and Groq AI.

@@ -1,57 +1,48 @@
 'use client';
-
 import Link from 'next/link';
+import { useTheme } from '@/context/ThemeContext';
 
 const cols = [
   {
     title: 'Product',
     links: [
-      { label: 'Resume Analyzer', href: '/resume-analyzer' },
-      { label: 'Career Navigator', href: '/career-navigator' },
-      { label: 'AI Chatbot', href: '/chatbot' },
-      { label: 'Progress Tracker', href: '/progress-tracker' },
-      { label: 'Insights', href: '/insights' },
+      { label: 'Resume Analyzer',   href: '/resume-analyzer' },
+      { label: 'Career Navigator',  href: '/career-navigator' },
+      { label: 'AI Chatbot',        href: '/chatbot' },
+      { label: 'Progress Tracker',  href: '/progress-tracker' },
+      { label: 'Insights',          href: '/insights' },
     ],
   },
   {
     title: 'Resources',
     links: [
-      { label: 'ATS Guidelines', href: '#' },
-      { label: 'Interview Tips', href: '#' },
+      { label: 'ATS Guidelines',   href: '#' },
+      { label: 'Interview Tips',   href: '#' },
       { label: 'Resume Templates', href: '#' },
-      { label: 'Career Blog', href: '#' },
+      { label: 'Career Blog',      href: '#' },
     ],
   },
   {
     title: 'Company',
     links: [
-      { label: 'Pricing', href: '/upgrade' },
+      { label: 'Pricing',    href: '/upgrade' },
       { label: 'Contact Us', href: '/contact' },
-      { label: 'Feedback', href: '/feedback' },
-      { label: 'About', href: '#' },
+      { label: 'Feedback',   href: '/feedback' },
+      { label: 'About',      href: '#' },
     ],
   },
   {
     title: 'Legal',
     links: [
-      { label: 'Privacy Policy', href: '#' },
+      { label: 'Privacy Policy',  href: '#' },
       { label: 'Terms of Service', href: '#' },
-      { label: 'Cookie Policy', href: '#' },
-      { label: 'Refund Policy', href: '#' },
+      { label: 'Cookie Policy',   href: '#' },
+      { label: 'Refund Policy',   href: '#' },
     ],
   },
 ];
 
 const socials = [
-  // {
-  //   label: 'Twitter',
-  //   href: '#',
-  //   icon: (
-  //     <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-  //       <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.737-8.835L1.254 2.25H8.08l4.253 5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
-  //     </svg>
-  //   ),
-  // },
   {
     label: 'LinkedIn',
     href: '#',
@@ -73,67 +64,38 @@ const socials = [
 ];
 
 export default function Footer() {
+  const { isDark } = useTheme();
+
+  // ── colour tokens ──────────────────────────────────────────
+  const footerBg    = isDark ? '#0f1117' : '#f9fafb';
+  const borderColor = isDark ? '#272d3d' : '#e5e7eb';
+  const titleColor  = isDark ? '#f1f5f9' : '#0f1729';
+  const linkColor   = isDark ? '#94a3b8' : '#6b7280';
+  const linkHover   = '#2255ec';
+  const socialBg    = isDark ? '#1a1f2e' : '#ffffff';
+  const copyColor   = isDark ? '#64748b' : '#9ca3af';
+
   return (
-    <footer
-      style={{
-        background: '#f9fafb',
-        borderTop: '1px solid #e5e7eb',
-        color: '#374151',
-        fontFamily: 'Inter, sans-serif',
-      }}
-    >
-      {/* Main grid */}
+    <footer style={{ background: footerBg, borderTop: `1px solid ${borderColor}`, color: titleColor, fontFamily: 'Inter, sans-serif', transition: 'background 300ms, border-color 300ms' }}>
       <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '64px 48px 48px' }} className="footer-pad">
+
+        {/* ── Main grid ── */}
         <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: '1.6fr repeat(4, 1fr)',
-            gap: '48px',
-            marginBottom: '56px',
-          }}
+          style={{ display: 'grid', gridTemplateColumns: '1.6fr repeat(4, 1fr)', gap: '48px', marginBottom: '56px' }}
           className="footer-grid"
         >
           {/* Brand column */}
           <div className="footer-brand">
-            <Link
-              href="/"
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '10px',
-                textDecoration: 'none',
-                marginBottom: '16px',
-              }}
-            >
-              <div
-                style={{
-                  width: '36px',
-                  height: '36px',
-                  borderRadius: '10px',
-                  background: '#2255ec',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  flexShrink: 0,
-                }}
-              >
+            <Link href="/" style={{ display: 'inline-flex', alignItems: 'center', gap: '10px', textDecoration: 'none', marginBottom: '16px' }}>
+              <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: '#2255ec', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                 <span style={{ color: '#fff', fontWeight: 800, fontSize: '16px' }}>A</span>
               </div>
-              <span style={{ fontSize: '16px', fontWeight: 700, color: '#0f1729' }}>
-                AICareerNav
-              </span>
+              <span style={{ fontSize: '16px', fontWeight: 700, color: titleColor }}>AICareerNav</span>
             </Link>
-            <p
-              style={{
-                fontSize: '13px',
-                color: '#6b7280',
-                lineHeight: 1.75,
-                marginBottom: '24px',
-                maxWidth: '220px',
-              }}
-            >
+            <p style={{ fontSize: '13px', color: linkColor, lineHeight: 1.75, marginBottom: '24px', maxWidth: '220px' }}>
               AI-powered career platform to build ATS-ready resumes, find jobs, and ace interviews.
             </p>
+
             {/* Socials */}
             <div style={{ display: 'flex', gap: '10px' }}>
               {socials.map((s) => (
@@ -142,26 +104,14 @@ export default function Footer() {
                   href={s.href}
                   aria-label={s.label}
                   style={{
-                    width: '34px',
-                    height: '34px',
-                    borderRadius: '8px',
-                    background: '#fff',
-                    border: '1px solid #e5e7eb',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    color: '#6b7280',
-                    textDecoration: 'none',
+                    width: '34px', height: '34px', borderRadius: '8px',
+                    background: socialBg, border: `1px solid ${borderColor}`,
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    color: linkColor, textDecoration: 'none',
                     transition: 'background 150ms, color 150ms',
                   }}
-                  onMouseEnter={(e) => {
-                    (e.currentTarget as HTMLElement).style.background = '#2255ec';
-                    (e.currentTarget as HTMLElement).style.color = '#fff';
-                  }}
-                  onMouseLeave={(e) => {
-                    (e.currentTarget as HTMLElement).style.background = '#fff';
-                    (e.currentTarget as HTMLElement).style.color = '#6b7280';
-                  }}
+                  onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = '#2255ec'; (e.currentTarget as HTMLElement).style.color = '#fff'; }}
+                  onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = socialBg; (e.currentTarget as HTMLElement).style.color = linkColor; }}
                 >
                   {s.icon}
                 </a>
@@ -172,32 +122,16 @@ export default function Footer() {
           {/* Link columns */}
           {cols.map((col) => (
             <div key={col.title}>
-              <p
-                style={{
-                  fontSize: '11px',
-                  fontWeight: 700,
-                  color: '#0f1729',
-                  textTransform: 'uppercase',
-                  letterSpacing: '0.08em',
-                  marginBottom: '16px',
-                }}
-              >
+              <p style={{ fontSize: '11px', fontWeight: 700, color: titleColor, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '16px' }}>
                 {col.title}
               </p>
               {col.links.map((l) => (
                 <Link
                   key={l.label}
                   href={l.href}
-                  style={{
-                    display: 'block',
-                    fontSize: '13px',
-                    color: '#6b7280',
-                    textDecoration: 'none',
-                    marginBottom: '10px',
-                    transition: 'color 150ms',
-                  }}
-                  onMouseEnter={(e) => (e.currentTarget.style.color = '#2255ec')}
-                  onMouseLeave={(e) => (e.currentTarget.style.color = '#6b7280')}
+                  style={{ display: 'block', fontSize: '13px', color: linkColor, textDecoration: 'none', marginBottom: '10px', transition: 'color 150ms' }}
+                  onMouseEnter={e => (e.currentTarget.style.color = linkHover)}
+                  onMouseLeave={e => (e.currentTarget.style.color = linkColor)}
                 >
                   {l.label}
                 </Link>
@@ -206,19 +140,9 @@ export default function Footer() {
           ))}
         </div>
 
-        {/* Divider */}
-        <div
-          style={{
-            borderTop: '1px solid #e5e7eb',
-            paddingTop: '24px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            flexWrap: 'wrap',
-            gap: '12px',
-          }}
-        >
-          <p style={{ fontSize: '12px', color: '#9ca3af' }}>
+        {/* ── Bottom bar ── */}
+        <div style={{ borderTop: `1px solid ${borderColor}`, paddingTop: '24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px' }}>
+          <p style={{ fontSize: '12px', color: copyColor }}>
             © 2025 CareerNav. Crafted to help you land your next role.
           </p>
           <div style={{ display: 'flex', gap: '20px' }}>
@@ -226,14 +150,9 @@ export default function Footer() {
               <a
                 key={l}
                 href="#"
-                style={{
-                  fontSize: '12px',
-                  color: '#9ca3af',
-                  textDecoration: 'none',
-                  transition: 'color 150ms',
-                }}
-                onMouseEnter={(e) => (e.currentTarget.style.color = '#374151')}
-                onMouseLeave={(e) => (e.currentTarget.style.color = '#9ca3af')}
+                style={{ fontSize: '12px', color: copyColor, textDecoration: 'none', transition: 'color 150ms' }}
+                onMouseEnter={e => (e.currentTarget.style.color = isDark ? '#cbd5e1' : '#374151')}
+                onMouseLeave={e => (e.currentTarget.style.color = copyColor)}
               >
                 {l}
               </a>

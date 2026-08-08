@@ -5,11 +5,14 @@ import { Toaster } from 'react-hot-toast';
 import Sidebar from './Sidebar';
 import AppHeader from './AppHeader';
 import Footer from './Footer';
+import FloatingChat from './FloatingChat';
 import { stripBasePath } from '@/lib/pathHelper';
+import { useTheme } from '@/context/ThemeContext';
 
 const PUBLIC_PATHS = ['/', '/login', '/register', '/contact', '/upgrade'];
 
 export default function ClientLayout({ children }: { children: React.ReactNode }) {
+  const { isDark } = useTheme();
   const [isOpen, setIsOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [authChecked, setAuthChecked] = useState(false);
@@ -63,17 +66,18 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
 
   if (!authChecked) return null;
 
-  const sidebarWidth = isOpen ? '240px' : isMobile ? '0px' : '64px';
   const marginLeft = isMobile ? '0px' : isOpen ? '240px' : '64px';
 
   return (
-    <div style={{ display: 'flex', minHeight: '100vh', background: '#f9fafb' }}>
+    <div style={{
+      display: 'flex',
+      minHeight: '100vh',
+      background: isDark ? '#141720' : '#f9fafb',
+      transition: 'background 300ms',
+    }}>
       {/* Mobile overlay */}
       {isMobile && isOpen && (
-        <div
-          className="sidebar-overlay open"
-          onClick={() => setIsOpen(false)}
-        />
+        <div className="sidebar-overlay open" onClick={() => setIsOpen(false)} />
       )}
 
       <Sidebar isOpen={isOpen} toggleSidebar={() => setIsOpen(!isOpen)} isMobile={isMobile} />
@@ -86,11 +90,13 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
           flexDirection: 'column',
           minHeight: '100vh',
           marginLeft,
-          transition: 'margin-left 300ms ease',
+          transition: 'margin-left 300ms ease, background 300ms',
+          background: isDark ? '#141720' : '#f9fafb',
         }}
       >
         <AppHeader toggleSidebar={() => setIsOpen(!isOpen)} />
         <main style={{ flex: 1 }}>{children}</main>
+        <FloatingChat />
         <Toaster
           position="bottom-right"
           toastOptions={{
