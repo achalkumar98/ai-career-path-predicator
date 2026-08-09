@@ -130,7 +130,7 @@ export default function InstallPWA({ variant = 'icon' }: InstallPWAProps) {
       {/* app icon */}
       <div style={{
         width: '44px', height: '44px', borderRadius: '12px',
-        background: '#2255ec', display: 'flex', alignItems: 'center',
+       display: 'flex', alignItems: 'center',
         justifyContent: 'center', flexShrink: 0,
       }}>
         <Image src="/assets/aicareernav-logo.png" alt="AiCareerNav" width={32} height={32} style={{ borderRadius: '8px', objectFit: 'contain' }} />
