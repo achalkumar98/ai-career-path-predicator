@@ -195,92 +195,84 @@ type SpeechRecognitionConstructor = new () => SpeechRecognitionInstance;
       </div>
 
       {/* Chat Modal */}
-      {open && (
-        <div style={{ position: 'fixed', inset: 0, background: 'rgba(15,23,41,0.5)', backdropFilter: 'blur(4px)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 200, padding: '24px' }}>
-          <div style={{ background: '#fff', borderRadius: '16px', width: '100%', maxWidth: '560px', height: '600px', boxShadow: '0 20px 40px rgba(0,0,0,0.15)', display: 'flex', flexDirection: 'column', overflow: 'hidden' }} className="chat-modal">
+      {open && (() => {
+        const mBg   = isDark ? '#1a1f2e' : '#ffffff';
+        const mBdr  = isDark ? '#272d3d' : '#f3f4f6';
+        const mTxt  = isDark ? '#f1f5f9' : '#0f1729';
+        const mSub  = isDark ? '#64748b' : '#6b7280';
+        const mBody = isDark ? '#cbd5e1' : '#374151';
+        const mAvatBg = isDark ? 'rgba(5,150,105,0.2)' : '#f0fdf4';
+        const msgBotBg = isDark ? '#0f1117' : '#f9fafb';
+        const msgBotBdr = isDark ? '#272d3d' : '#e5e7eb';
+        const msgBotClr = isDark ? '#cbd5e1' : '#374151';
+        const iBg   = isDark ? '#0f1117' : '#ffffff';
+        const iClr  = isDark ? '#e2e8f0' : '#0f1729';
+        const iBdr  = isDark ? '#272d3d' : '#e5e7eb';
+        const footBg = isDark ? '#1a1f2e' : '#ffffff';
+        return (
+        <div style={{ position: 'fixed', inset: 0, background: 'rgba(15,23,41,0.55)', backdropFilter: 'blur(4px)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 200, padding: '24px' }}>
+          <div style={{ background: mBg, borderRadius: '16px', width: '100%', maxWidth: '560px', height: '600px', boxShadow: isDark ? '0 20px 40px rgba(0,0,0,0.5)' : '0 20px 40px rgba(0,0,0,0.15)', display: 'flex', flexDirection: 'column', overflow: 'hidden', border: `1px solid ${mBdr}` }} className="chat-modal">
 
             {/* Header */}
-            <div style={{ padding: '16px 20px', borderBottom: '1px solid #f3f4f6', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0 }}>
+            <div style={{ padding: '16px 20px', borderBottom: `1px solid ${mBdr}`, display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: '#f0fdf4', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: mAvatBg, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   <Bot size={18} style={{ color: '#059669' }} />
                 </div>
                 <div>
-                  <p style={{ fontSize: '14px', fontWeight: 700, color: '#0f1729' }}>CareerBot</p>
+                  <p style={{ fontSize: '14px', fontWeight: 700, color: mTxt }}>CareerBot</p>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
                     <span style={{ width: '7px', height: '7px', borderRadius: '50%', background: '#059669', display: 'inline-block' }} />
-                    <p style={{ fontSize: '11px', color: '#6b7280' }}>Online — AI Career Assistant</p>
+                    <p style={{ fontSize: '11px', color: mSub }}>Online — AI Career Assistant</p>
                   </div>
                 </div>
               </div>
-              <button onClick={() => setOpen(false)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#9ca3af', padding: '4px', borderRadius: '6px', transition: 'background 150ms' }}
-                onMouseEnter={e => (e.currentTarget.style.background = '#f3f4f6')}
+              <button onClick={() => setOpen(false)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: mSub, padding: '4px', borderRadius: '6px', transition: 'background 150ms' }}
+                onMouseEnter={e => (e.currentTarget.style.background = isDark ? '#272d3d' : '#f3f4f6')}
                 onMouseLeave={e => (e.currentTarget.style.background = 'none')}>
                 <X size={18} />
               </button>
             </div>
 
             {/* Messages */}
-            <div style={{ flex: 1, overflowY: 'auto', padding: '20px', display: 'flex', flexDirection: 'column', gap: '14px' }}>
+            <div style={{ flex: 1, overflowY: 'auto', padding: '20px', display: 'flex', flexDirection: 'column', gap: '14px', background: isDark ? '#141720' : '#ffffff' }}>
               {messages.map((m, i) => (
                 <div key={i} style={{ display: 'flex', gap: '10px', alignItems: 'flex-start', flexDirection: m.role === 'user' ? 'row-reverse' : 'row' }}>
-                  <div style={{ width: '30px', height: '30px', borderRadius: '50%', background: m.role === 'user' ? '#2255ec' : '#f0fdf4', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                  <div style={{ width: '30px', height: '30px', borderRadius: '50%', background: m.role === 'user' ? '#2255ec' : mAvatBg, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                     {m.role === 'user' ? <User size={14} style={{ color: '#fff' }} /> : <Bot size={14} style={{ color: '#059669' }} />}
                   </div>
-                  <div style={{ maxWidth: '75%', padding: '10px 14px', borderRadius: m.role === 'user' ? '14px 4px 14px 14px' : '4px 14px 14px 14px', background: m.role === 'user' ? '#2255ec' : '#f9fafb', border: m.role === 'bot' ? '1px solid #e5e7eb' : 'none', fontSize: '13px', color: m.role === 'user' ? '#fff' : '#374151', lineHeight: 1.65 }}>
-                    {/* {m.text} */}
+                  <div style={{ maxWidth: '75%', padding: '10px 14px', borderRadius: m.role === 'user' ? '14px 4px 14px 14px' : '4px 14px 14px 14px', background: m.role === 'user' ? '#2255ec' : msgBotBg, border: m.role === 'bot' ? `1px solid ${msgBotBdr}` : 'none', fontSize: '13px', color: m.role === 'user' ? '#fff' : msgBotClr, lineHeight: 1.65 }}>
                     {m.role === 'bot' ? (
-  <ReactMarkdown
-  remarkPlugins={[remarkGfm]}
-  components={{
-    code({
-      className,
-      children,
-    }: {
-      className?: string;
-      children?: React.ReactNode;
-    }) {
-      const match = /language-(\w+)/.exec(
-        className || ''
-      );
-
-      if (match) {
-        return (
-          <CodeBlock
-            language={match[1]}
-            value={String(children)}
-          />
-        );
-      }
-
-      return (
-        <code
-          style={{
-            background: '#eef2ff',
-            padding: '2px 5px',
-            borderRadius: '4px',
-          }}
-        >
-          {children}
-        </code>
-      );
-    },
-  }}
->
-  {m.text}
-</ReactMarkdown>
-) : (
-  m.text
-)}
+                      <ReactMarkdown
+                        remarkPlugins={[remarkGfm]}
+                        components={{
+                          code({ className, children }: { className?: string; children?: React.ReactNode }) {
+                            const match = /language-(\w+)/.exec(className || '');
+                            if (match) {
+                              return <CodeBlock language={match[1]} value={String(children)} />;
+                            }
+                            return (
+                              <code style={{ background: isDark ? '#0f1117' : '#eef2ff', padding: '2px 5px', borderRadius: '4px', color: isDark ? '#e2e8f0' : undefined }}>
+                                {children}
+                              </code>
+                            );
+                          },
+                        }}
+                      >
+                        {m.text}
+                      </ReactMarkdown>
+                    ) : (
+                      m.text
+                    )}
                   </div>
                 </div>
               ))}
               {loading && (
                 <div style={{ display: 'flex', gap: '10px', alignItems: 'flex-start' }}>
-                  <div style={{ width: '30px', height: '30px', borderRadius: '50%', background: '#f0fdf4', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                  <div style={{ width: '30px', height: '30px', borderRadius: '50%', background: mAvatBg, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                     <Bot size={14} style={{ color: '#059669' }} />
                   </div>
-                  <div style={{ padding: '12px 16px', borderRadius: '4px 14px 14px 14px', background: '#f9fafb', border: '1px solid #e5e7eb', display: 'flex', gap: '4px', alignItems: 'center' }}>
+                  <div style={{ padding: '12px 16px', borderRadius: '4px 14px 14px 14px', background: msgBotBg, border: `1px solid ${msgBotBdr}`, display: 'flex', gap: '4px', alignItems: 'center' }}>
                     {[0, 1, 2].map(i => (
                       <span key={i} style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#9ca3af', display: 'inline-block', animation: `bounce 1.2s ${i * 0.2}s infinite` }} />
                     ))}
@@ -291,29 +283,30 @@ type SpeechRecognitionConstructor = new () => SpeechRecognitionInstance;
             </div>
 
             {/* Input */}
-            <div style={{ padding: '16px 20px', borderTop: '1px solid #f3f4f6', flexShrink: 0 }}>
+            <div style={{ padding: '16px 20px', borderTop: `1px solid ${mBdr}`, flexShrink: 0, background: footBg }}>
               <form onSubmit={handleSend} style={{ display: 'flex', gap: '8px' }}>
                 <input
                   type="text" value={input} onChange={e => setInput(e.target.value)}
                   placeholder="Ask anything about your career..."
-                  style={{ flex: 1, padding: '10px 14px', borderRadius: '10px', border: '1px solid #e5e7eb', fontSize: '13px', outline: 'none', transition: 'border-color 150ms' }}
+                  style={{ flex: 1, padding: '10px 14px', borderRadius: '10px', border: `1px solid ${iBdr}`, fontSize: '13px', outline: 'none', transition: 'border-color 150ms', background: iBg, color: iClr, fontFamily: 'inherit' }}
                   onFocus={e => (e.currentTarget.style.borderColor = '#059669')}
-                  onBlur={e => (e.currentTarget.style.borderColor = '#e5e7eb')}
+                  onBlur={e => (e.currentTarget.style.borderColor = iBdr)}
                 />
                 <button type="button" onClick={handleVoice}
-                  style={{ width: '40px', height: '40px', borderRadius: '10px', border: `1px solid ${isListening ? 'rgba(220,38,38,0.3)' : '#e5e7eb'}`, background: isListening ? '#fef2f2' : '#fff', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: isListening ? '#dc2626' : '#6b7280', flexShrink: 0 }}
+                  style={{ width: '40px', height: '40px', borderRadius: '10px', border: `1px solid ${isListening ? 'rgba(220,38,38,0.3)' : iBdr}`, background: isListening ? '#fef2f2' : (isDark ? '#0f1117' : '#fff'), cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: isListening ? '#dc2626' : mSub, flexShrink: 0 }}
                   aria-label="Voice input">
                   <Mic size={15} />
                 </button>
                 <button type="submit" disabled={loading || !input.trim()}
-                  style={{ width: '40px', height: '40px', borderRadius: '10px', background: loading || !input.trim() ? '#d1fae5' : '#059669', border: 'none', cursor: loading || !input.trim() ? 'not-allowed' : 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, transition: 'background 150ms' }}>
+                  style={{ width: '40px', height: '40px', borderRadius: '10px', background: loading || !input.trim() ? (isDark ? '#064e3b' : '#d1fae5') : '#059669', border: 'none', cursor: loading || !input.trim() ? 'not-allowed' : 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, transition: 'background 150ms' }}>
                   {loading ? <Loader2 size={15} style={{ color: '#059669', animation: 'spin 1s linear infinite' }} /> : <Send size={15} style={{ color: '#fff' }} />}
                 </button>
               </form>
             </div>
           </div>
         </div>
-      )}
+        );
+      })()}
 
       <style>{`
         @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }

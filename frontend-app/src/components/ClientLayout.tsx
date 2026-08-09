@@ -6,6 +6,7 @@ import Sidebar from './Sidebar';
 import AppHeader from './AppHeader';
 import Footer from './Footer';
 import FloatingChat from './FloatingChat';
+import InstallPWA from './InstallPWA';
 import { stripBasePath } from '@/lib/pathHelper';
 import { useTheme } from '@/context/ThemeContext';
 
@@ -97,6 +98,7 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
         <AppHeader toggleSidebar={() => setIsOpen(!isOpen)} />
         <main style={{ flex: 1 }}>{children}</main>
         <FloatingChat />
+        <InstallPWA variant="banner" />
         <Toaster
           position="bottom-right"
           toastOptions={{

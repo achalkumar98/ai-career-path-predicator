@@ -980,12 +980,21 @@ export default function ResumeAnalyzer() {
       )}
 
       {/* ── Upload Modal ─────────────────────────────────────────────────────── */}
-      {open && (
+      {open && (() => {
+        const mBg   = isDark ? '#1a1f2e' : '#ffffff';
+        const mBdr  = isDark ? '#272d3d' : '#f3f4f6';
+        const mTxt  = isDark ? '#f1f5f9' : '#0f1729';
+        const mSub  = isDark ? '#64748b' : '#9ca3af';
+        const mBody = isDark ? '#cbd5e1' : '#374151';
+        const dropBg   = isDark ? '#0f1117' : '#f9fafb';
+        const dropBdr  = isDark ? '#272d3d' : '#e5e7eb';
+        const noteBg   = isDark ? 'rgba(124,58,237,0.12)' : PURPLE_LIGHT;
+        return (
         <div
           style={{
             position: 'fixed',
             inset: 0,
-            background: 'rgba(15,23,41,0.5)',
+            background: 'rgba(15,23,41,0.55)',
             backdropFilter: 'blur(4px)',
             display: 'flex',
             alignItems: 'center',
@@ -993,25 +1002,24 @@ export default function ResumeAnalyzer() {
             zIndex: 200,
             padding: '24px',
           }}
-          onClick={(e) => {
-            if (e.target === e.currentTarget) setOpen(false);
-          }}
+          onClick={(e) => { if (e.target === e.currentTarget) setOpen(false); }}
         >
           <div
             style={{
-              background: '#fff',
+              background: mBg,
               borderRadius: '16px',
               width: '100%',
               maxWidth: '480px',
-              boxShadow: '0 20px 40px rgba(0,0,0,0.15)',
+              boxShadow: isDark ? '0 20px 40px rgba(0,0,0,0.5)' : '0 20px 40px rgba(0,0,0,0.15)',
               overflow: 'hidden',
+              border: `1px solid ${mBdr}`,
             }}
           >
             {/* header */}
             <div
               style={{
                 padding: '20px 24px',
-                borderBottom: '1px solid #f3f4f6',
+                borderBottom: `1px solid ${mBdr}`,
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'space-between',
@@ -1023,7 +1031,7 @@ export default function ResumeAnalyzer() {
                     width: '32px',
                     height: '32px',
                     borderRadius: '8px',
-                    background: PURPLE_LIGHT,
+                    background: isDark ? 'rgba(124,58,237,0.18)' : PURPLE_LIGHT,
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
@@ -1032,21 +1040,15 @@ export default function ResumeAnalyzer() {
                   <FileText size={15} style={{ color: PURPLE }} />
                 </div>
                 <div>
-                  <p style={{ fontSize: '14px', fontWeight: 700, color: '#0f1729' }}>
+                  <p style={{ fontSize: '14px', fontWeight: 700, color: mTxt }}>
                     Resume Analyzer
                   </p>
-                  <p style={{ fontSize: '11px', color: '#9ca3af' }}>AI-powered skill extraction</p>
+                  <p style={{ fontSize: '11px', color: mSub }}>AI-powered skill extraction</p>
                 </div>
               </div>
               <button
                 onClick={() => setOpen(false)}
-                style={{
-                  background: 'none',
-                  border: 'none',
-                  cursor: 'pointer',
-                  color: '#9ca3af',
-                  padding: '4px',
-                }}
+                style={{ background: 'none', border: 'none', cursor: 'pointer', color: mSub, padding: '4px' }}
                 aria-label="Close"
               >
                 <X size={18} />
@@ -1069,28 +1071,28 @@ export default function ResumeAnalyzer() {
                     width: '100%',
                     height: '140px',
                     borderRadius: '10px',
-                    border: '2px dashed #e5e7eb',
-                    background: '#f9fafb',
+                    border: `2px dashed ${dropBdr}`,
+                    background: dropBg,
                     cursor: 'pointer',
                     transition: 'border-color 150ms, background 150ms',
                   }}
                   onMouseEnter={(e) => {
                     (e.currentTarget as HTMLElement).style.borderColor = 'rgba(124,58,237,0.4)';
-                    (e.currentTarget as HTMLElement).style.background = 'rgba(124,58,237,0.03)';
+                    (e.currentTarget as HTMLElement).style.background = 'rgba(124,58,237,0.06)';
                   }}
                   onMouseLeave={(e) => {
-                    (e.currentTarget as HTMLElement).style.borderColor = '#e5e7eb';
-                    (e.currentTarget as HTMLElement).style.background = '#f9fafb';
+                    (e.currentTarget as HTMLElement).style.borderColor = dropBdr;
+                    (e.currentTarget as HTMLElement).style.background = dropBg;
                   }}
                 >
                   {file ? (
                     <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                       <FaFilePdf size={22} style={{ color: '#dc2626' }} />
                       <div>
-                        <p style={{ fontSize: '13px', fontWeight: 500, color: '#0f1729' }}>
+                        <p style={{ fontSize: '13px', fontWeight: 500, color: mTxt }}>
                           {file.name}
                         </p>
-                        <p style={{ fontSize: '11px', color: '#6b7280' }}>
+                        <p style={{ fontSize: '11px', color: mSub }}>
                           {(file.size / 1024).toFixed(1)} KB
                         </p>
                       </div>
@@ -1098,10 +1100,10 @@ export default function ResumeAnalyzer() {
                   ) : (
                     <div style={{ textAlign: 'center' }}>
                       <FaUpload size={20} style={{ color: PURPLE, margin: '0 auto 8px' }} />
-                      <p style={{ fontSize: '13px', fontWeight: 500, color: '#0f1729' }}>
+                      <p style={{ fontSize: '13px', fontWeight: 500, color: mTxt }}>
                         Drop your PDF here
                       </p>
-                      <p style={{ fontSize: '11px', color: '#9ca3af', marginTop: '4px' }}>
+                      <p style={{ fontSize: '11px', color: mSub, marginTop: '4px' }}>
                         or click to browse
                       </p>
                     </div>
@@ -1121,12 +1123,12 @@ export default function ResumeAnalyzer() {
                     gap: '8px',
                     padding: '10px 12px',
                     borderRadius: '8px',
-                    background: PURPLE_LIGHT,
+                    background: noteBg,
                     border: '1px solid rgba(124,58,237,0.15)',
                   }}
                 >
                   <Sparkles size={13} style={{ color: PURPLE, flexShrink: 0, marginTop: '1px' }} />
-                  <p style={{ fontSize: '11px', color: '#374151', lineHeight: 1.6 }}>
+                  <p style={{ fontSize: '11px', color: mBody, lineHeight: 1.6 }}>
                     After analysis, we&apos;ll auto-fill your top skill to help you find matching
                     jobs instantly.
                   </p>
@@ -1174,7 +1176,8 @@ export default function ResumeAnalyzer() {
             </div>
           </div>
         </div>
-      )}
+        );
+      })()}
 
       <style>{`@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }`}</style>
     </div>

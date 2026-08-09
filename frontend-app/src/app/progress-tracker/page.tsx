@@ -192,7 +192,16 @@ export default function ProgressTracker() {
       </div>
 
       {/* Modal */}
-      {open && (
+      {open && (() => {
+        const mBg  = isDark ? '#1a1f2e' : '#ffffff';
+        const mBdr = isDark ? '#272d3d' : '#f3f4f6';
+        const mTxt = isDark ? '#f1f5f9' : '#0f1729';
+        const mSub = isDark ? '#64748b' : '#6b7280';
+        const mHdrBg = isDark ? '#1a1f2e' : 'linear-gradient(135deg, #f0fdf4, #fff)';
+        const mBtnBdr = isDark ? '#272d3d' : '#e5e7eb';
+        const mBtnClr = isDark ? '#94a3b8' : '#6b7280';
+        const mLoadClr = isDark ? '#64748b' : '#9ca3af';
+        return (
         <div
           onClick={() => setOpen(false)}
           style={{
@@ -203,33 +212,33 @@ export default function ProgressTracker() {
             zIndex: 200, padding: '16px',
           }}
         >
-          {/* Stop click propagation so clicking the modal itself doesn't close it */}
           <div
             onClick={(e) => e.stopPropagation()}
             style={{
-              background: '#fff', borderRadius: '20px',
+              background: mBg, borderRadius: '20px',
               width: '100%', maxWidth: '720px',
               maxHeight: 'calc(100vh - 48px)',
               display: 'flex', flexDirection: 'column',
-              boxShadow: '0 24px 60px rgba(0,0,0,0.2)',
+              boxShadow: isDark ? '0 24px 60px rgba(0,0,0,0.5)' : '0 24px 60px rgba(0,0,0,0.2)',
               overflow: 'hidden',
+              border: `1px solid ${mBdr}`,
             }}
           >
             {/* Modal header */}
             <div style={{
               padding: '18px 24px',
-              borderBottom: '1px solid #f3f4f6',
+              borderBottom: `1px solid ${mBdr}`,
               display: 'flex', alignItems: 'center', justifyContent: 'space-between',
               flexShrink: 0,
-              background: 'linear-gradient(135deg, #f0fdf4, #fff)',
+              background: mHdrBg,
             }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: 'rgba(5,150,105,0.12)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: isDark ? 'rgba(5,150,105,0.18)' : 'rgba(5,150,105,0.12)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   <TrendingUp size={17} style={{ color: '#059669' }} />
                 </div>
                 <div>
-                  <p style={{ fontSize: '15px', fontWeight: 700, color: '#0f1729', lineHeight: 1 }}>Progress Tracker</p>
-                  <p style={{ fontSize: '11px', color: '#6b7280', marginTop: '3px' }}>Your complete history at a glance</p>
+                  <p style={{ fontSize: '15px', fontWeight: 700, color: mTxt, lineHeight: 1 }}>Progress Tracker</p>
+                  <p style={{ fontSize: '11px', color: mSub, marginTop: '3px' }}>Your complete history at a glance</p>
                 </div>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
@@ -237,8 +246,8 @@ export default function ProgressTracker() {
                   onClick={fetchHistory}
                   disabled={loading}
                   title="Refresh"
-                  style={{ width: '32px', height: '32px', borderRadius: '8px', background: 'transparent', border: '1px solid #e5e7eb', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#6b7280', transition: 'all 150ms' }}
-                  onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = '#f3f4f6'; }}
+                  style={{ width: '32px', height: '32px', borderRadius: '8px', background: 'transparent', border: `1px solid ${mBtnBdr}`, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: mBtnClr, transition: 'all 150ms' }}
+                  onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = isDark ? '#272d3d' : '#f3f4f6'; }}
                   onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = 'transparent'; }}
                 >
                   <RefreshCw size={14} className={loading ? 'spin' : ''} />
@@ -246,9 +255,9 @@ export default function ProgressTracker() {
                 <button
                   onClick={() => setOpen(false)}
                   title="Close"
-                  style={{ width: '32px', height: '32px', borderRadius: '8px', background: 'transparent', border: '1px solid #e5e7eb', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#6b7280', transition: 'all 150ms' }}
-                  onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = '#fef2f2'; (e.currentTarget as HTMLElement).style.color = '#dc2626'; }}
-                  onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = 'transparent'; (e.currentTarget as HTMLElement).style.color = '#6b7280'; }}
+                  style={{ width: '32px', height: '32px', borderRadius: '8px', background: 'transparent', border: `1px solid ${mBtnBdr}`, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: mBtnClr, transition: 'all 150ms' }}
+                  onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = isDark ? '#2d1a1a' : '#fef2f2'; (e.currentTarget as HTMLElement).style.color = '#dc2626'; }}
+                  onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = 'transparent'; (e.currentTarget as HTMLElement).style.color = mBtnClr; }}
                 >
                   <X size={15} />
                 </button>
@@ -258,7 +267,7 @@ export default function ProgressTracker() {
             {/* Modal body */}
             <div style={{ padding: '20px 24px', overflowY: 'auto', flex: 1 }}>
               {loading ? (
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '56px', gap: '10px', color: '#9ca3af' }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '56px', gap: '10px', color: mLoadClr }}>
                   <Loader2 size={18} className="spin" />
                   <span style={{ fontSize: '13px' }}>Loading your history…</span>
                 </div>
@@ -268,7 +277,8 @@ export default function ProgressTracker() {
             </div>
           </div>
         </div>
-      )}
+        );
+      })()}
       <style>{`@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }`}</style>
       <style>{`@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }`}</style>
     </div>
