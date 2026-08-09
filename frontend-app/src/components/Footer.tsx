@@ -1,4 +1,5 @@
 'use client';
+import Image from 'next/image';
 import Link from 'next/link';
 import { useTheme } from '@/context/ThemeContext';
 
@@ -87,9 +88,7 @@ export default function Footer() {
           {/* Brand column */}
           <div className="footer-brand">
             <Link href="/" style={{ display: 'inline-flex', alignItems: 'center', gap: '10px', textDecoration: 'none', marginBottom: '16px' }}>
-              <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: '#2255ec', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                <span style={{ color: '#fff', fontWeight: 800, fontSize: '16px' }}>A</span>
-              </div>
+              <Image src="/assets/aicareernav-logo.png" alt="AiCareerNav" width={36} height={36} style={{ borderRadius: '10px', objectFit: 'contain', flexShrink: 0 }} />
               <span style={{ fontSize: '16px', fontWeight: 700, color: titleColor }}>AICareerNav</span>
             </Link>
             <p style={{ fontSize: '13px', color: linkColor, lineHeight: 1.75, marginBottom: '24px', maxWidth: '220px' }}>

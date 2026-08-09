@@ -1,4 +1,5 @@
 'use client';
+import Image from 'next/image';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
@@ -82,9 +83,7 @@ export default function Login() {
           <ArrowLeft size={14} /> Back to home
         </Link>
         <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: '8px', textDecoration: 'none' }}>
-          <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: '#2255ec', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <span style={{ color: '#fff', fontWeight: 800, fontSize: '14px' }}>A</span>
-          </div>
+          <Image src="/assets/aicareernav-logo.png" alt="AiCareerNav" width={32} height={32} style={{ borderRadius: '8px', objectFit: 'contain' }} />
           <span style={{ fontSize: '14px', fontWeight: 700, color: brandColor }}>AiCareerNav</span>
         </Link>
       </div>

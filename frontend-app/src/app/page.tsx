@@ -1,4 +1,5 @@
 'use client';
+import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
@@ -198,19 +199,7 @@ export default function LandingPage() {
             textDecoration: 'none',
           }}
         >
-          <div
-            style={{
-              width: '32px',
-              height: '32px',
-              borderRadius: '8px',
-              background: '#2255ec',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-          >
-            <span style={{ color: '#fff', fontWeight: 800, fontSize: '14px' }}>A</span>
-          </div>
+          <Image src="/assets/aicareernav-logo.png" alt="AiCareerNav" width={32} height={32} priority style={{ borderRadius: '8px', objectFit: 'contain' }} />
           <span style={{ fontSize: '15px', fontWeight: 700, color: '#0f1729' }}>AICareerNav</span>
         </Link>
         <div
