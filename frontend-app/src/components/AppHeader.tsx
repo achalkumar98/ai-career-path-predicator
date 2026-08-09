@@ -7,6 +7,7 @@ import {
   PanelLeft, Bell, LogOut, User, Settings, X,
   MessageCircle, Phone, Loader2,
 } from 'lucide-react';
+import InstallPWA from '@/components/InstallPWA';
 
 const pageTitles: Record<string, string> = {
   '/homepage':         'Dashboard',
@@ -192,6 +193,9 @@ export default function AppHeader({ toggleSidebar }: AppHeaderProps) {
 
       {/* ── Right ── */}
       <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+
+        {/* ── Install PWA ── */}
+        <InstallPWA variant="icon" />
 
         {/* ── Bell ── */}
         <div ref={bellRef} style={{ position: 'relative' }}>

@@ -190,12 +190,24 @@ export default function Insights() {
       </div>
 
       {/* Modal */}
-      {open && (
+      {open && (() => {
+        const mBg   = isDark ? '#1a1f2e' : '#ffffff';
+        const mBdr  = isDark ? '#272d3d' : '#f3f4f6';
+        const mTxt  = isDark ? '#f1f5f9' : '#0f1729';
+        const mSub  = isDark ? '#64748b' : '#9ca3af';
+        const mBody = isDark ? '#cbd5e1' : '#374151';
+        const iBg   = isDark ? '#0f1117' : '#ffffff';
+        const iClr  = isDark ? '#e2e8f0' : '#0f1729';
+        const iBdr  = isDark ? '#272d3d' : '#e5e7eb';
+        const resBg = isDark ? '#0f1117' : '#f9fafb';
+        const rBdr  = isDark ? '#272d3d' : '#e5e7eb';
+        const tryBg = isDark ? '#0f1117' : '#fff';
+        return (
         <div
           style={{
             position: 'fixed',
             inset: 0,
-            background: 'rgba(15,23,41,0.5)',
+            background: 'rgba(15,23,41,0.55)',
             backdropFilter: 'blur(4px)',
             display: 'flex',
             alignItems: 'center',
@@ -203,21 +215,24 @@ export default function Insights() {
             zIndex: 200,
             padding: '24px',
           }}
+          onClick={() => setOpen(false)}
         >
           <div
             style={{
-              background: '#fff',
+              background: mBg,
               borderRadius: '16px',
               width: '100%',
               maxWidth: '520px',
-              boxShadow: '0 20px 40px rgba(0,0,0,0.15)',
+              boxShadow: isDark ? '0 20px 40px rgba(0,0,0,0.5)' : '0 20px 40px rgba(0,0,0,0.15)',
               overflow: 'hidden',
+              border: `1px solid ${mBdr}`,
             }}
+            onClick={(e) => e.stopPropagation()}
           >
             <div
               style={{
                 padding: '20px 24px',
-                borderBottom: '1px solid #f3f4f6',
+                borderBottom: `1px solid ${mBdr}`,
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'space-between',
@@ -229,7 +244,7 @@ export default function Insights() {
                     width: '32px',
                     height: '32px',
                     borderRadius: '8px',
-                    background: '#fffbeb',
+                    background: isDark ? 'rgba(245,158,11,0.15)' : '#fffbeb',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
@@ -238,21 +253,15 @@ export default function Insights() {
                   <Sparkles size={15} style={{ color: '#d97706' }} />
                 </div>
                 <div>
-                  <p style={{ fontSize: '14px', fontWeight: 700, color: '#0f1729' }}>
+                  <p style={{ fontSize: '14px', fontWeight: 700, color: mTxt }}>
                     Personality & Trends
                   </p>
-                  <p style={{ fontSize: '11px', color: '#9ca3af' }}>AI-powered career insight</p>
+                  <p style={{ fontSize: '11px', color: mSub }}>AI-powered career insight</p>
                 </div>
               </div>
               <button
                 onClick={() => setOpen(false)}
-                style={{
-                  background: 'none',
-                  border: 'none',
-                  cursor: 'pointer',
-                  color: '#9ca3af',
-                  padding: '4px',
-                }}
+                style={{ background: 'none', border: 'none', cursor: 'pointer', color: mSub, padding: '4px' }}
               >
                 <X size={18} />
               </button>
@@ -269,7 +278,7 @@ export default function Insights() {
                         display: 'block',
                         fontSize: '12px',
                         fontWeight: 500,
-                        color: '#374151',
+                        color: mBody,
                         marginBottom: '6px',
                       }}
                     >
@@ -285,9 +294,10 @@ export default function Insights() {
                         width: '100%',
                         padding: '10px 12px',
                         borderRadius: '8px',
-                        border: '1px solid #e5e7eb',
+                        border: `1px solid ${iBdr}`,
                         fontSize: '13px',
-                        color: '#0f1729',
+                        color: iClr,
+                        background: iBg,
                         outline: 'none',
                         resize: 'none',
                         boxSizing: 'border-box',
@@ -295,7 +305,7 @@ export default function Insights() {
                         transition: 'border-color 150ms',
                       }}
                       onFocus={(e) => (e.currentTarget.style.borderColor = '#d97706')}
-                      onBlur={(e) => (e.currentTarget.style.borderColor = '#e5e7eb')}
+                      onBlur={(e) => (e.currentTarget.style.borderColor = iBdr)}
                     />
                   </div>
                   <button
@@ -330,26 +340,21 @@ export default function Insights() {
               ) : (
                 <div>
                   <div
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '8px',
-                      marginBottom: '16px',
-                    }}
+                    style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px' }}
                   >
                     <Sparkles size={15} style={{ color: '#d97706' }} />
-                    <p style={{ fontSize: '13px', fontWeight: 600, color: '#0f1729' }}>
+                    <p style={{ fontSize: '13px', fontWeight: 600, color: mTxt }}>
                       Your AI Career Insight
                     </p>
                   </div>
                   <div
                     style={{
-                      background: '#f9fafb',
-                      border: '1px solid #e5e7eb',
+                      background: resBg,
+                      border: `1px solid ${rBdr}`,
                       borderRadius: '10px',
                       padding: '16px',
                       fontSize: '13px',
-                      color: '#374151',
+                      color: mBody,
                       lineHeight: 1.7,
                       maxHeight: '300px',
                       overflowY: 'auto',
@@ -358,20 +363,17 @@ export default function Insights() {
                     {result}
                   </div>
                   <button
-                    onClick={() => {
-                      setResult(null);
-                      setUserInput('');
-                    }}
+                    onClick={() => { setResult(null); setUserInput(''); }}
                     style={{
                       marginTop: '16px',
                       width: '100%',
                       padding: '10px',
                       borderRadius: '8px',
-                      border: '1px solid #e5e7eb',
-                      background: '#fff',
+                      border: `1px solid ${rBdr}`,
+                      background: tryBg,
                       fontSize: '13px',
                       cursor: 'pointer',
-                      color: '#374151',
+                      color: mBody,
                     }}
                   >
                     Try Again
@@ -381,7 +383,8 @@ export default function Insights() {
             </div>
           </div>
         </div>
-      )}
+        );
+      })()}
       <style>{`@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }`}</style>
     </div>
   );

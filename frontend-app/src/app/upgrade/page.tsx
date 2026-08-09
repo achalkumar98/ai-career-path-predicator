@@ -86,8 +86,8 @@ export default function UpgradePage() {
       {/* Top bar */}
       <div
         style={{
-          background: '#fff',
-          borderBottom: '1px solid #e5e7eb',
+          background: isDark ? '#0f1117' : '#fff',
+          borderBottom: `1px solid ${isDark ? '#272d3d' : '#e5e7eb'}`,
           padding: '14px 48px',
           display: 'flex',
           alignItems: 'center',
@@ -102,7 +102,7 @@ export default function UpgradePage() {
             alignItems: 'center',
             gap: '6px',
             textDecoration: 'none',
-            color: '#374151',
+            color: isDark ? '#94a3b8' : '#374151',
             fontSize: '13px',
           }}
         >
@@ -126,15 +126,15 @@ export default function UpgradePage() {
           >
             <span style={{ color: '#fff', fontWeight: 800, fontSize: '13px' }}>A</span>
           </div>
-          <span style={{ fontSize: '14px', fontWeight: 700, color: '#0f1729' }}>AiCareerNav</span>
+          <span style={{ fontSize: '14px', fontWeight: 700, color: isDark ? '#f1f5f9' : '#0f1729' }}>AiCareerNav</span>
         </Link>
       </div>
 
       {/* Hero */}
       <div
         style={{
-          background: 'linear-gradient(160deg,#f0f4ff 0%,#f9fafb 60%)',
-          borderBottom: '1px solid #e5e7eb',
+          background: isDark ? 'linear-gradient(160deg, #111827 0%, #141720 60%)' : 'linear-gradient(160deg,#f0f4ff 0%,#f9fafb 60%)',
+          borderBottom: `1px solid ${isDark ? '#272d3d' : '#e5e7eb'}`,
           padding: '64px 48px 56px',
           textAlign: 'center',
         }}
@@ -158,7 +158,7 @@ export default function UpgradePage() {
           ✦ Simple, transparent pricing
         </div>
         <h1
-          style={{ fontSize: '42px', fontWeight: 800, color: '#0f1729', marginBottom: '12px' }}
+          style={{ fontSize: '42px', fontWeight: 800, color: isDark ? '#f1f5f9' : '#0f1729', marginBottom: '12px' }}
           className="hero-title"
         >
           Choose Your <span style={{ color: '#2255ec' }}>Plan</span>
@@ -166,7 +166,7 @@ export default function UpgradePage() {
         <p
           style={{
             fontSize: '15px',
-            color: '#6b7280',
+            color: isDark ? '#94a3b8' : '#6b7280',
             maxWidth: '480px',
             margin: '0 auto',
             lineHeight: 1.7,
@@ -192,12 +192,18 @@ export default function UpgradePage() {
         >
           {plans.map((plan) => {
             const Icon = plan.icon;
+            const cardBg     = isDark ? '#1a1f2e' : plan.bg;
+            const cardBorder = isDark ? (plan.popular ? plan.border : '#272d3d') : plan.border;
+            const headingClr = isDark ? '#f1f5f9' : '#0f1729';
+            const bodyClr    = isDark ? '#94a3b8' : '#6b7280';
+            const featureClr = isDark ? '#cbd5e1' : '#374151';
+            const dividerClr = isDark ? '#272d3d' : '#e5e7eb';
             return (
               <div
                 key={plan.name}
                 style={{
-                  background: plan.bg,
-                  border: `2px solid ${plan.border}`,
+                  background: cardBg,
+                  border: `2px solid ${cardBorder}`,
                   borderRadius: '18px',
                   padding: '32px',
                   position: 'relative',
@@ -245,7 +251,7 @@ export default function UpgradePage() {
                       width: '40px',
                       height: '40px',
                       borderRadius: '10px',
-                      background: `${plan.color}15`,
+                      background: `${plan.color}20`,
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
@@ -253,20 +259,20 @@ export default function UpgradePage() {
                   >
                     <Icon size={18} style={{ color: plan.color }} />
                   </div>
-                  <p style={{ fontSize: '16px', fontWeight: 700, color: '#0f1729' }}>{plan.name}</p>
+                  <p style={{ fontSize: '16px', fontWeight: 700, color: headingClr }}>{plan.name}</p>
                 </div>
 
                 <div style={{ marginBottom: '8px' }}>
-                  <span style={{ fontSize: '36px', fontWeight: 800, color: '#0f1729' }}>
+                  <span style={{ fontSize: '36px', fontWeight: 800, color: headingClr }}>
                     {plan.price}
                   </span>
                   {plan.price !== 'Free' && (
-                    <span style={{ fontSize: '13px', color: '#6b7280', marginLeft: '4px' }}>
+                    <span style={{ fontSize: '13px', color: bodyClr, marginLeft: '4px' }}>
                       /{plan.period}
                     </span>
                   )}
                   {plan.price === 'Free' && (
-                    <span style={{ fontSize: '13px', color: '#6b7280', marginLeft: '6px' }}>
+                    <span style={{ fontSize: '13px', color: bodyClr, marginLeft: '6px' }}>
                       {plan.period}
                     </span>
                   )}
@@ -274,7 +280,7 @@ export default function UpgradePage() {
                 <p
                   style={{
                     fontSize: '13px',
-                    color: '#6b7280',
+                    color: bodyClr,
                     marginBottom: '24px',
                     lineHeight: 1.6,
                   }}
@@ -302,12 +308,12 @@ export default function UpgradePage() {
                   {plan.price === 'Free' ? 'Get Started Free' : `Get ${plan.name}`}
                 </button>
 
-                <div style={{ borderTop: '1px solid #e5e7eb', paddingTop: '20px' }}>
+                <div style={{ borderTop: `1px solid ${dividerClr}`, paddingTop: '20px' }}>
                   <p
                     style={{
                       fontSize: '11px',
                       fontWeight: 600,
-                      color: '#9ca3af',
+                      color: isDark ? '#475569' : '#9ca3af',
                       textTransform: 'uppercase',
                       letterSpacing: '0.05em',
                       marginBottom: '12px',
@@ -325,7 +331,7 @@ export default function UpgradePage() {
                           size={14}
                           style={{ color: plan.color, flexShrink: 0, marginTop: '1px' }}
                         />
-                        <span style={{ fontSize: '13px', color: '#374151' }}>{f}</span>
+                        <span style={{ fontSize: '13px', color: featureClr }}>{f}</span>
                       </div>
                     ))}
                     {plan.notIncluded?.map((f) => (
@@ -345,7 +351,7 @@ export default function UpgradePage() {
                         <span
                           style={{
                             fontSize: '13px',
-                            color: '#9ca3af',
+                            color: isDark ? '#94a3b8' : '#9ca3af',
                             textDecoration: 'line-through',
                           }}
                         >
