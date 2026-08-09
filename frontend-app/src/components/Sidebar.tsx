@@ -1,4 +1,5 @@
 'use client';
+import Image from 'next/image';
 import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
@@ -89,13 +90,14 @@ export default function Sidebar({ isOpen, isMobile }: SidebarProps) {
       {/* ── Logo ── */}
       <div style={{ padding: '14px 12px', borderBottom: `1px solid ${divider}`, flexShrink: 0 }}>
         <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: '10px', textDecoration: 'none' }}>
-          <div style={{
-            width: '36px', height: '36px', borderRadius: '10px',
-            background: '#2255ec', display: 'flex', alignItems: 'center', justifyContent: 'center',
-            flexShrink: 0,
-          }}>
-            <span style={{ color: '#fff', fontWeight: 800, fontSize: '16px' }}>A</span>
-          </div>
+          <Image
+            src="/assets/aicareernav-logo.png"
+            alt="AiCareerNav"
+            width={36}
+            height={36}
+            priority
+            style={{ borderRadius: '10px', objectFit: 'contain', flexShrink: 0 }}
+          />
           {isOpen && (
             <div>
               <span style={{ fontSize: '14px', fontWeight: 700, color: titleColor }}>AiCareerNav</span>

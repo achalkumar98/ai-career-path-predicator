@@ -1,4 +1,5 @@
 'use client';
+import Image from 'next/image';
 import { useState } from 'react';
 import Link from 'next/link';
 import { ArrowLeft, Mail, MapPin, Clock, Send, CheckCircle } from 'lucide-react';
@@ -70,9 +71,7 @@ export default function ContactPage() {
           <ArrowLeft size={14} /> Back to home
         </Link>
         <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: '8px', textDecoration: 'none' }}>
-          <div style={{ width: '30px', height: '30px', borderRadius: '8px', background: '#2255ec', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <span style={{ color: '#fff', fontWeight: 800, fontSize: '13px' }}>A</span>
-          </div>
+          <Image src="/assets/aicareernav-logo.png" alt="AiCareerNav" width={30} height={30} style={{ borderRadius: '8px', objectFit: 'contain' }} />
           <span style={{ fontSize: '14px', fontWeight: 700, color: brandColor }}>AiCareerNav</span>
         </Link>
       </div>

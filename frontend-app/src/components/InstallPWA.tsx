@@ -1,4 +1,5 @@
 'use client';
+import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { useTheme } from '@/context/ThemeContext';
 import { Monitor, X, Download } from 'lucide-react';
@@ -132,7 +133,7 @@ export default function InstallPWA({ variant = 'icon' }: InstallPWAProps) {
         background: '#2255ec', display: 'flex', alignItems: 'center',
         justifyContent: 'center', flexShrink: 0,
       }}>
-        <span style={{ color: '#fff', fontWeight: 800, fontSize: '20px' }}>A</span>
+        <Image src="/assets/aicareernav-logo.png" alt="AiCareerNav" width={32} height={32} style={{ borderRadius: '8px', objectFit: 'contain' }} />
       </div>
 
       {/* text */}
