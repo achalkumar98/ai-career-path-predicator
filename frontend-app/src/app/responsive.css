@@ -297,6 +297,57 @@
 }
 
 /* ─────────────────────────────────────────────────────────────────────────────
+   How-it-works 3-step strip (Live Job Matching section)
+───────────────────────────────────────────────────────────────────────────── */
+
+/* ≤ 768 px  →  2-column: steps 1 & 2 on row 1, step 3 centred on row 2 */
+@media (max-width: 768px) {
+  .how-it-works-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+  /* step borders: right-border stays for col 1; bottom-border for row 1 */
+  .how-it-works-step-border {
+    border-right: none !important;
+    border-bottom: 1px solid #e5e7eb !important;
+  }
+  /* step 2 (idx 1) sits in col 2 – remove its right border, keep bottom */
+  .how-it-works-step:nth-child(2) {
+    border-right: none !important;
+    border-bottom: 1px solid #e5e7eb !important;
+  }
+  /* step 3 spans both columns, centred */
+  .how-it-works-step:nth-child(3) {
+    grid-column: 1 / -1;
+    border-bottom: none !important;
+  }
+  .how-it-works-step {
+    padding: 24px 20px !important;
+  }
+}
+
+/* ≤ 480 px  →  single column, all steps stacked */
+@media (max-width: 480px) {
+  .how-it-works-grid {
+    grid-template-columns: 1fr !important;
+  }
+  .how-it-works-step-border {
+    border-right: none !important;
+    border-bottom: 1px solid #e5e7eb !important;
+  }
+  .how-it-works-step:nth-child(2) {
+    border-right: none !important;
+    border-bottom: 1px solid #e5e7eb !important;
+  }
+  .how-it-works-step:nth-child(3) {
+    grid-column: auto;
+    border-bottom: none !important;
+  }
+  .how-it-works-step {
+    padding: 20px 16px !important;
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
    Chatbot page responsive
 ───────────────────────────────────────────────────────────────────────────── */
 
