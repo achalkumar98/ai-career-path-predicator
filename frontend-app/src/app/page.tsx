@@ -924,6 +924,7 @@ export default function LandingPage() {
             ] as { step: string; icon: React.ElementType; title: string; desc: string }[]).map(({ step, icon: Icon, title, desc }, idx) => (
               <div
                 key={step}
+                className={`how-it-works-step${idx < 2 ? ' how-it-works-step-border' : ''}`}
                 style={{ padding: '36px 28px', borderRight: idx < 2 ? '1px solid #e5e7eb' : 'none' }}
               >
                 <div style={{ display: 'flex', alignItems: 'flex-start', gap: '14px' }}>
