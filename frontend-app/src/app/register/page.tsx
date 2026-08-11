@@ -76,9 +76,14 @@ export default function Register() {
 
           {/* Logo */}
           <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '24px' }}>
-            <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: '#2255ec', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <span style={{ color: '#fff', fontWeight: 800, fontSize: '20px' }}>N</span>
-            </div>
+            <Image
+              src="/assets/aicareernav-logo.png"
+              alt="AiCareerNav"
+              width={56}
+              height={56}
+              style={{ borderRadius: '14px', objectFit: 'contain' }}
+              priority
+            />
           </div>
 
           <h1 style={{ fontSize: '22px', fontWeight: 700, color: titleColor, textAlign: 'center', marginBottom: '6px' }}>Create your account</h1>
