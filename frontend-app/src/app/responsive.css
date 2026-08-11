@@ -295,3 +295,102 @@
     font-size: 25px !important;
   }
 }
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   Chatbot page responsive
+───────────────────────────────────────────────────────────────────────────── */
+
+/* Desktop sidebar is visible; mobile drawer is controlled by JS transform */
+.chatbot-sidebar-desktop { display: flex; }
+
+/* Topbar tweaks */
+.chatbot-active-title { display: inline; }
+.chatbot-history-btn  { display: none !important; }
+.chatbot-back-label   { display: inline; }
+
+@media (max-width: 768px) {
+  /* Hide the fixed desktop sidebar on mobile */
+  .chatbot-sidebar-desktop {
+    display: none !important;
+  }
+
+  /* Show the hamburger that opens the mobile drawer */
+  .chatbot-history-btn {
+    display: inline-flex !important;
+  }
+
+  /* Hide the active session title in the topbar — not enough room */
+  .chatbot-active-title {
+    display: none !important;
+  }
+
+  /* Compact topbar padding */
+  .chatbot-topbar {
+    padding: 8px 12px !important;
+  }
+
+  /* Messages area — tighter side padding */
+  .chatbot-messages {
+    padding: 16px 12px !important;
+  }
+
+  /* Bubbles fill more width on small screens */
+  .chatbot-bubble {
+    max-width: 88% !important;
+  }
+
+  /* Input bar — tighter padding */
+  .chatbot-input-bar {
+    padding: 10px 12px !important;
+  }
+
+  /* Slightly larger tap targets */
+  .chatbot-icon-btn {
+    width: 44px !important;
+    height: 44px !important;
+  }
+
+  /* Empty state — less vertical padding */
+  .chatbot-empty {
+    padding: 32px 20px !important;
+  }
+  .chatbot-empty h2 {
+    font-size: 18px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  /* Full-height layout on very small phones */
+  .chatbot-root {
+    height: 100dvh !important;
+  }
+
+  /* Hide "Back" text — keep just the arrow icon */
+  .chatbot-back-label {
+    display: none !important;
+  }
+
+  /* "New Chat" — icon only, no text label */
+  .chatbot-newchat-label {
+    display: none !important;
+  }
+  .chatbot-newchat-btn {
+    padding: 7px 10px !important;
+  }
+
+  /* Wider bubbles */
+  .chatbot-bubble {
+    max-width: 92% !important;
+    font-size: 13px !important;
+  }
+
+  /* Prevent iOS input zoom (font-size must be ≥ 16px) */
+  .chatbot-input {
+    font-size: 16px !important;
+  }
+
+  /* Input bar — full bleed on very small screens */
+  .chatbot-input-bar {
+    padding: 8px 10px 10px !important;
+  }
+}

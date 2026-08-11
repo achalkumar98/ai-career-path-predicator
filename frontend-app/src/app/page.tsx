@@ -1,4 +1,5 @@
 'use client';
+import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -22,6 +23,8 @@ import {
   Upload,
   Menu,
   X,
+  MapPin,
+  Filter,
 } from 'lucide-react';
 
 const stats = [
@@ -125,36 +128,48 @@ const features = [
   },
 ];
 
-const portals = [
+const jobFeatures = [
   {
-    name: 'LinkedIn',
-    desc: "World's largest professional network",
-    bg: '#0077b5',
-    letter: 'in',
+    icon: Search,
+    title: 'Keyword Search',
+    desc: 'Search by any role, skill, or technology — frontend developer, Python, DevOps, and more.',
+    color: '#2255ec',
+    bg: '#eef2ff',
   },
   {
-    name: 'Naukri',
-    desc: "India's top job portal",
-    bg: '#2255ec',
-    letter: 'N',
+    icon: MapPin,
+    title: 'Location Filtered',
+    desc: 'Target jobs in your preferred city or region. Exact-match and nearby results both shown.',
+    color: '#059669',
+    bg: '#f0fdf4',
   },
   {
-    name: 'Indeed',
-    desc: '#1 job site — 250M+ visits/mo',
-    bg: '#003a9b',
-    letter: 'i',
+    icon: TrendingUp,
+    title: 'Live LinkedIn Listings',
+    desc: 'Fresh postings scraped directly from LinkedIn in real time — no stale data, no sign-in needed.',
+    color: '#7c3aed',
+    bg: '#faf5ff',
   },
   {
-    name: 'Glassdoor',
-    desc: 'Salaries, reviews, insider insights',
-    bg: '#0caa41',
-    letter: 'G',
+    icon: Filter,
+    title: 'Date Range Filter',
+    desc: 'Narrow results by posted date — last 24 hours, 7 days, custom range, and more.',
+    color: '#d97706',
+    bg: '#fffbeb',
   },
   {
-    name: 'Google Jobs',
-    desc: 'Aggregated from every major board',
-    bg: '#ea4335',
-    letter: 'G',
+    icon: Layers,
+    title: 'Paginated Results',
+    desc: 'Browse up to 12 jobs per page with smooth pagination — never lose your place mid-search.',
+    color: '#0891b2',
+    bg: '#ecfeff',
+  },
+  {
+    icon: FileCheck,
+    title: 'Direct Apply Links',
+    desc: 'Every result includes a direct link to apply on LinkedIn — one click and you\'re there.',
+    color: '#dc2626',
+    bg: '#fef2f2',
   },
 ];
 
@@ -842,17 +857,18 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ── Job Portal Coverage ── */}
+      {/* ── Live Job Matching ── */}
       <section
         style={{
           padding: '80px 48px',
-          background: 'linear-gradient(180deg,#f0fdf4 0%,#f9fafb 100%)',
+          background: 'linear-gradient(180deg,#eef2ff 0%,#f9fafb 100%)',
           borderTop: '1px solid #e5e7eb',
         }}
         className="section-pad"
       >
         <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
-          <div style={{ textAlign: 'center', marginBottom: '48px' }}>
+          {/* Header */}
+          <div style={{ textAlign: 'center', marginBottom: '56px' }}>
             <div
               style={{
                 display: 'inline-flex',
@@ -860,15 +876,15 @@ export default function LandingPage() {
                 gap: '6px',
                 padding: '6px 16px',
                 borderRadius: '9999px',
-                background: 'rgba(5,150,105,0.08)',
-                border: '1px solid rgba(5,150,105,0.2)',
+                background: 'rgba(34,85,236,0.08)',
+                border: '1px solid rgba(34,85,236,0.2)',
                 fontSize: '12px',
                 fontWeight: 600,
-                color: '#059669',
+                color: '#2255ec',
                 marginBottom: '16px',
               }}
             >
-              ✦ Job Portal Coverage
+              ✦ Live Job Matching
             </div>
             <h2
               style={{
@@ -880,124 +896,88 @@ export default function LandingPage() {
               }}
               className="landing-section-h2"
             >
-              One Click, <span style={{ color: '#059669' }}>Every Major Portal</span>
+              Real Jobs from <span style={{ color: '#2255ec' }}>LinkedIn — Live</span>
             </h2>
-            <p
-              style={{
-                fontSize: '15px',
-                color: '#6b7280',
-                maxWidth: '560px',
-                margin: '0 auto',
-              }}
-            >
-              We generate smart search links for the job sites you actually use — your role and
-              location pre-filled, one click opens each in a new tab.
+            <p style={{ fontSize: '15px', color: '#6b7280', maxWidth: '560px', margin: '0 auto' }}>
+              Search live LinkedIn job listings by keyword and location. Fresh postings scraped in
+              real time — no stale data, no sign-in required, direct apply links included.
             </p>
           </div>
+
+          {/* How it works — 3-step strip */}
           <div
             style={{
               display: 'grid',
-              gridTemplateColumns: 'repeat(5,1fr)',
-              gap: '16px',
-              marginBottom: '40px',
+              gridTemplateColumns: 'repeat(3,1fr)',
+              marginBottom: '48px',
+              background: '#fff',
+              border: '1px solid #e5e7eb',
+              borderRadius: '20px',
+              overflow: 'hidden',
             }}
-            className="portals-grid"
+            className="how-it-works-grid"
           >
-            {portals.map((p) => (
+            {([
+              { step: '01', icon: Search,    title: 'Enter Keyword & Location', desc: 'Type any role, skill, or technology alongside your preferred city or region.' },
+              { step: '02', icon: TrendingUp, title: 'We Scrape LinkedIn Live',   desc: 'Our engine fetches fresh postings directly from LinkedIn — no cached data.' },
+              { step: '03', icon: FileCheck,  title: 'Browse & Apply Directly',   desc: 'Filter by date, paginate results, and click any card to apply on LinkedIn.' },
+            ] as { step: string; icon: React.ElementType; title: string; desc: string }[]).map(({ step, icon: Icon, title, desc }, idx) => (
               <div
-                key={p.name}
-                style={{
-                  background: '#fff',
-                  border: '1px solid #e5e7eb',
-                  borderRadius: '14px',
-                  padding: '28px 16px',
-                  textAlign: 'center',
-                  cursor: 'pointer',
-                  transition: 'box-shadow 200ms, transform 200ms',
-                }}
-                onMouseEnter={(e) => {
-                  (e.currentTarget as HTMLElement).style.boxShadow = '0 8px 24px rgba(0,0,0,0.08)';
-                  (e.currentTarget as HTMLElement).style.transform = 'translateY(-3px)';
-                }}
-                onMouseLeave={(e) => {
-                  (e.currentTarget as HTMLElement).style.boxShadow = 'none';
-                  (e.currentTarget as HTMLElement).style.transform = 'translateY(0)';
-                }}
+                key={step}
+                style={{ padding: '36px 28px', borderRight: idx < 2 ? '1px solid #e5e7eb' : 'none' }}
               >
-                <div
-                  style={{
-                    width: '52px',
-                    height: '52px',
-                    borderRadius: '12px',
-                    background: p.bg,
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    margin: '0 auto 14px',
-                    color: '#fff',
-                    fontWeight: 800,
-                    fontSize: '17px',
-                  }}
-                >
-                  {p.letter}
+                <div style={{ display: 'flex', alignItems: 'flex-start', gap: '14px' }}>
+                  <div style={{ width: '46px', height: '46px', borderRadius: '13px', background: '#eef2ff', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                    <Icon size={19} style={{ color: '#2255ec' }} />
+                  </div>
+                  <div>
+                    <span style={{ fontSize: '11px', fontWeight: 700, color: '#2255ec', letterSpacing: '0.06em' }}>STEP {step}</span>
+                    <p style={{ fontSize: '14px', fontWeight: 700, color: '#0f1729', margin: '5px 0 7px' }}>{title}</p>
+                    <p style={{ fontSize: '13px', color: '#6b7280', lineHeight: 1.65 }}>{desc}</p>
+                  </div>
                 </div>
-                <p
-                  style={{
-                    fontSize: '13px',
-                    fontWeight: 700,
-                    color: '#0f1729',
-                    marginBottom: '5px',
-                  }}
-                >
-                  {p.name}
-                </p>
-                <p
-                  style={{
-                    fontSize: '11px',
-                    color: '#6b7280',
-                    lineHeight: 1.5,
-                  }}
-                >
-                  {p.desc}
-                </p>
               </div>
             ))}
           </div>
-          <p
-            style={{
-              textAlign: 'center',
-              fontSize: '13px',
-              color: '#6b7280',
-              marginBottom: '28px',
-              lineHeight: 1.75,
-            }}
+
+          {/* Feature cards */}
+          <div
+            style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '16px', marginBottom: '44px' }}
+            className="features-grid"
           >
-            Each card opens the platform in a new tab with your search ready.
-            <br />
-            You apply on the original site — we don&apos;t store applications or charge fees.
-          </p>
+            {jobFeatures.map((f) => {
+              const Icon = f.icon;
+              return (
+                <div
+                  key={f.title}
+                  style={{ background: '#fff', border: '1px solid #e5e7eb', borderRadius: '16px', padding: '24px', transition: 'box-shadow 200ms, transform 200ms, border-color 200ms' }}
+                  onMouseEnter={(e) => { const el = e.currentTarget as HTMLElement; el.style.boxShadow = '0 8px 28px rgba(0,0,0,0.08)'; el.style.transform = 'translateY(-3px)'; el.style.borderColor = f.color; }}
+                  onMouseLeave={(e) => { const el = e.currentTarget as HTMLElement; el.style.boxShadow = 'none'; el.style.transform = 'translateY(0)'; el.style.borderColor = '#e5e7eb'; }}
+                >
+                  <div style={{ width: '42px', height: '42px', borderRadius: '11px', background: f.bg, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '13px' }}>
+                    <Icon size={18} style={{ color: f.color }} />
+                  </div>
+                  <p style={{ fontSize: '14px', fontWeight: 700, color: '#0f1729', marginBottom: '6px' }}>{f.title}</p>
+                  <p style={{ fontSize: '13px', color: '#6b7280', lineHeight: 1.65 }}>{f.desc}</p>
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Disclaimer + CTA */}
           <div style={{ textAlign: 'center' }}>
+            <p style={{ fontSize: '13px', color: '#9ca3af', marginBottom: '24px', lineHeight: 1.75 }}>
+              Jobs are fetched live from LinkedIn — results may take 15–30 seconds.
+              <br />
+              You apply directly on LinkedIn. We never store your applications or charge fees.
+            </p>
             <button
               onClick={() => router.push('/login')}
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '8px',
-                padding: '13px 28px',
-                borderRadius: '10px',
-                background: '#059669',
-                color: '#fff',
-                fontSize: '14px',
-                fontWeight: 600,
-                border: 'none',
-                cursor: 'pointer',
-                boxShadow: '0 4px 14px rgba(5,150,105,0.25)',
-                transition: 'background 150ms',
-              }}
-              onMouseEnter={(e) => (e.currentTarget.style.background = '#047857')}
-              onMouseLeave={(e) => (e.currentTarget.style.background = '#059669')}
+              style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '13px 28px', borderRadius: '10px', background: '#2255ec', color: '#fff', fontSize: '14px', fontWeight: 600, border: 'none', cursor: 'pointer', boxShadow: '0 4px 14px rgba(34,85,236,0.28)', transition: 'background 150ms' }}
+              onMouseEnter={(e) => (e.currentTarget.style.background = '#1a44c8')}
+              onMouseLeave={(e) => (e.currentTarget.style.background = '#2255ec')}
             >
-              Try Smart Job Search <ArrowRight size={14} />
+              Search Live Jobs <ArrowRight size={14} />
             </button>
           </div>
         </div>
