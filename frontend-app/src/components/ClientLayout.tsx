@@ -70,12 +70,14 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
   const marginLeft = isMobile ? '0px' : isOpen ? '240px' : '64px';
 
   return (
-    <div style={{
-      display: 'flex',
-      minHeight: '100vh',
-      background: isDark ? '#141720' : '#f9fafb',
-      transition: 'background 300ms',
-    }}>
+    <div
+      style={{
+        display: 'flex',
+        minHeight: '100vh',
+        background: isDark ? '#141720' : '#f9fafb',
+        transition: 'background 300ms',
+      }}
+    >
       {/* Mobile overlay */}
       {isMobile && isOpen && (
         <div className="sidebar-overlay open" onClick={() => setIsOpen(false)} />
@@ -100,10 +102,11 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
         <FloatingChat />
         <InstallPWA variant="banner" />
         <Toaster
-          position="bottom-right"
+          position="top-center"
+          reverseOrder={false}
           toastOptions={{
             duration: 4000,
-            success: { iconTheme: { primary: '#166534', secondary: '#ffffff' } },
+            success: { iconTheme: { primary: '#FF8C00', secondary: '#ffffff' } },
           }}
         />
         <Footer />
