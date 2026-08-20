@@ -2,12 +2,10 @@
 
 A full-stack AI-powered career platform that helps users explore career paths, analyse resumes, find jobs, and get personalised guidance — all in one place.
 
-[![Watch the demo](frontend-app/public/Overview.png)](https://drive.google.com/file/d/1NDcBNWmcEginrlFp55nEstwmNrh-OsJX/view?usp=sharing)
+[![Watch the demo](frontend-app/public/Overview.png)](https://ai-career-path-predicator-tawny.vercel.app)
 
 **Live Links**
-- Frontend: [ai-career-path-predicator-tawny.vercel.app](https://ai-career-path-predicator-tawny.vercel.app)
-- Backend API: [ai-career-path-predicator.onrender.com](https://ai-career-path-predicator.onrender.com)
-- API Docs (Swagger): [/v1/docs](https://ai-career-path-predicator.onrender.com/v1/docs)
+- Live: [ai-career-path-predicator-tawny.vercel.app](https://ai-career-path-predicator-tawny.vercel.app)
 
 ---
 
@@ -101,7 +99,7 @@ ai-career-nav/
 - Node.js 20+
 - npm
 - MongoDB (local or Atlas)
-- Groq API key — [console.groq.com](https://console.groq.com)
+- Groq API key
 - Gmail App Password — for contact and feedback emails
 
 ---
@@ -272,36 +270,6 @@ LinkedIn can rate-limit requests or change page structure. Those failures are un
 
 ---
 
-## Deployment
-
-### Frontend — Vercel
-
-1. Import the repository into Vercel.
-2. Set the **root directory** to `frontend-app`.
-3. Add environment variable:
-
-| Key | Value |
-|---|---|
-| `NEXT_PUBLIC_BASE_API_URL` | `https://ai-career-path-predicator.onrender.com/api/` |
-
-### Backend — Render
-
-`render.yaml` is pre-configured with `backend-app` as the root and installs Chrome during the build.
-
-1. Create a **Web Service** from the repository on Render (or use the Blueprint).
-2. Set root directory to `backend-app` if not using the Blueprint.
-3. Build command: `npm install && npm run install:chrome`
-4. Start command: `npm start`
-5. Add environment variables (production values).
-
-If the deployment fails with a Chrome-missing error, go to **Manual Deploy → Clear build cache & deploy** and confirm the build log contains:
-
-```
-chrome@<version> <path-to-chrome>
-```
-
----
-
 ## Scripts
 
 ### Backend
@@ -326,20 +294,6 @@ npm run compile-ts  # TypeScript type-check (no emit)
 npm run lint        # ESLint check
 npm run lint:fix    # ESLint auto-fix
 ```
-
----
-
-## Troubleshooting
-
-| Problem | What to check |
-|---|---|
-| Cannot connect to MongoDB | Verify `MONGO_URI` and Atlas network access |
-| AI endpoints fail | Verify `GROQ_API_KEY` — no `OPENAI_API_KEY` is needed |
-| Email not sending | Set `SMTP_USER` and a Gmail **App Password** in `SMTP_PASS` |
-| Chrome missing (job matching) | Run `npm run install:chrome`; on Render clear build cache |
-| CORS error in browser | Add your frontend URL to `CORS_ORIGIN` (comma-separated) |
-| Validation error (400) | Check required fields in the API Reference table above |
-| Recharts peer dep warning | Expected — React 19 requires `--legacy-peer-deps`; runtime works fine |
 
 ---
 
