@@ -37,7 +37,7 @@ A full-stack AI-powered career platform that helps users explore career paths, a
 | **Frontend** | Next.js 15, React 19, TypeScript, Tailwind CSS v4 |
 | **Backend** | Node.js, Express 5 |
 | **Database** | MongoDB with Mongoose |
-| **AI** | Groq API — `llama-3.3-70b-versatile` via OpenAI-compatible SDK |
+| **AI** | Groq API |
 | **Charts** | Recharts 3 (React 19 compatible) |
 | **Authentication** | JWT + bcryptjs |
 | **Validation** | Joi — every request body/query/file validated before reaching controllers |
