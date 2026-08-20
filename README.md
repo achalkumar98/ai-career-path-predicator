@@ -2,6 +2,8 @@
 
 A full-stack AI-powered career platform that helps users explore career paths, analyse resumes, find jobs, and get personalised guidance — all in one place.
 
+[![Watch the demo](frontend-app/public/Overview.png)](https://drive.google.com/file/d/1NDcBNWmcEginrlFp55nEstwmNrh-OsJX/view?usp=sharing)
+
 **Live Links**
 - Frontend: [ai-career-path-predicator-tawny.vercel.app](https://ai-career-path-predicator-tawny.vercel.app)
 - Backend API: [ai-career-path-predicator.onrender.com](https://ai-career-path-predicator.onrender.com)
