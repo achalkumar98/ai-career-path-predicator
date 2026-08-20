@@ -10,7 +10,7 @@ async function callGroqWithRetry(prompt, retries = 3, delayMs = 15000) {
   for (let attempt = 1; attempt <= retries; attempt++) {
     try {
       const result = await groq.chat.completions.create({
-        model: 'llama-3.3-70b-versatile', // check console.groq.com/docs/models for current options
+        model: 'openai/gpt-oss-120b', // check console.groq.com/docs/models for current options
         messages: [{ role: 'user', content: prompt }],
       });
       return result.choices[0].message.content.trim();
